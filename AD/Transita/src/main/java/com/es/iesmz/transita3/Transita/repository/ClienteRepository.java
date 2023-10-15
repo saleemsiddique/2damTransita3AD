@@ -1,2 +1,3 @@
-package com.es.iesmz.transita3.Transita.repository;public class ClienteRepository {
+package com.es.iesmz.transita3.Transita.repository;
+public class ClienteRepository {
 }
