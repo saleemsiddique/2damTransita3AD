@@ -24,6 +24,4 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :apellido%", nativeQuery = true)
     Set<Cliente> findByApellidoStartingWith(@Param("apellido") String apellido);
 
-    @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre_usuario%", nativeQuery = true)
-    Set<Cliente> findByNombreUsuarioStartingWith(@Param("nombreUsuario") String nombreUsuario);
 }

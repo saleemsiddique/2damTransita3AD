@@ -53,12 +53,6 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
-    @GetMapping("/cliente/nombreUsuario/{nombreUsuario}")
-    public ResponseEntity<Set<Cliente>> searchClientesByNombreUsuarioStartingWith(@PathVariable("nombreUsuario") String nombreUsuario) {
-        Set<Cliente> clientes = clienteService.findByNombreUsuarioStartingWith(nombreUsuario);
-        return new ResponseEntity<>(clientes, HttpStatus.OK);
-    }
-
     @GetMapping("/cliente/telefono/{numeroTelefono}")
     public ResponseEntity<Cliente> getClienteByNumeroTelefono(@PathVariable String numeroTelefono) {
         Cliente cliente = clienteService.findByNumeroTelefono(numeroTelefono);
