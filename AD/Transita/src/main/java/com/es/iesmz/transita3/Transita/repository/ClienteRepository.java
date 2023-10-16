@@ -1,2 +1,29 @@
-package com.es.iesmz.transita3.Transita.repository;public class ClienteRepository {
+package com.es.iesmz.transita3.Transita.repository;
+
+import com.es.iesmz.transita3.Transita.domain.Cliente;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.Set;
+
+@Repository
+public interface ClienteRepository extends CrudRepository<Cliente, Long> {
+    Set<Cliente> findAll();
+    Cliente findByDni(String dni);
+    Set<Cliente> findByNombre(String nombre);
+    Set<Cliente> findByApellido(String apellido);
+    Cliente findByNumeroTelefono(String numeroTelefono);
+    Cliente findByEmail(String email);
+    Cliente nombreUsuario(String nombreUsuario);
+
+    @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre%", nativeQuery = true)
+    Set<Cliente> findByNombreStartingWith(@Param("nombre") String nombre);
+
+    @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :apellido%", nativeQuery = true)
+    Set<Cliente> findByApellidoStartingWith(@Param("apellido") String apellido);
+
+    @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre_usuario%", nativeQuery = true)
+    Set<Cliente> findByNombreUsuarioStartingWith(@Param("nombreUsuario") String nombreUsuario);
 }
