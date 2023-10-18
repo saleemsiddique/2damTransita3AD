@@ -2,7 +2,7 @@ package com.es.iesmz.transita3.Transita.security;
 
 import com.es.iesmz.transita3.Transita.security.jwt.AuthEntryPointJwt;
 import com.es.iesmz.transita3.Transita.security.jwt.AuthTokenFilter;
-import com.es.iesmz.transita3.Transita.security.services.UserDetailsServiceImpl;
+import com.es.iesmz.transita3.Transita.security.services.UsuarioDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     prePostEnabled = true)
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   @Autowired
-  UserDetailsServiceImpl userDetailsService;
+  UsuarioDetailsServiceImpl usuarioDetailsService;
 
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
@@ -48,7 +48,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   public DaoAuthenticationProvider authenticationProvider() {
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
        
-      authProvider.setUserDetailsService(userDetailsService);
+      authProvider.setUserDetailsService(usuarioDetailsService);
       authProvider.setPasswordEncoder(passwordEncoder());
    
       return authProvider;
@@ -81,21 +81,20 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //
 //    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //  }
-  
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf().disable()
-        .cors().disable()
-        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-        .antMatchers("/api/test/**").permitAll()
-        .anyRequest().authenticated();
-    
+    http.cors().and().csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+            .antMatchers("/api/test/**").permitAll()
+            .anyRequest().authenticated();
+
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
+
     return http.build();
   }
 }
