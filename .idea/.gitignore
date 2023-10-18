@@ -1,5 +1,8 @@
 # Compiled class files
-/target/
+*.class
+
+# Maven target directory
+target/
 
 # Logs
 *.log
@@ -36,6 +39,9 @@ gradle/wrapper/gradle-wrapper.properties
 *.jar
 *.war
 
+# XML files
+*.xml
+
 # IDE-specific files
 *.iml
 *.ipr
@@ -46,5 +52,3 @@ gradle/wrapper/gradle-wrapper.properties
 
 # Windows-specific files
 Thumbs.db
-
-*.class
