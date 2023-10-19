@@ -11,12 +11,9 @@ import java.util.Set;
 @Repository
 public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Set<Cliente> findAll();
-    Cliente findByDni(String dni);
     Set<Cliente> findByNombre(String nombre);
     Set<Cliente> findByApellido(String apellido);
-    Cliente findByNumeroTelefono(String numeroTelefono);
     Cliente findByEmail(String email);
-    Cliente nombreUsuario(String nombreUsuario);
 
     @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre%", nativeQuery = true)
     Set<Cliente> findByNombreStartingWith(@Param("nombre") String nombre);

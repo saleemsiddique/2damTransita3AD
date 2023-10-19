@@ -20,29 +20,34 @@ public class Cliente {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "dni")
-    private String dni;
+    @Column(name = "nombre")
+    private String nombre;
 
     @Column(name = "apellido")
     private String apellido;
 
-    @Column(name = "nombre")
-    private String nombre;
-
-    @Column(name = "fecha_nacimiento")
-    private LocalDate fechaNacimiento;
-
-    @Column(name = "numero_telefono")
-    private String numeroTelefono;
-
     @Column(name = "email")
     private String email;
 
-    @Column(name = "nombre_usuario")
-    private String nombreUsuario;
-
     @Column(name = "contrasenya")
     private String contrasenya;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Incidencia> Incidencias = new ArrayList<>();*/

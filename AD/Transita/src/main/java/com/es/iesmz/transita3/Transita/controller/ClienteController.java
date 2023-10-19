@@ -32,15 +32,6 @@ public class ClienteController {
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
-    @GetMapping("/cliente/dni/{dni}")
-    public ResponseEntity<Cliente> getClienteByDni(@PathVariable String dni) {
-        Cliente cliente = clienteService.findByDni(dni);
-        if (cliente == null) {
-            throw new ClienteNotFoundException(dni);
-        }
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
-    }
-
     @GetMapping("/cliente/nombre/{nombre}")
     public ResponseEntity<Set<Cliente>> searchClientesByNombreStartingWith(@PathVariable("nombre") String nombre) {
         Set<Cliente> clientes = clienteService.findByNombreStartingWith(nombre);
@@ -51,15 +42,6 @@ public class ClienteController {
     public ResponseEntity<Set<Cliente>> searchClientesByApellidoStartingWith(@PathVariable("apellido") String apellido) {
         Set<Cliente> clientes = clienteService.findByApellidoStartingWith(apellido);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
-    }
-
-    @GetMapping("/cliente/telefono/{numeroTelefono}")
-    public ResponseEntity<Cliente> getClienteByNumeroTelefono(@PathVariable String numeroTelefono) {
-        Cliente cliente = clienteService.findByNumeroTelefono(numeroTelefono);
-        if (cliente == null) {
-            throw new ClienteNotFoundException(numeroTelefono);
-        }
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
     @GetMapping("/cliente/email/{email}")

@@ -21,11 +21,6 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente findByDni(String dni) {
-        return clienteRepository.findByDni(dni);
-    }
-
-    @Override
     public Optional<Cliente> findById(long id) {
         return clienteRepository.findById(id);
     }
@@ -43,11 +38,6 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Set<Cliente> findByApellidoStartingWith(String apellido) {
         return clienteRepository.findByApellidoStartingWith(apellido);
-    }
-
-    @Override
-    public Cliente findByNumeroTelefono(String numeroTelefono) {
-        return clienteRepository.findByNumeroTelefono(numeroTelefono);
     }
 
     @Override
