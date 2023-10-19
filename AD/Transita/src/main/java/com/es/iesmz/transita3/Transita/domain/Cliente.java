@@ -4,9 +4,6 @@ package com.es.iesmz.transita3.Transita.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,22 +28,6 @@ public class Cliente {
 
     @Column(name = "contrasenya")
     private String contrasenya;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /*@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
