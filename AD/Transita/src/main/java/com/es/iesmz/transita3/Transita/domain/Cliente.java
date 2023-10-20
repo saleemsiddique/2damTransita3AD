@@ -20,7 +20,7 @@ import java.util.Set;
 @Entity
 @Table(name = "cliente",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "nombreUsuario"),
+                @UniqueConstraint(columnNames = "nombre_usuario"),
                 @UniqueConstraint(columnNames = "contrasenya")
         })
 public class Cliente {
@@ -40,18 +40,20 @@ public class Cliente {
 
     @NotBlank
     @Size(max = 50)
-    @Column(name = "nombre_usuario")
     @Email
+    @Column(name = "nombre_usuario")
     private String nombreUsuario;
 
     @NotBlank
     @Size(max = 120)
     private String contrasenya;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(  name = "roles_usuario",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "roles_usuario",
             joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_rol"))
+            inverseJoinColumns = @JoinColumn(name = "id_rol")
+    )
     private Set<Rol> rols = new HashSet<>();
 
     public Cliente(String nombre, String apellidos, String nombreUsuario, String contrasenya) {

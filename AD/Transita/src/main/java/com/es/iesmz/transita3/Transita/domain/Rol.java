@@ -3,6 +3,8 @@ package com.es.iesmz.transita3.Transita.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +21,7 @@ public class Rol {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ERole nombre;
+
+    @ManyToMany(mappedBy = "rols")
+    private Set<Cliente> clientes = new HashSet<>();
 }
