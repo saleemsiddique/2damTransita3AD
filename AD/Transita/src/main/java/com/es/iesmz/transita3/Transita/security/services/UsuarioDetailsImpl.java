@@ -44,7 +44,7 @@ public class UsuarioDetailsImpl implements UserDetails {
         return new UsuarioDetailsImpl(
                 cliente.getId(),
                 cliente.getNombre(),
-                cliente.getApellido(),
+                cliente.getApellidos(),
                 cliente.getNombreUsuario(),
                 cliente.getContrasenya(),
                 authorities);
@@ -57,6 +57,14 @@ public class UsuarioDetailsImpl implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
     }
 
     @Override

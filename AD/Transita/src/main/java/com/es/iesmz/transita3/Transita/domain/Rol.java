@@ -1,7 +1,8 @@
 package com.es.iesmz.transita3.Transita.domain;
 
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor

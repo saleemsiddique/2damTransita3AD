@@ -38,17 +38,17 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
-    @GetMapping("/cliente/apellido/{apellido}")
+    @GetMapping("/cliente/apellidos/{apellido}")
     public ResponseEntity<Set<Cliente>> searchClientesByApellidoStartingWith(@PathVariable("apellido") String apellido) {
         Set<Cliente> clientes = clienteService.findByApellidoStartingWith(apellido);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
-    @GetMapping("/cliente/email/{email}")
-    public ResponseEntity<Cliente> getClienteByEmail(@PathVariable String email) {
-        Cliente cliente = clienteService.findByEmail(email);
+    @GetMapping("/cliente/nombreusuario/{nombreusuario}")
+    public ResponseEntity<Cliente> getClienteByEmail(@PathVariable String nombreusuario) {
+        Cliente cliente = clienteService.findByNombreUsuario(nombreusuario);
         if (cliente == null) {
-            throw new ClienteNotFoundException(email);
+            throw new ClienteNotFoundException(nombreusuario);
         }
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }

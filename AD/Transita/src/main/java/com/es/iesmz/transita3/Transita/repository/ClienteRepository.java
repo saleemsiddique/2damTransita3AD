@@ -13,8 +13,8 @@ import java.util.Set;
 public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Set<Cliente> findAll();
     Set<Cliente> findByNombre(String nombre);
-    Set<Cliente> findByApellido(String apellido);
-    Optional<Cliente> findByNombreUsuario(String nombreUsuario);
+    Set<Cliente> findByApellidos(String apellido);
+    Cliente findByNombreUsuario(String nombreUsuario);
 
 
     Boolean existsByNombreUsuario(String username);

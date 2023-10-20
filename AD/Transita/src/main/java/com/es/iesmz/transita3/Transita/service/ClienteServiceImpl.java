@@ -41,8 +41,8 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente findByEmail(String email) {
-        return clienteRepository.findByEmail(email);
+    public Cliente findByNombreUsuario(String nombreUsuario) {
+        return clienteRepository.findByNombreUsuario(nombreUsuario);
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.es.iesmz.transita3.Transita.domain;
 
-import jakarta.persistence.*;
-
 import lombok.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -16,12 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString
 @Entity
 @Table(name = "cliente",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "nombreUsuario"),
-                @UniqueConstraint(columnNames = "email")
+                @UniqueConstraint(columnNames = "contrasenya")
         })
 public class Cliente {
     @Id
@@ -35,8 +35,8 @@ public class Cliente {
 
     @NotBlank
     @Size(max = 20)
-    @Column(name = "apellido")
-    private String apellido;
+    @Column(name = "apellidos")
+    private String apellidos;
 
     @NotBlank
     @Size(max = 50)
@@ -53,4 +53,11 @@ public class Cliente {
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_rol"))
     private Set<Rol> rols = new HashSet<>();
+
+    public Cliente(String nombre, String apellidos, String nombreUsuario, String contrasenya) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.nombreUsuario = nombreUsuario;
+        this.contrasenya = contrasenya;
+    }
 }

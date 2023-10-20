@@ -20,7 +20,7 @@ public class ClienteSignupRequest {
 
     @NotBlank
     @Size(min = 3, max = 20)
-    private String apellido;
+    private String apellidos;
 
     @NotBlank
     @Size(max = 50)

@@ -13,7 +13,7 @@ public interface ClienteService {
     Cliente addCliente(Cliente cliente);
     Set<Cliente> findByNombreStartingWith(String nombre);
     Set<Cliente> findByApellidoStartingWith(String apellido);
-    Cliente findByEmail(String email);
+    Cliente findByNombreUsuario(String email);
     Cliente modifyCliente(long id, Cliente newCliente);
     void deleteCliente(long id);
 }
