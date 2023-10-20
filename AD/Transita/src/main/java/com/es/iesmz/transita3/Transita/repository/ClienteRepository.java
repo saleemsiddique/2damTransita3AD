@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -13,7 +14,11 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Set<Cliente> findAll();
     Set<Cliente> findByNombre(String nombre);
     Set<Cliente> findByApellido(String apellido);
-    Cliente findByEmail(String email);
+    Optional<Cliente> findByNombreUsuario(String nombreUsuario);
+
+
+    Boolean existsByNombreUsuario(String username);
+    Boolean existsByEmail(String email);
 
     @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre%", nativeQuery = true)
     Set<Cliente> findByNombreStartingWith(@Param("nombre") String nombre);
