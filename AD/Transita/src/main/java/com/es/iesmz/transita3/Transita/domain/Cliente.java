@@ -51,7 +51,7 @@ public class Cliente {
     @Column(name = "contrasenya")
     private String contrasenya;
 
-    @Column(name = "Estado")
+    @Column(name = "estado")
     private ECliente estadoCuenta;
 
 

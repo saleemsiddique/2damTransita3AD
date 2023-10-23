@@ -1,6 +1,7 @@
 package com.es.iesmz.transita3.Transita.security.services;
 
 import com.es.iesmz.transita3.Transita.domain.Cliente;
+import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,15 +25,17 @@ public class UsuarioDetailsImpl implements UserDetails {
     @JsonIgnore
     private String contrasenya;
 
+    private ECliente estado;
+
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UsuarioDetailsImpl(Long id, String nombre, String apellido, String nombreUsuario, String contrasenya,
-                              Collection<? extends GrantedAuthority> authorities) {
+    public UsuarioDetailsImpl(Long id, String nombre, String apellido, String nombreUsuario, String contrasenya, ECliente estado, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellido;
         this.nombreUsuario = nombreUsuario;
         this.contrasenya = contrasenya;
+        this.estado = estado;
         this.authorities = authorities;
     }
 
@@ -47,6 +50,7 @@ public class UsuarioDetailsImpl implements UserDetails {
                 cliente.getApellidos(),
                 cliente.getNombreUsuario(),
                 cliente.getContrasenya(),
+                cliente.getEstadoCuenta(),
                 authorities);
     }
 
@@ -70,6 +74,10 @@ public class UsuarioDetailsImpl implements UserDetails {
     @Override
     public String getPassword() {
         return contrasenya;
+    }
+
+    public ECliente getEstado() {
+        return estado;
     }
 
     @Override

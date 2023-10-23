@@ -1,6 +1,7 @@
 package com.es.iesmz.transita3.Transita.controller;
 
 import com.es.iesmz.transita3.Transita.domain.Cliente;
+import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.es.iesmz.transita3.Transita.domain.ERole;
 import com.es.iesmz.transita3.Transita.domain.Rol;
 import com.es.iesmz.transita3.Transita.payload.request.ClienteLoginRequest;
@@ -69,6 +70,7 @@ public class ClienteAuthController {
                 userDetails.getApellidos(),
                 userDetails.getUsername(),
                 userDetails.getPassword(),
+                userDetails.getEstado(),
                 roles));
     }
 
@@ -84,6 +86,9 @@ public class ClienteAuthController {
         Cliente cliente = new Cliente(signUpRequestCliente.getNombre(), signUpRequestCliente.getApellidos(), signUpRequestCliente.getNombreUsuario(),
                 encoder.encode(signUpRequestCliente.getContrasenya()));
 
+        // Set the estadoCuenta to ACTIVADO (or your desired default state)
+        cliente.setEstadoCuenta(ECliente.ACTIVADO);
+
         Set<String> strRoles = signUpRequestCliente.getRol();
         Set<Rol> roles = new HashSet<>();
 
@@ -94,12 +99,12 @@ public class ClienteAuthController {
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "admin":
+                    case "ROL_ADMIN":
                         Rol adminRol = roleRepository.findByNombre(ERole.ROL_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
                         roles.add(adminRol);
                         break;
-                    default:
+                    case "ROL_USUARIO":
                         Rol userRol = roleRepository.findByNombre(ERole.ROL_USUARIO)
                                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
                         roles.add(userRol);
@@ -112,4 +117,5 @@ public class ClienteAuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
 }

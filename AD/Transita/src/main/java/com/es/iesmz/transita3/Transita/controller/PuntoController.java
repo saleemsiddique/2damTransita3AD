@@ -22,8 +22,9 @@ public class PuntoController {
     private PuntoService puntoService;
 
     @GetMapping("/puntos")
-    @PreAuthorize("hasRole('ROL_USUARIO')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Set<Punto>> getPunto(){
+        System.out.println("Método getPunto ha sido llamado.");
         Set<Punto> puntos = null;
         puntos = puntoService.findAll();
 
@@ -31,8 +32,10 @@ public class PuntoController {
     }
 
     @GetMapping("/puntos/id/{id}")
+    @PreAuthorize("hasRole('ROL_USUARIO')")
     public ResponseEntity<Punto> getPuntoById(@PathVariable long id){
-         Punto punto = puntoService.findById(id)
+        System.out.println("Método getPunto ha sido llamado.");
+        Punto punto = puntoService.findById(id)
                  .orElseThrow(()-> new PuntoNotFoundException(id));
          return new ResponseEntity<>(punto, HttpStatus.OK);
     }

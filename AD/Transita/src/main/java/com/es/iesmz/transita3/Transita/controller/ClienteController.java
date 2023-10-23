@@ -20,7 +20,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping("/cliente")
-    @PreAuthorize("hasAnyRole('ROL_USUARIO', 'ROL_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Set<Cliente>> getClientes(@RequestParam(value = "nombre", defaultValue = "") String nombre) {
         Set<Cliente> clientes = clienteService.findAll();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
