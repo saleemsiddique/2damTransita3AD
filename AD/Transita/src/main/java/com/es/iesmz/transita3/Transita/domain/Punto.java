@@ -1,10 +1,10 @@
 package com.es.iesmz.transita3.Transita.domain;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -29,7 +29,7 @@ public class Punto {
     @Column(name = "Accesibilidad")
     private AccesibilidadPunto accesibilidadPunto;
 
-    /*@OneToMany(mappedBy = "Punto")
-    private List<Incidencia> incidencias;*/
+    @OneToMany(mappedBy = "punto", cascade = CascadeType.ALL)
+    private List<Incidencia> incidencias;
 
 }

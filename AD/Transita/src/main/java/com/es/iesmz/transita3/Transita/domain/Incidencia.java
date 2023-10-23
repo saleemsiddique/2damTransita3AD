@@ -1,10 +1,10 @@
 package com.es.iesmz.transita3.Transita.domain;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 
@@ -26,8 +26,8 @@ public class Incidencia {
     private LocalDate FechaHora;
 
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Punto punto;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Cliente cliente;*/
+    private Cliente cliente;
 }

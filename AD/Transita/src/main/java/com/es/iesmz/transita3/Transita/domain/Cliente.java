@@ -1,6 +1,5 @@
 package com.es.iesmz.transita3.Transita.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +7,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -47,7 +48,11 @@ public class Cliente {
 
     @NotBlank
     @Size(max = 120)
+    @Column(name = "contrasenya")
     private String contrasenya;
+
+    @Column(name = "Estado")
+    private ECliente estadoCuenta;
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -57,6 +62,9 @@ public class Cliente {
             inverseJoinColumns = @JoinColumn(name = "id_rol")
     )
     private Set<Rol> rols = new HashSet<>();
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Incidencia> incidencias = new ArrayList<>();
 
     public Cliente(String nombre, String apellidos, String nombreUsuario, String contrasenya) {
         this.nombre = nombre;
