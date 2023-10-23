@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -55,6 +56,7 @@ public class Cliente {
     private ECliente estadoCuenta;
 
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "roles_usuario",
@@ -63,6 +65,7 @@ public class Cliente {
     )
     private Set<Rol> rols = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Incidencia> incidencias = new ArrayList<>();
 

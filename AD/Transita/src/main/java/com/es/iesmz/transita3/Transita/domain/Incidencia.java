@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,11 @@ public class Incidencia {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Punto punto;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Cliente cliente;
+
 }

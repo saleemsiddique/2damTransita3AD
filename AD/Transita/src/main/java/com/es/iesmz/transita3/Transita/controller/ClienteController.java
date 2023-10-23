@@ -27,8 +27,8 @@ public class ClienteController {
     }
 
 
-    @GetMapping("/cliente/{id}")
-    @PreAuthorize("hasRole('ROL_USUARIO') or hasRole('ROL_ADMIN')")
+    @GetMapping("/cliente/id/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Cliente> getCliente(@PathVariable long id) {
         Cliente cliente = clienteService.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException(id));
