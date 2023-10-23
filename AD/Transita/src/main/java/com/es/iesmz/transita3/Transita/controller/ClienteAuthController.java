@@ -65,6 +65,8 @@ public class ClienteAuthController {
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
+                userDetails.getNombre(),
+                userDetails.getApellidos(),
                 userDetails.getUsername(),
                 userDetails.getPassword(),
                 roles));

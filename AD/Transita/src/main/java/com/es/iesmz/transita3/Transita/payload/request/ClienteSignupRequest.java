@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 
 import java.util.Set;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

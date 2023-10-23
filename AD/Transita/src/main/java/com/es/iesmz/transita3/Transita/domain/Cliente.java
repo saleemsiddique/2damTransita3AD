@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -47,6 +48,7 @@ public class Cliente {
     @NotBlank
     @Size(max = 120)
     private String contrasenya;
+
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
