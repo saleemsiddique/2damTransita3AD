@@ -93,19 +93,19 @@ public class ClienteAuthController {
         Set<Rol> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Rol userRol = roleRepository.findByNombre(ERole.ROL_USUARIO)
+            Rol userRol = roleRepository.findByNombre(ERole.ROLE_USUARIO)
                     .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
             roles.add(userRol);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "ROL_ADMIN":
-                        Rol adminRol = roleRepository.findByNombre(ERole.ROL_ADMIN)
+                    case "ROLE_ADMIN":
+                        Rol adminRol = roleRepository.findByNombre(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
                         roles.add(adminRol);
                         break;
-                    case "ROL_USUARIO":
-                        Rol userRol = roleRepository.findByNombre(ERole.ROL_USUARIO)
+                    case "ROLE_USUARIO":
+                        Rol userRol = roleRepository.findByNombre(ERole.ROLE_USUARIO)
                                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
                         roles.add(userRol);
                 }

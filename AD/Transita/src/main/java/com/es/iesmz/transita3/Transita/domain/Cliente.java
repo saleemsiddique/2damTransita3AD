@@ -74,5 +74,6 @@ public class Cliente {
         this.apellidos = apellidos;
         this.nombreUsuario = nombreUsuario;
         this.contrasenya = contrasenya;
+        this.estadoCuenta = ECliente.ACTIVADO;
     } 
 }

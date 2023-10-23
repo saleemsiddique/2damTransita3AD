@@ -22,7 +22,7 @@ public class PuntoController {
     private PuntoService puntoService;
 
     @GetMapping("/puntos")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Punto>> getPunto(){
         System.out.println("Método getPunto ha sido llamado.");
         Set<Punto> puntos = null;
@@ -32,7 +32,7 @@ public class PuntoController {
     }
 
     @GetMapping("/puntos/id/{id}")
-    @PreAuthorize("hasRole('ROL_USUARIO')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Punto> getPuntoById(@PathVariable long id){
         System.out.println("Método getPunto ha sido llamado.");
         Punto punto = puntoService.findById(id)
@@ -41,6 +41,7 @@ public class PuntoController {
     }
 
     @GetMapping("/puntos/tipo/{tipo}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Punto>> getPuntoByTipo(@PathVariable int tipo) {
         TipoPunto tipoPunto = null;
 
@@ -59,18 +60,21 @@ public class PuntoController {
     }
 
     @GetMapping("/puntos/latitud/{latitud}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Punto>> getPuntoByLatitud(@PathVariable double latitud){
         Set<Punto> puntos = puntoService.findByLatitud(latitud);
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
     @GetMapping("/puntos/longitud/{longitud}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Punto>> getPuntoByLongitud(@PathVariable double longitud){
         Set<Punto> puntos = puntoService.findByLongitud(longitud);
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
     @GetMapping("/puntos/accesibilidad/{accesibilidad}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Punto>> getPuntoByAccesibilidad(@PathVariable int accesibilidad) {
         AccesibilidadPunto accesibilidadPunto = null;
 
@@ -89,12 +93,14 @@ public class PuntoController {
     }
 
     @PostMapping("/puntos")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Punto> addPunto(@RequestBody Punto punto){
         Punto nuevoPunto = puntoService.addPunto(punto);
         return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
     }
 
     @PutMapping("/punto/modificar/{id}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Punto> modifyPunto(@PathVariable long id,
                                              @RequestBody Punto nuevoPunto)
     {
@@ -105,6 +111,7 @@ public class PuntoController {
     }
 
     @DeleteMapping("punto/eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Punto> deletePunto(@PathVariable long id){
         Punto punto = puntoService.findById(id)
                 .orElseThrow(()-> new PuntoNotFoundException(id));

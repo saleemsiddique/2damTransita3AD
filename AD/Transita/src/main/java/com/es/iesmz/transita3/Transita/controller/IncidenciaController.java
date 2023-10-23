@@ -11,6 +11,7 @@ import com.es.iesmz.transita3.Transita.service.IncidenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -22,6 +23,7 @@ public class IncidenciaController {
     private IncidenciaService incidenciaService;
 
     @GetMapping("/incidencias")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Incidencia>> getIncidencia(){
         Set<Incidencia> incidencias = null;
         incidencias = incidenciaService.findAll();
@@ -30,6 +32,7 @@ public class IncidenciaController {
     }
 
     @GetMapping("/incidencia/id/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> getIncidenciaById(@PathVariable long id){
         Incidencia incidencia = incidenciaService.findById(id)
                 .orElseThrow(()-> new IncidenciaNotFoundException(id));
@@ -37,6 +40,7 @@ public class IncidenciaController {
     }
 
     @GetMapping("/incidencia/estado/{estado}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Incidencia>> findByEstado(@PathVariable int estado) {
         EstadoIncidencia estadoIncidencia = null;
 
@@ -57,18 +61,21 @@ public class IncidenciaController {
     }
 
     @GetMapping("/incidencia/duracion/{duracion}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Incidencia>> getIncideciaByDuracion(@PathVariable int duracion){
         Set<Incidencia> incidencias = incidenciaService.findByDuracion(duracion);
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
     @PostMapping("/incidencia")
+    @PreAuthorize("hasRole('ROLE_USUARIO')")
     public ResponseEntity<Incidencia> addIncidencia(@RequestBody Incidencia incidencia){
         Incidencia nuevaIncidencia = incidenciaService.addIncidencia(incidencia);
         return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
     }
 
     @PutMapping("/incidencia/modificar/{id}")
+    @PreAuthorize("hasRole('ROLE_USUARIO')")
     public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id,
                                              @RequestBody Incidencia nuevaIncidencia)
     {
@@ -79,6 +86,7 @@ public class IncidenciaController {
     }
 
     @DeleteMapping("/incidencia/eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> deleteIncidencia(@PathVariable long id){
         Incidencia incidencia = incidenciaService.findById(id)
                 .orElseThrow(()-> new IncidenciaNotFoundException(id));
