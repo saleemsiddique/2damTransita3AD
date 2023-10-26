@@ -48,21 +48,18 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
-    @GetMapping("/cliente/apellidos/{apellido}")
+    @GetMapping("/cliente/apellidos/{apellidos}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Set<Cliente>> searchClientesByApellidoStartingWith(@PathVariable("apellido") String apellido) {
-        Set<Cliente> clientes = clienteService.findByApellidoStartingWith(apellido);
+    public ResponseEntity<Set<Cliente>> searchClientesByApellidoStartingWith(@PathVariable("apellidos") String apellidos) {
+        Set<Cliente> clientes = clienteService.findByApellidoStartingWith(apellidos);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
     @GetMapping("/cliente/nombreusuario/{nombreusuario}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Cliente> getClienteByEmail(@PathVariable String nombreusuario) {
-        Cliente cliente = clienteService.findByNombreUsuario(nombreusuario);
-        if (cliente == null) {
-            throw new ClienteNotFoundException(nombreusuario);
-        }
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    public ResponseEntity<Set<Cliente>> getClienteByEmail(@PathVariable String nombreusuario) {
+        Set<Cliente> clientes = clienteService.findByNombreUsuarioStartingWith(nombreusuario);
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
     /*

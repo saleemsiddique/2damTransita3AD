@@ -41,6 +41,11 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario) {
+        return  clienteRepository.findByNombreUsuarioStartingWith(nombreUsuario);
+    }
+
+    @Override
     public Cliente findByNombreUsuario(String nombreUsuario) {
         return clienteRepository.findByNombreUsuario(nombreUsuario);
     }
