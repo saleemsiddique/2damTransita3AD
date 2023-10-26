@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static com.es.iesmz.transita3.Transita.controller.Response.NOT_FOUND;
@@ -18,6 +20,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @GetMapping("/cliente")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -69,16 +74,38 @@ public class ClienteController {
         return new ResponseEntity<>(addedCliente, HttpStatus.OK);
     }*/
 
-    /*
-    No creo que tenga sentido que un cliente pueda ser actualizado de esta manera de poner todos los datos a la vez ni por el mimso ni por un admin, tendria que ser un controller por campo (preguntar)
-    @PutMapping("/cliente/{id}")
-    @PreAuthorize("hasRole('ROLE_USUARIO')")
-    public ResponseEntity<Cliente> modifyCliente(@PathVariable long id, @RequestBody Cliente newCliente) {
-        Cliente cliente = clienteService.modifyCliente(id, newCliente);
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
-    }*/
 
-    @DeleteMapping("/cliente/{id}")
+
+    @PutMapping("/cliente/modificar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Cliente> modifyCliente(@PathVariable long id, @RequestBody Cliente newCliente) {
+        Optional<Cliente> optionalCliente = clienteService.findById(id);
+
+        if (optionalCliente.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Cliente cliente = optionalCliente.get();
+
+        // Actualiza los campos del cliente con los valores proporcionados en la solicitud
+        cliente.setNombre(newCliente.getNombre());
+        cliente.setApellidos(newCliente.getApellidos());
+        cliente.setNombreUsuario(newCliente.getNombreUsuario());
+
+        // Cifra la nueva contraseña antes de guardarla si se proporciona
+        if (newCliente.getContrasenya() != null) {
+            String contraseñaCifrada = passwordEncoder.encode(newCliente.getContrasenya());
+            cliente.setContrasenya(contraseñaCifrada);
+        }
+
+        // Guarda el cliente modificado en la base de datos
+        cliente = clienteService.modifyCliente(cliente.getId(), cliente);
+
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/cliente/eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response> deleteCliente(@PathVariable long id) {
         clienteService.deleteCliente(id);
