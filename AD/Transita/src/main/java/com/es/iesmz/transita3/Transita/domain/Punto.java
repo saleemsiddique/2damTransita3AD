@@ -1,5 +1,7 @@
 package com.es.iesmz.transita3.Transita.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +30,8 @@ public class Punto {
     private double longitud;
     @Column(name = "Accesibilidad")
     private AccesibilidadPunto accesibilidadPunto;
+
+
 
     @OneToMany(mappedBy = "punto", cascade = CascadeType.ALL)
     private List<Incidencia> incidencias;

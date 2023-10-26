@@ -68,20 +68,18 @@ public class IncidenciaController {
     }
 
     @PostMapping("/incidencia")
-    @PreAuthorize("hasRole('ROLE_USUARIO')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> addIncidencia(@RequestBody Incidencia incidencia){
         Incidencia nuevaIncidencia = incidenciaService.addIncidencia(incidencia);
         return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
     }
 
     @PutMapping("/incidencia/modificar/{id}")
-    @PreAuthorize("hasRole('ROLE_USUARIO')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id,
                                              @RequestBody Incidencia nuevaIncidencia)
     {
-        Incidencia incidencia = incidenciaService.findById(id)
-                .orElseThrow(()-> new IncidenciaNotFoundException(id));
-        incidencia = incidenciaService.modifyIncidencia(id, nuevaIncidencia);
+        Incidencia incidencia = incidenciaService.modifyIncidencia(id, nuevaIncidencia);
         return new ResponseEntity<>(incidencia, HttpStatus.OK);
     }
 
