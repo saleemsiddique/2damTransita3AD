@@ -7,6 +7,12 @@ import com.es.iesmz.transita3.Transita.exception.AccesibilidadNotFoundException;
 import com.es.iesmz.transita3.Transita.exception.PuntoNotFoundException;
 import com.es.iesmz.transita3.Transita.exception.TipoNotFoundException;
 import com.es.iesmz.transita3.Transita.service.PuntoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,28 +27,43 @@ public class PuntoController {
     @Autowired
     private PuntoService puntoService;
 
-    @GetMapping("/puntos")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Set<Punto>> getPunto(){
-        System.out.println("Método getPunto ha sido llamado.");
-        Set<Punto> puntos = null;
-        puntos = puntoService.findAll();
+    @Operation(summary = "Obtiene el listado de puntos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+            @GetMapping("/puntos")
+            @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+            public ResponseEntity<Set<Punto>> getPunto(){
+            System.out.println("Método getPunto ha sido llamado.");
+            Set<Punto> puntos = null;
+            puntos = puntoService.findAll();
 
-        return new ResponseEntity<>(puntos, HttpStatus.OK);
-    }
+            return new ResponseEntity<>(puntos, HttpStatus.OK);
+            }
 
+            @Operation(summary = "Obtiene un punto por su ID")
+            @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto con ese ID",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
     @GetMapping("/puntos/id/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Punto> getPuntoById(@PathVariable long id){
         System.out.println("Método getPunto ha sido llamado.");
         Punto punto = puntoService.findById(id)
-                 .orElseThrow(()-> new PuntoNotFoundException(id));
-         return new ResponseEntity<>(punto, HttpStatus.OK);
+                .orElseThrow(()-> new PuntoNotFoundException(id));
+        return new ResponseEntity<>(punto, HttpStatus.OK);
     }
 
-    @GetMapping("/puntos/tipo/{tipo}")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Set<Punto>> getPuntoByTipo(@PathVariable int tipo) {
+    @Operation(summary = "Obtiene el listado de puntos por tipo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+            @GetMapping("/puntos/tipo/{tipo}")
+            @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+            public ResponseEntity<Set<Punto>> getPuntoByTipo(@PathVariable int tipo) {
         TipoPunto tipoPunto = null;
 
         if (tipo == 0) {
@@ -59,23 +80,38 @@ public class PuntoController {
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
-    @GetMapping("/puntos/latitud/{latitud}")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Set<Punto>> getPuntoByLatitud(@PathVariable double latitud){
+    @Operation(summary = "Obtiene el listado de puntos por latitud")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+            @GetMapping("/puntos/latitud/{latitud}")
+            @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+            public ResponseEntity<Set<Punto>> getPuntoByLatitud(@PathVariable double latitud){
         Set<Punto> puntos = puntoService.findByLatitud(latitud);
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
-    @GetMapping("/puntos/longitud/{longitud}")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Set<Punto>> getPuntoByLongitud(@PathVariable double longitud){
+    @Operation(summary = "Obtiene el listado de puntos por longitud")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+            @GetMapping("/puntos/longitud/{longitud}")
+            @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+            public ResponseEntity<Set<Punto>> getPuntoByLongitud(@PathVariable double longitud){
         Set<Punto> puntos = puntoService.findByLongitud(longitud);
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
-    @GetMapping("/puntos/accesibilidad/{accesibilidad}")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Set<Punto>> getPuntoByAccesibilidad(@PathVariable int accesibilidad) {
+    @Operation(summary = "Obtiene el listado de puntos por accesibilidad")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+            @GetMapping("/puntos/accesibilidad/{accesibilidad}")
+            @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+            public ResponseEntity<Set<Punto>> getPuntoByAccesibilidad(@PathVariable int accesibilidad) {
         AccesibilidadPunto accesibilidadPunto = null;
 
         if (accesibilidad == 0) {
@@ -92,43 +128,56 @@ public class PuntoController {
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
-    @PostMapping("/puntos")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Punto> addPunto(@RequestBody Punto punto){
+    @Operation(summary = "Añade un nuevo punto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto agregado",
+                    content = @Content(schema = @Schema(implementation = Punto.class))
+            )})
+            @PostMapping("/puntos")
+            @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+            public ResponseEntity<Punto> addPunto(@RequestBody Punto punto){
         Punto nuevoPunto = puntoService.addPunto(punto);
         return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
     }
 
-    @PutMapping("/punto/modificar/{id}")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Punto> modifyPunto(@PathVariable long id,
-                                             @RequestBody Punto nuevoPunto)
-    {
+    @Operation(summary = "Modifica un punto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto modificado",
+                    content = @Content(schema = @Schema(implementation = Punto.class))
+            )})
+@PutMapping("/punto/modificar/{id}")
+@PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+public ResponseEntity<Punto> modifyPunto(@PathVariable long id,
+@RequestBody Punto nuevoPunto)
+        {
         Punto punto = puntoService.findById(id)
-                .orElseThrow(()-> new PuntoNotFoundException(id));
+        .orElseThrow(()-> new PuntoNotFoundException(id));
         punto = puntoService.modifyPunto(id, nuevoPunto);
         return new ResponseEntity<>(punto, HttpStatus.OK);
-    }
+        }
 
-    @DeleteMapping("punto/eliminar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Punto> deletePunto(@PathVariable long id){
+    @Operation(summary = "Elimina un punto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se elimina el punto", content = @Content(schema = @Schema(implementation =
+                    Response.class))),
+    @ApiResponse(responseCode = "404", description = "El punto no existe", content = @Content(schema = @Schema(implementation =
+            Response.class)))
+})
+        @DeleteMapping("punto/eliminar/{id}")
+        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        public ResponseEntity<Punto> deletePunto(@PathVariable long id){
         Punto punto = puntoService.findById(id)
-                .orElseThrow(()-> new PuntoNotFoundException(id));
+        .orElseThrow(()-> new PuntoNotFoundException(id));
         puntoService.deletePunto(id);
         return new ResponseEntity(Response.noErrorResponse(), HttpStatus.OK);
-    }
+        }
 
-    @ExceptionHandler(PuntoNotFoundException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Response>
+@ExceptionHandler(PuntoNotFoundException.class)
+@ResponseBody
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public ResponseEntity<Response>
     handleException(PuntoNotFoundException pnfe) {
-        Response response = Response.errorResonse(NOT_FOUND,
-                pnfe.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-
-
-
-}
+            Response response = Response.errorResonse(NOT_FOUND, pnfe.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+        }

@@ -8,6 +8,12 @@ import com.es.iesmz.transita3.Transita.exception.IncidenciaNotFoundException;
 
 import com.es.iesmz.transita3.Transita.service.IncidenciaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +28,11 @@ public class IncidenciaController {
     @Autowired
     private IncidenciaService incidenciaService;
 
+    @Operation(summary = "Obtiene el listado de incidencias")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de incidencias",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
     @GetMapping("/incidencias")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Incidencia>> getIncidencia(){
@@ -31,6 +42,11 @@ public class IncidenciaController {
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene una incidencia determinada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Incidencia con ese ID",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
     @GetMapping("/incidencia/id/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> getIncidenciaById(@PathVariable long id){
@@ -39,6 +55,11 @@ public class IncidenciaController {
         return new ResponseEntity<>(incidencia, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene el listado de incidencias")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de incidencias",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
     @GetMapping("/incidencia/estado/{estado}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Incidencia>> findByEstado(@PathVariable int estado) {
@@ -60,13 +81,23 @@ public class IncidenciaController {
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene el listado de incidencias por duracion")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de incidencias",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
     @GetMapping("/incidencia/duracion/{duracion}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Set<Incidencia>> getIncideciaByDuracion(@PathVariable int duracion){
+    public ResponseEntity<Set<Incidencia>> getIncideciaByDuracion(@PathVariable String duracion){
         Set<Incidencia> incidencias = incidenciaService.findByDuracion(duracion);
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
+    @Operation(summary = "Registra un nuevo incidencia")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se registra el incidencia", content = @Content(schema = @Schema(implementation =
+                    Incidencia.class)))
+    })
     @PostMapping("/incidencia")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> addIncidencia(@RequestBody Incidencia incidencia){
@@ -74,7 +105,15 @@ public class IncidenciaController {
         return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
     }
 
-    @PutMapping("/incidencia/modificar/{id}")
+
+    @Operation(summary = "Modifica una incidencia en el catálogo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se modifica la incidencia", content = @Content(schema = @Schema(implementation =
+                    Incidencia.class))),
+    @ApiResponse(responseCode = "404", description = "la incidencia no existe", content = @Content(schema = @Schema(implementation =
+            Response.class)))
+})
+@PutMapping("/incidencia/modificar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id,
                                              @RequestBody Incidencia nuevaIncidencia)
@@ -83,6 +122,14 @@ public class IncidenciaController {
         return new ResponseEntity<>(incidencia, HttpStatus.OK);
     }
 
+
+    @Operation(summary = "Elimina una incidencia")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se elimina la incidencia", content = @Content(schema = @Schema(implementation =
+                    Response.class))),
+    @ApiResponse(responseCode = "404", description = "La incidencia no existe", content = @Content(schema = @Schema(implementation =
+            Response.class)))
+})
     @DeleteMapping("/incidencia/eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> deleteIncidencia(@PathVariable long id){

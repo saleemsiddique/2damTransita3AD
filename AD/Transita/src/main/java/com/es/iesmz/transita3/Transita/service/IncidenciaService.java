@@ -13,7 +13,7 @@ public interface  IncidenciaService {
 
     Set<Incidencia> findByEstado(EstadoIncidencia estado);
 
-    Set<Incidencia> findByDuracion(int duracion);
+    Set<Incidencia> findByDuracion(String duracion);
 
     Incidencia addIncidencia(Incidencia incidencia);
 

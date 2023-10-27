@@ -15,7 +15,7 @@ public interface IncidenciaRepository extends CrudRepository<Incidencia, Long> {
 
     Set<Incidencia> findByEstado(EstadoIncidencia estado);
 
-    Set<Incidencia> findByDuracion(int duracion);
+    Set<Incidencia> findByDuracion(String duracion);
 
 
 

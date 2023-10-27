@@ -24,7 +24,7 @@ public class IncidenciaServiceImpl implements IncidenciaService{
     }
 
     @Override
-    public Set<Incidencia> findByDuracion(int duracion) {
+    public Set<Incidencia> findByDuracion(String duracion) {
         return incidenciaRepository.findByDuracion(duracion);
     }
 
