@@ -3,6 +3,9 @@ package com.es.iesmz.transita3.Transita.controller;
 import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.exception.ClienteNotFoundException;
 import com.es.iesmz.transita3.Transita.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +26,7 @@ public class ClienteController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
+    @Operation(summary = "Obtener una lista de todos los clientes")
     @GetMapping("/cliente")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Cliente>> getClientes(@RequestParam(value = "nombre", defaultValue = "") String nombre) {
@@ -31,7 +34,11 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Obtener un cliente por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente obtenido exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
+    })
     @GetMapping("/cliente/id/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Cliente> getCliente(@PathVariable long id) {
@@ -41,6 +48,7 @@ public class ClienteController {
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
+    @Operation(summary = "Buscar clientes por nombre que comienza con")
     @GetMapping("/cliente/nombre/{nombre}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Cliente>> searchClientesByNombreStartingWith(@PathVariable("nombre") String nombre) {
@@ -48,6 +56,7 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
+    @Operation(summary = "Buscar clientes por apellido que comienza con")
     @GetMapping("/cliente/apellidos/{apellidos}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Cliente>> searchClientesByApellidoStartingWith(@PathVariable("apellidos") String apellidos) {
@@ -55,12 +64,14 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtener cliente por correo electrónico")
     @GetMapping("/cliente/nombreusuario/{nombreusuario}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Cliente>> getClienteByEmail(@PathVariable String nombreusuario) {
         Set<Cliente> clientes = clienteService.findByNombreUsuarioStartingWith(nombreusuario);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
+
 
     /*
     Creo que no hace falta, porque el cliente se crea cuando haces el signup (preguntar)
@@ -73,6 +84,7 @@ public class ClienteController {
 
 
 
+    @Operation(summary = "Modificar un cliente por ID")
     @PutMapping("/cliente/modificar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Cliente> modifyCliente(@PathVariable long id, @RequestBody Cliente newCliente) {
@@ -101,7 +113,7 @@ public class ClienteController {
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Eliminar un cliente por ID")
     @DeleteMapping("/cliente/eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response> deleteCliente(@PathVariable long id) {
