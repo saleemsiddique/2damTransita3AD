@@ -22,5 +22,5 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
 
-
+    
 }
