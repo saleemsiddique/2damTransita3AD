@@ -17,14 +17,13 @@ public class ZonaController {
     @Autowired
     private ZonaService zonaService;
 
-    @GetMapping
-    @RequestMapping("/zonas")
+    @GetMapping("/zonas")
     public ResponseEntity<Set<Zona>> getAllZonas() {
         Set<Zona> zonas = zonaService.findAll();
         return new ResponseEntity<>(zonas, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("zona/id/{id}")
     public ResponseEntity<Zona> getZonaById(@PathVariable long id) {
         Zona zona = zonaService.findById(id).orElse(null);
         if (zona != null) {
@@ -33,7 +32,7 @@ public class ZonaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("nombre/{nombre}")
+    @GetMapping("zona/nombre/{nombre}")
     public ResponseEntity<Set<Zona>> getZonaByNombre(@PathVariable String nombre) {
         Set<Zona> zonas = zonaService.findByNombreStartingWith(nombre);
         return new ResponseEntity<>(zonas, HttpStatus.OK);
@@ -46,7 +45,7 @@ public class ZonaController {
         return new ResponseEntity<>(nuevaZona, HttpStatus.CREATED);
     }
 
-    @PutMapping("modificar/{id}")
+    @PutMapping("zona/modificar/{id}")
     public ResponseEntity<Zona> updateZona(@PathVariable long id, @RequestBody Zona nuevaZona) {
         Zona zonaActualizada = zonaService.modifyZona(id, nuevaZona);
         if (zonaActualizada != null) {
@@ -56,13 +55,13 @@ public class ZonaController {
         }
     }
 
-    @DeleteMapping("eliminar/{id}")
+    @DeleteMapping("zona/eliminar/{id}")
     public ResponseEntity<Void> deleteZona(@PathVariable long id) {
         zonaService.deleteZona(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{id}/puntos")
+    @GetMapping("zona/{id}/puntos")
     public ResponseEntity<Set<Punto>> getPuntosByZona(@PathVariable long id) {
         Zona zona = zonaService.findById(id).orElse(null);
         if (zona != null) {
