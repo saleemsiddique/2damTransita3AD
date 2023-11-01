@@ -6,18 +6,19 @@ import com.es.iesmz.transita3.Transita.service.ZonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
 @RestController
-@RequestMapping("/zonas")
 public class ZonaController {
 
     @Autowired
     private ZonaService zonaService;
 
     @GetMapping
+    @RequestMapping("/zonas")
     public ResponseEntity<Set<Zona>> getAllZonas() {
         Set<Zona> zonas = zonaService.findAll();
         return new ResponseEntity<>(zonas, HttpStatus.OK);
@@ -38,8 +39,9 @@ public class ZonaController {
         return new ResponseEntity<>(zonas, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Zona> createZona(@RequestBody Zona zona) {
+    @PostMapping("/zona")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Zona> addZona(@RequestBody Zona zona) {
         Zona nuevaZona = zonaService.addZona(zona);
         return new ResponseEntity<>(nuevaZona, HttpStatus.CREATED);
     }
