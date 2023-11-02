@@ -69,7 +69,7 @@ public class UsuarioMunicipio {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "roles_usuario",
+            name = "roles_usuario_municipio",
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_rol")
     )
@@ -82,4 +82,5 @@ public class UsuarioMunicipio {
         this.contrasenya = contrasenya;
         this.telefono = telefono;
     }
+
 }

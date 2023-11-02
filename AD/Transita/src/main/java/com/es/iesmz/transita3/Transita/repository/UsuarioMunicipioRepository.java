@@ -21,11 +21,11 @@ public interface UsuarioMunicipioRepository extends CrudRepository<UsuarioMunici
     Boolean existsByNombreUsuario(String nombreUsuario);
 
     @Query(value = "SELECT * FROM USUARIOMUNICIPIO u WHERE u.nombre LIKE :nombre%", nativeQuery = true)
-    Set<Cliente> findByNombreStartingWith(@Param("nombre") String nombre);
+    Set<UsuarioMunicipio> findByNombreStartingWith(@Param("nombre") String nombre);
 
     @Query(value = "SELECT * FROM USUARIOMUNICIPIO u WHERE u.apellidos LIKE :apellido%", nativeQuery = true)
-    Set<Cliente> findByApellidoStartingWith(@Param("apellido") String apellido);
+    Set<UsuarioMunicipio> findByApellidoStartingWith(@Param("apellido") String apellido);
 
     @Query(value = "SELECT * FROM USUARIOMUNICIPIO u WHERE u.nombre_usuario LIKE :nombreUsuario%", nativeQuery = true)
-    Set<Cliente> findByNombreUsuarioStartingWith(@Param("nombreUsuario") String nombreUsuario);
+    Set<UsuarioMunicipio> findByNombreUsuarioStartingWith(@Param("nombreUsuario") String nombreUsuario);
 }
