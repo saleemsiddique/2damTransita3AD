@@ -1,7 +1,6 @@
 package com.es.iesmz.transita3.Transita.repository;
 
 
-import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.UsuarioMunicipio;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

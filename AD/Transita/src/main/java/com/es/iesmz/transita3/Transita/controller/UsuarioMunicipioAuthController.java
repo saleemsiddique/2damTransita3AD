@@ -47,7 +47,7 @@ public class UsuarioMunicipioAuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @GetMapping("/signin/usuarioMunicipio")
+    @GetMapping("/signin/usuario_municipio")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody UsuarioMunicipioLoginRequest usuarioMunicipioLoginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -71,7 +71,7 @@ public class UsuarioMunicipioAuthController {
                 roles));
     }
 
-    @PostMapping("/signup/usuarioMunicipio")
+    @PostMapping("/signup/usuario_municipio")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UsuarioMunicipioSignupRequest signUpRequestUsuarioMunicipio) {
         if (usuarioMunicipioRepository.existsByNombreUsuario(signUpRequestUsuarioMunicipio.getNombreUsuario())) {
             return ResponseEntity

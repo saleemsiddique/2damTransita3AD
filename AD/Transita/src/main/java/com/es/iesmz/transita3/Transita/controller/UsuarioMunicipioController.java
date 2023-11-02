@@ -28,7 +28,7 @@ public class UsuarioMunicipioController {
     private PasswordEncoder passwordEncoder;
 
     @Operation(summary = "Obtener una lista de todos los usuarios de municipio")
-    @GetMapping("/usuario-municipio")
+    @GetMapping("/usuario_municipio")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<UsuarioMunicipio>> getUsuariosMunicipio(@RequestParam(value = "nombre", defaultValue = "") String nombre) {
         Set<UsuarioMunicipio> usuariosMunicipio = usuarioMunicipioService.findAll();
@@ -40,7 +40,7 @@ public class UsuarioMunicipioController {
             @ApiResponse(responseCode = "200", description = "Usuario de municipio obtenido exitosamente"),
             @ApiResponse(responseCode = "404", description = "Usuario de municipio no encontrado")
     })
-    @GetMapping("/usuario-municipio/telefono/{telefono}")
+    @GetMapping("/usuario_municipio/telefono/{telefono}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UsuarioMunicipio> getUsuarioMunicipio(@PathVariable String telefono) {
         UsuarioMunicipio usuarioMunicipio = usuarioMunicipioService.findByTelefono(telefono);
@@ -52,7 +52,7 @@ public class UsuarioMunicipioController {
             @ApiResponse(responseCode = "200", description = "Usuario de municipio obtenido exitosamente"),
             @ApiResponse(responseCode = "404", description = "Usuario de municipio no encontrado")
     })
-    @GetMapping("/usuario-municipio/id/{id}")
+    @GetMapping("/usuario_municipio/id/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UsuarioMunicipio> getUsuarioMunicipio(@PathVariable long id) {
         UsuarioMunicipio usuarioMunicipio = usuarioMunicipioService.findById(id)
@@ -62,7 +62,7 @@ public class UsuarioMunicipioController {
     }
 
     @Operation(summary = "Buscar usuarios de municipio por nombre que comienza con")
-    @GetMapping("/usuario-municipio/nombre/{nombre}")
+    @GetMapping("/usuario_municipio/nombre/{nombre}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<UsuarioMunicipio>> searchUsuariosMunicipioByNombreStartingWith(@PathVariable("nombre") String nombre) {
         Set<UsuarioMunicipio> usuariosMunicipio = usuarioMunicipioService.findByNombreStartingWith(nombre);
@@ -70,7 +70,7 @@ public class UsuarioMunicipioController {
     }
 
     @Operation(summary = "Buscar usuarios de municipio por apellido que comienza con")
-    @GetMapping("/usuario-municipio/apellidos/{apellidos}")
+    @GetMapping("/usuario_municipio/apellidos/{apellidos}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<UsuarioMunicipio>> searchUsuariosMunicipioByApellidoStartingWith(@PathVariable("apellidos") String apellidos) {
         Set<UsuarioMunicipio> usuariosMunicipio = usuarioMunicipioService.findByApellidoStartingWith(apellidos);
@@ -78,7 +78,7 @@ public class UsuarioMunicipioController {
     }
 
     @Operation(summary = "Obtener usuario de municipio por correo electrónico")
-    @GetMapping("/usuario-municipio/nombreusuario/{nombreusuario}")
+    @GetMapping("/usuario_municipio/nombreusuario/{nombreusuario}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<UsuarioMunicipio>> getUsuarioMunicipioByNombreUsuario(@PathVariable String nombreusuario) {
         Set<UsuarioMunicipio> usuariosMunicipio = usuarioMunicipioService.findByNombreUsuarioStartingWith(nombreusuario);
@@ -86,7 +86,7 @@ public class UsuarioMunicipioController {
     }
 
     @Operation(summary = "Modificar un usuario de municipio por ID")
-    @PutMapping("/usuario-municipio/modificar/{id}")
+    @PutMapping("/usuario_municipio/modificar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UsuarioMunicipio> modifyUsuarioMunicipio(@PathVariable long id, @RequestBody UsuarioMunicipio newUsuarioMunicipio) {
         Optional<UsuarioMunicipio> optionalUsuarioMunicipio = usuarioMunicipioService.findById(id);
@@ -115,7 +115,7 @@ public class UsuarioMunicipioController {
     }
 
     @Operation(summary = "Eliminar un usuario de municipio por ID")
-    @DeleteMapping("/usuario-municipio/eliminar/{id}")
+    @DeleteMapping("/usuario_municipio/eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response> deleteUsuarioMunicipio(@PathVariable long id) {
         usuarioMunicipioService.deleteUsuarioMunicipio(id);

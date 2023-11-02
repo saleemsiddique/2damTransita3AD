@@ -24,4 +24,7 @@ public class Rol {
 
     @ManyToMany(mappedBy = "rols")
     private Set<Cliente> clientes = new HashSet<>();
+
+    @ManyToMany(mappedBy = "rols")
+    private Set<UsuarioMunicipio> usuarioMunicipios = new HashSet<>();
 }

@@ -21,9 +21,9 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
-@Table(name = "usuario_municipio",
+@Table(name = "usuarioMunicipio",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "nombre_usuario"),
+                @UniqueConstraint(columnNames = "nombre_usuario_municipio"),
                 @UniqueConstraint(columnNames = "contrasenya"),
                 @UniqueConstraint(columnNames = "telefono")
         })
