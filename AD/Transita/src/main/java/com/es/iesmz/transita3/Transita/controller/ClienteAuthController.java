@@ -50,7 +50,7 @@ public class ClienteAuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @GetMapping("/signin/cliente")
+    @PostMapping("/signin/cliente")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody ClienteLoginRequest clienteLoginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
