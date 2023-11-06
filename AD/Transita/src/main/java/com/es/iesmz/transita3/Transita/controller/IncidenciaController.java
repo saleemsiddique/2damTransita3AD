@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.controller;
 
+import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
 
@@ -53,6 +54,18 @@ public class IncidenciaController {
         Incidencia incidencia = incidenciaService.findById(id)
                 .orElseThrow(()-> new IncidenciaNotFoundException(id));
         return new ResponseEntity<>(incidencia, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtiene las incidencias de un cliente especifico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Incidencias con ese Cliente_ID",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
+    @GetMapping("/incidencias/clienteid/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERADOR', 'ROLE_USUARIO')")
+    public ResponseEntity<Set<Incidencia>> findByIncidenciaByClienteId(@PathVariable long id){
+        Set<Incidencia> incidencias = incidenciaService.findByIncidenciaByClienteId(id);
+        return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
     @Operation(summary = "Obtiene el listado de incidencias")

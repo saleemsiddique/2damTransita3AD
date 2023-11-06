@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.service;
 
+import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
 import com.es.iesmz.transita3.Transita.exception.IncidenciaNotFoundException;
@@ -21,6 +22,11 @@ public class IncidenciaServiceImpl implements IncidenciaService{
     @Override
     public Optional<Incidencia> findById(long id) {
         return incidenciaRepository.findById(id);
+    }
+
+    @Override
+    public Set<Incidencia> findByIncidenciaByClienteId(long clienteId) {
+        return incidenciaRepository.findByIncidenciaByClienteId(clienteId);
     }
 
     @Override
@@ -52,4 +58,5 @@ public class IncidenciaServiceImpl implements IncidenciaService{
                 .orElseThrow(() -> new IncidenciaNotFoundException(id));
         incidenciaRepository.deleteById(id);
     }
+
 }

@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.service;
 
+import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
 
@@ -20,4 +21,7 @@ public interface  IncidenciaService {
     Incidencia modifyIncidencia(long id, Incidencia nuevaIncidencia);
 
     void deleteIncidencia(Long id);
+
+    Set<Incidencia> findByIncidenciaByClienteId(long clienteId);
+
 }
