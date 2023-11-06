@@ -28,9 +28,20 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     @Query(value = "SELECT * FROM cliente c WHERE c.nombre_usuario LIKE :nombreUsuario%", nativeQuery = true)
     Set<Cliente> findByNombreUsuarioStartingWith(@Param("nombreUsuario") String nombreUsuario);
 
-    @Query(value = "SELECT * FROM cliente c WHERE c.role LIKE :ROLE_ADMIN OR c.role LIKE :ROLE_MODERATOR", nativeQuery = true)
-    Set<Cliente> findByRoleAdminOrModerator(@Param("rol") String nombreUsuario);
+    @Query(value = "SELECT c.* FROM cliente c INNER JOIN roles_usuario ru ON c.id = ru.id_usuario " +
+            "WHERE ru.id_rol = 1 OR ru.id_rol = 2", nativeQuery = true)
+    Set<Cliente> findByRoleAdminOrModerator();
 
-    @Query(value = "SELECT * FROM cliente c WHERE c.role LIKE :ROLE_USUARIO", nativeQuery = true)
-    Set<Cliente> findByRoleUsuario(@Param("rol") String nombreUsuario);
+
+    @Query(value = "SELECT c.* FROM cliente c INNER JOIN roles_usuario ru ON c.id = ru.id_usuario " +
+            "WHERE ru.id_rol = 3", nativeQuery = true)
+    Set<Cliente> findByRoleUsuario();
+
+
+
+
+
+
+    /*@Query(value = "SELECT * FROM cliente c WHERE c.role LIKE :ROLE_USUARIO", nativeQuery = true)
+    Set<Cliente> findByRoleUsuario(@Param("rol") String nombreUsuario);*/
 }

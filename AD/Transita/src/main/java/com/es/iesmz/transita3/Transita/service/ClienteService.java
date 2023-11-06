@@ -18,4 +18,7 @@ public interface ClienteService {
     Cliente findByNombreUsuario(String email);
     Cliente modifyCliente(long id, Cliente newCliente);
     void deleteCliente(long id);
+
+    Set<Cliente> findByRoleAdminOrModerator();
+    Set<Cliente> findByRoleUsuario();
 }
