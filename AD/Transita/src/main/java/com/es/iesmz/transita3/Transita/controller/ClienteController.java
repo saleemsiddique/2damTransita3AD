@@ -64,7 +64,7 @@ public class ClienteController {
     }
     @Operation(summary = "Buscar clientes por rol (ROLE_USUARIO)")
     @GetMapping("/cliente/RolUsuario")
-    @PreAuthorize("hasRole('ROLE_USUARIO')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Set<Cliente>> findByRoleUsuario(@RequestParam(value = "nombre", defaultValue = "") String roles_usuario) {
         Set<Cliente> clientes = clienteService.findByRoleUsuario();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
