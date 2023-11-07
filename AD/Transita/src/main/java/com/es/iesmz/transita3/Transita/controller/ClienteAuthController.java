@@ -104,6 +104,11 @@ public class ClienteAuthController {
                                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
                         roles.add(adminRol);
                         break;
+                    case "ROLE_MODERADOR":
+                        Rol moderatorRol = roleRepository.findByNombre(ERole.ROLE_MODERADOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+                        roles.add(moderatorRol);
+                        break;
                     case "ROLE_USUARIO":
                         Rol userRol = roleRepository.findByNombre(ERole.ROLE_USUARIO)
                                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
