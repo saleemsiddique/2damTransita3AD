@@ -84,5 +84,7 @@ public class Cliente {
         this.nombreUsuario = nombreUsuario;
         this.contrasenya = contrasenya;
         this.estadoCuenta = ECliente.ACTIVADO;
+
     }
+
 }

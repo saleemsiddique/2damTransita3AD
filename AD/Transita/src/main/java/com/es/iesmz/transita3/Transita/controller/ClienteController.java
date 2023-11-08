@@ -1,7 +1,10 @@
 package com.es.iesmz.transita3.Transita.controller;
 
 import com.es.iesmz.transita3.Transita.domain.Cliente;
+import com.es.iesmz.transita3.Transita.domain.ERole;
+import com.es.iesmz.transita3.Transita.domain.Rol;
 import com.es.iesmz.transita3.Transita.exception.ClienteNotFoundException;
+import com.es.iesmz.transita3.Transita.repository.RolRepository;
 import com.es.iesmz.transita3.Transita.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,6 +29,8 @@ public class ClienteController {
     private ClienteService clienteService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    RolRepository roleRepository;
 
     @Operation(summary = "Obtener una lista de todos los clientes")
     @GetMapping("/cliente")
@@ -109,11 +115,41 @@ public class ClienteController {
         }
 
         Cliente cliente = optionalCliente.get();
+        cliente.getRols().clear();
 
         // Actualiza los campos del cliente con los valores proporcionados en la solicitud
         cliente.setNombre(newCliente.getNombre());
         cliente.setApellidos(newCliente.getApellidos());
         cliente.setNombreUsuario(newCliente.getNombreUsuario());
+
+        // Aquí se agregan los roles directamente al cliente
+        cliente.setRols(newCliente.getRols());
+
+        if (cliente.getRols() == null || cliente.getRols().isEmpty()) {
+            Rol userRol = roleRepository.findByNombre(ERole.ROLE_USUARIO)
+                    .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+            cliente.getRols().add(userRol);
+        } else {
+            // No es necesario crear un nuevo conjunto, puedes usar el conjunto existente en el cliente
+            for (Rol role : cliente.getRols()) {
+                switch (role.getNombre()) {
+                    case ROLE_ADMIN:
+                        Rol adminRol = roleRepository.findByNombre(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+                        cliente.getRols().add(adminRol);
+                        break;
+                    case ROLE_MODERADOR:
+                        Rol moderatorRol = roleRepository.findByNombre(ERole.ROLE_MODERADOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+                        cliente.getRols().add(moderatorRol);
+                        break;
+                    case ROLE_USUARIO:
+                        Rol userRol = roleRepository.findByNombre(ERole.ROLE_USUARIO)
+                                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+                        cliente.getRols().add(userRol);
+                }
+            }
+        }
 
         // Cifra la nueva contraseña antes de guardarla si se proporciona
         if (newCliente.getContrasenya() != null) {
@@ -126,6 +162,7 @@ public class ClienteController {
 
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
+
 
     @Operation(summary = "Eliminar un cliente por ID")
     @DeleteMapping("/cliente/eliminar/{id}")

@@ -13,6 +13,7 @@ import com.es.iesmz.transita3.Transita.repository.RolRepository;
 import com.es.iesmz.transita3.Transita.security.jwt.JwtUtils;
 import com.es.iesmz.transita3.Transita.security.services.UsuarioDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -122,5 +124,66 @@ public class ClienteAuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+    @PutMapping("/cliente/modificar/{id}")
+    public ResponseEntity<?> modifyCliente(@PathVariable Long id, @Valid @RequestBody ClienteSignupRequest signUpRequestCliente) {
+        // Verifica si el cliente existe en la base de datos
+        Optional<Cliente> optionalCliente = clientRepository.findById(id);
+
+        if (!optionalCliente.isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("Error: Cliente no encontrado"));
+        }
+
+        // Obtiene el cliente existente
+        Cliente cliente = optionalCliente.get();
+
+        // Actualiza los campos del cliente con los valores proporcionados en la solicitud
+        cliente.setNombre(signUpRequestCliente.getNombre());
+        cliente.setApellidos(signUpRequestCliente.getApellidos());
+        cliente.setNombreUsuario(signUpRequestCliente.getNombreUsuario());
+
+        // Cifra la nueva contraseña antes de guardarla si se proporciona
+        if (signUpRequestCliente.getContrasenya() != null) {
+            String contraseñaCifrada = encoder.encode(signUpRequestCliente.getContrasenya());
+            cliente.setContrasenya(contraseñaCifrada);
+        }
+
+        // Actualiza los roles del cliente
+        Set<String> strRoles = signUpRequestCliente.getRol();
+        Set<Rol> roles = new HashSet<>();
+
+        if (strRoles == null) {
+            Rol userRol = roleRepository.findByNombre(ERole.ROLE_USUARIO)
+                    .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+            roles.add(userRol);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "ROLE_ADMIN":
+                        Rol adminRol = roleRepository.findByNombre(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+                        roles.add(adminRol);
+                        break;
+                    case "ROLE_MODERADOR":
+                        Rol moderatorRol = roleRepository.findByNombre(ERole.ROLE_MODERADOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+                        roles.add(moderatorRol);
+                        break;
+                    case "ROLE_USUARIO":
+                        Rol userRol = roleRepository.findByNombre(ERole.ROLE_USUARIO)
+                                .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+                        roles.add(userRol);
+                }
+            });
+        }
+
+        cliente.setRols(roles);
+        clientRepository.save(cliente);
+
+        return ResponseEntity.ok(new MessageResponse("Cliente modificado exitosamente"));
+    }
+
 
 }
