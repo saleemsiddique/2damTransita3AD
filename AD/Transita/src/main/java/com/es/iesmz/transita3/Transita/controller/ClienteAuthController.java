@@ -12,6 +12,8 @@ import com.es.iesmz.transita3.Transita.repository.ClienteRepository;
 import com.es.iesmz.transita3.Transita.repository.RolRepository;
 import com.es.iesmz.transita3.Transita.security.jwt.JwtUtils;
 import com.es.iesmz.transita3.Transita.security.services.UsuarioDetailsImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 //https://github.com/bezkoder/spring-boot-spring-security-jwt-authentication
@@ -81,7 +85,7 @@ public class ClienteAuthController {
         if (clientRepository.existsByNombreUsuario(signUpRequestCliente.getNombreUsuario())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email está en uso"));
+                    .body(new MessageResponse("Error: Nombre de usuario ya está en uso"));
         }
 
         // Create new user's account
@@ -122,8 +126,23 @@ public class ClienteAuthController {
         cliente.setRols(roles);
         clientRepository.save(cliente);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        // Convertir el objeto Cliente a JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        String clienteJson;
+        try {
+            clienteJson = objectMapper.writeValueAsString(cliente);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error al convertir el objeto Cliente a JSON"));
+        }
+
+        // Devolver el JSON del cliente en el cuerpo de la respuesta
+        return ResponseEntity.ok(clienteJson);
     }
+
+
+
 
     @PutMapping("/cliente/modificar/{id}")
     public ResponseEntity<?> modifyCliente(@PathVariable Long id, @Valid @RequestBody ClienteSignupRequest signUpRequestCliente) {
