@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Rol {
     @Column(length = 20)
     private ERole nombre;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "rols")
     private Set<Cliente> clientes = new HashSet<>();
 }

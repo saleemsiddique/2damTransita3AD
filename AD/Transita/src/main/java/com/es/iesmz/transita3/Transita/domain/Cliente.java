@@ -65,7 +65,7 @@ public class Cliente {
     @Schema(description = "Estado de la cuenta del cliente", example = "ACTIVADO", required = true)
     private ECliente estadoCuenta;
 
-    @JsonIgnore
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "roles_usuario",
