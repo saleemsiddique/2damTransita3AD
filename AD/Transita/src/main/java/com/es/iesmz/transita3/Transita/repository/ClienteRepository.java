@@ -15,8 +15,6 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Set<Cliente> findByNombre(String nombre);
     Set<Cliente> findByApellidos(String apellido);
     Cliente findByNombreUsuario(String nombreUsuario);
-
-
     Boolean existsByNombreUsuario(String nombreUsuario);
 
     @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre%", nativeQuery = true)

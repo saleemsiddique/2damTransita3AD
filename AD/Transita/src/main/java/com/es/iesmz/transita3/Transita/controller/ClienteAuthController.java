@@ -5,6 +5,7 @@ import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.es.iesmz.transita3.Transita.domain.ERole;
 import com.es.iesmz.transita3.Transita.domain.Rol;
 import com.es.iesmz.transita3.Transita.payload.request.ClienteLoginRequest;
+import com.es.iesmz.transita3.Transita.payload.request.ClienteModifyEstadoRequest;
 import com.es.iesmz.transita3.Transita.payload.request.ClienteSignupRequest;
 import com.es.iesmz.transita3.Transita.payload.response.JwtResponse;
 import com.es.iesmz.transita3.Transita.payload.response.MessageResponse;
@@ -202,6 +203,43 @@ public class ClienteAuthController {
         clientRepository.save(cliente);
 
         return ResponseEntity.ok(new MessageResponse("Cliente modificado exitosamente"));
+    }
+
+    @PutMapping("/cliente/modificarEstado/{id}")
+    public ResponseEntity<?> modifyClienteEstado(@PathVariable Long id, @Valid @RequestBody ClienteModifyEstadoRequest clienteModifyEstadoRequest) {
+        // Verifica si el cliente existe en la base de datos
+        Optional<Cliente> optionalCliente = clientRepository.findById(id);
+
+        if (!optionalCliente.isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("Error: Cliente no encontrado"));
+        }
+
+        // Obtiene el cliente existente
+        Cliente cliente = optionalCliente.get();
+
+        // Actualiza los campos del cliente con los valores proporcionados en la solicitud
+        String nuevoEstadoCuenta = clienteModifyEstadoRequest.getNuevoEstadoCuenta();
+
+        if (nuevoEstadoCuenta != null) {
+            try {
+                // Convierte el String a ECliente
+                ECliente estadoCliente = ECliente.valueOf(nuevoEstadoCuenta);
+
+                // Actualiza el estado de cuenta del cliente con el nuevo valor
+                cliente.setEstadoCuenta(estadoCliente);
+                clientRepository.save(cliente);
+
+                return ResponseEntity.ok(new MessageResponse("Cliente modificado exitosamente"));
+            } catch (IllegalArgumentException e) {
+                // Manejar la excepción si el valor no coincide con ningún estado de ECliente
+                return ResponseEntity.badRequest().body(new MessageResponse("Error: Estado de cuenta no válido"));
+            }
+        } else {
+            // No se proporcionó un nuevo estado de cuenta
+            return ResponseEntity.ok(new MessageResponse("No se realizaron cambios en el estado de cuenta del cliente"));
+        }
     }
 
 

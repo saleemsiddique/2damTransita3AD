@@ -66,6 +66,13 @@ public class ClienteServiceImpl implements ClienteService {
         newCliente.setId(cliente.getId());
         return clienteRepository.save(newCliente);
     }
+    @Override
+    public Cliente modifyClienteEstado(long id, Cliente newCliente) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException(id));
+        newCliente.setId(cliente.getId());
+        return clienteRepository.save(newCliente);
+    }
 
     @Override
     public void deleteCliente(long id) {
