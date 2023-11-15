@@ -5,6 +5,7 @@ import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.es.iesmz.transita3.Transita.domain.ERole;
 import com.es.iesmz.transita3.Transita.domain.Rol;
 import com.es.iesmz.transita3.Transita.payload.request.ClienteLoginRequest;
+import com.es.iesmz.transita3.Transita.payload.request.ClienteModificarDatosRequest;
 import com.es.iesmz.transita3.Transita.payload.request.ClienteModifyEstadoRequest;
 import com.es.iesmz.transita3.Transita.payload.request.ClienteSignupRequest;
 import com.es.iesmz.transita3.Transita.payload.response.JwtResponse;
@@ -146,7 +147,7 @@ public class ClienteAuthController {
 
 
     @PutMapping("/cliente/modificar/{id}")
-    public ResponseEntity<?> modifyCliente(@PathVariable Long id, @Valid @RequestBody ClienteSignupRequest signUpRequestCliente) {
+    public ResponseEntity<?> modifyCliente(@PathVariable Long id, @Valid @RequestBody ClienteModificarDatosRequest modifyDatosCliente) {
         // Verifica si el cliente existe en la base de datos
         Optional<Cliente> optionalCliente = clientRepository.findById(id);
 
@@ -160,18 +161,13 @@ public class ClienteAuthController {
         Cliente cliente = optionalCliente.get();
 
         // Actualiza los campos del cliente con los valores proporcionados en la solicitud
-        cliente.setNombre(signUpRequestCliente.getNombre());
-        cliente.setApellidos(signUpRequestCliente.getApellidos());
-        cliente.setNombreUsuario(signUpRequestCliente.getNombreUsuario());
+        cliente.setNombre(modifyDatosCliente.getNombre());
+        cliente.setApellidos(modifyDatosCliente.getApellidos());
+        cliente.setNombreUsuario(modifyDatosCliente.getNombreUsuario());
 
-        // Cifra la nueva contraseña antes de guardarla si se proporciona
-        if (signUpRequestCliente.getContrasenya() != null) {
-            String contraseñaCifrada = encoder.encode(signUpRequestCliente.getContrasenya());
-            cliente.setContrasenya(contraseñaCifrada);
-        }
 
         // Actualiza los roles del cliente
-        Set<String> strRoles = signUpRequestCliente.getRol();
+        Set<String> strRoles = modifyDatosCliente.getRol();
         Set<Rol> roles = new HashSet<>();
 
         if (strRoles == null) {
