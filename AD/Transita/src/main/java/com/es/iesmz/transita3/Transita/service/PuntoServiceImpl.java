@@ -1,6 +1,7 @@
 package com.es.iesmz.transita3.Transita.service;
 
 import com.es.iesmz.transita3.Transita.domain.AccesibilidadPunto;
+import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
 import com.es.iesmz.transita3.Transita.domain.Punto;
 import com.es.iesmz.transita3.Transita.domain.TipoPunto;
 import com.es.iesmz.transita3.Transita.exception.PuntoNotFoundException;
@@ -44,6 +45,11 @@ public class PuntoServiceImpl implements PuntoService{
     @Override
     public Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto) {
         return puntoRepository.findByAccesibilidadPunto(accesibilidadPunto);
+    }
+
+    @Override
+    public Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto) {
+        return puntoRepository.findByVisibilidadPunto(visibilidadPunto);
     }
 
     @Override

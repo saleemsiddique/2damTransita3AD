@@ -1,6 +1,7 @@
 package com.es.iesmz.transita3.Transita.controller;
 
 import com.es.iesmz.transita3.Transita.domain.AccesibilidadPunto;
+import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
 import com.es.iesmz.transita3.Transita.domain.Punto;
 import com.es.iesmz.transita3.Transita.domain.TipoPunto;
 import com.es.iesmz.transita3.Transita.exception.AccesibilidadNotFoundException;
@@ -77,6 +78,33 @@ public class PuntoController {
         }
 
         Set<Punto> puntos = puntoService.findByTipoPunto(tipoPunto);
+        return new ResponseEntity<>(puntos, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtiene la visibilidad del punto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+    @GetMapping("/puntos/visibilidad/{tipo}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Punto>> getPuntoByVisibilidad(@PathVariable int tipo) {
+        EVisibilidad tipoPunto = null;
+
+        if (tipo == 0) {
+            tipoPunto = EVisibilidad.GLOBAL;
+        }
+        else if (tipo == 1) {
+            tipoPunto = EVisibilidad.FAVORITO;
+        } else if (tipo == 2) {
+            tipoPunto = EVisibilidad.INCIDENCIA;
+        } else if (tipo == 3) {
+            tipoPunto = EVisibilidad.OCULTO;
+        } else {
+            throw new TipoNotFoundException("Tipo de Punto no existente");
+        }
+
+        Set<Punto> puntos = puntoService.findByVisibilidadPunto(tipoPunto);
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 

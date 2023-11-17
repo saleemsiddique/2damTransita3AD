@@ -51,6 +51,11 @@ public class Punto {
     @Schema(description = "Accesibilidad del punto", example = "ACCESIBLE", required = true)
     private AccesibilidadPunto accesibilidadPunto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Visibilidad")
+    @Schema(description = "visibilidad del punto", example = "GLOBAL", required = true)
+    private EVisibilidad visibilidadPunto;
+
     @JsonIgnore
     @OneToMany(mappedBy = "punto", cascade = CascadeType.ALL)
     private List<Incidencia> incidencias;
@@ -58,6 +63,4 @@ public class Punto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zona_id")
     private Zona zona;
-
-
 }

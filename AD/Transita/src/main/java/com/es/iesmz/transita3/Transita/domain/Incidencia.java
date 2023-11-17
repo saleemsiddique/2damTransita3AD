@@ -38,6 +38,10 @@ public class Incidencia {
     @Schema(description = "Fecha", example = "2023-10-27", required = true)
     private LocalDate fechaHora;
 
+    @Column(name = "Fotos")
+    @Lob
+    @Schema(description = "Fotos relacionadas con la incidencia", example = "ruta/de/la/foto.jpg", required = true)
+    private String fotos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "punto_id")

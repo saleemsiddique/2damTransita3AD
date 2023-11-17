@@ -1,6 +1,7 @@
 package com.es.iesmz.transita3.Transita.repository;
 
 import com.es.iesmz.transita3.Transita.domain.AccesibilidadPunto;
+import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
 import com.es.iesmz.transita3.Transita.domain.TipoPunto;
 import org.springframework.data.repository.CrudRepository;
 import com.es.iesmz.transita3.Transita.domain.Punto;
@@ -22,5 +23,5 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
 
-    
+    Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
 }

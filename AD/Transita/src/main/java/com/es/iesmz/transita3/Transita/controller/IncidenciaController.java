@@ -79,14 +79,15 @@ public class IncidenciaController {
         EstadoIncidencia estadoIncidencia = null;
 
         if (estado == 0) {
-            estadoIncidencia = EstadoIncidencia.Abierta;
+            estadoIncidencia = EstadoIncidencia.ENVIADO;
         }
         else if (estado == 1) {
-            estadoIncidencia = EstadoIncidencia.Revision;
+            estadoIncidencia = EstadoIncidencia.ACEPTADO;
         }else if (estado == 2) {
-            estadoIncidencia = EstadoIncidencia.Cerrada;
-        }
-        else {
+            estadoIncidencia = EstadoIncidencia.ENPROCESO;
+        } else if (estado == 3) {
+            estadoIncidencia = EstadoIncidencia.FINALIZADO;
+        } else {
             throw new EstadoIncidenciaNotFoundException("Estado de incidencia no existente");
         }
 
