@@ -4,10 +4,7 @@ import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.es.iesmz.transita3.Transita.domain.ERole;
 import com.es.iesmz.transita3.Transita.domain.Rol;
-import com.es.iesmz.transita3.Transita.payload.request.ClienteLoginRequest;
-import com.es.iesmz.transita3.Transita.payload.request.ClienteModificarDatosRequest;
-import com.es.iesmz.transita3.Transita.payload.request.ClienteModifyEstadoRequest;
-import com.es.iesmz.transita3.Transita.payload.request.ClienteSignupRequest;
+import com.es.iesmz.transita3.Transita.payload.request.*;
 import com.es.iesmz.transita3.Transita.payload.response.JwtResponse;
 import com.es.iesmz.transita3.Transita.payload.response.MessageResponse;
 import com.es.iesmz.transita3.Transita.repository.ClienteRepository;
@@ -236,6 +233,25 @@ public class ClienteAuthController {
             // No se proporcionó un nuevo estado de cuenta
             return ResponseEntity.ok(new MessageResponse("No se realizaron cambios en el estado de cuenta del cliente"));
         }
+    }
+
+    @PutMapping("/cliente/modificarContrasenya/{id}")
+    public ResponseEntity<?> modifyContrasenyaCliente(@PathVariable Long id, @Valid @RequestBody ClienteModificarContrasenyaRequest clienteModificarContrasenyaRequest){
+        Optional<Cliente> optionalCliente = clientRepository.findById(id);
+
+        if (!optionalCliente.isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse("Error: Cliente no encontrado"));
+        }
+
+        Cliente cliente = optionalCliente.get();
+
+        cliente.setContrasenya(encoder.encode(clienteModificarContrasenyaRequest.getContrasenya()));
+        clientRepository.save(cliente);
+
+        return ResponseEntity.ok(new MessageResponse("Cliente modificado exitosamente"));
+
     }
 
 
