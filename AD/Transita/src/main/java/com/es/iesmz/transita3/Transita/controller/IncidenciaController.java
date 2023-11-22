@@ -46,8 +46,9 @@ public class IncidenciaController {
         incidencias = incidenciaService.findAll();
 
         for (Incidencia incidencia : incidencias) {
-            incidencia.setFotos(decompressBase64String(incidencia.getFotos()));
-            System.out.println(incidencia.getFotos());
+            if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
+                incidencia.setFotos(decompressBase64String(incidencia.getFotos()));
+            }
         }
 
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
@@ -76,7 +77,9 @@ public class IncidenciaController {
     public ResponseEntity<Set<Incidencia>> findByIncidenciaByClienteId(@PathVariable long id) {
         Set<Incidencia> incidencias = incidenciaService.findByIncidenciaByClienteId(id);
         for (Incidencia incidencia : incidencias) {
-            incidencia.setFotos(decompressBase64String(incidencia.getFotos()));
+            if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
+                incidencia.setFotos(decompressBase64String(incidencia.getFotos()));
+            }
         }
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
@@ -163,16 +166,17 @@ public class IncidenciaController {
         if (optionalIncidencia.isPresent()) {
             Incidencia incidencia = optionalIncidencia.get();
             EstadoIncidencia estadoIncidencia = mapEstado(nuevoEstado);
+
+            if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
+                String base64Image = decompressBase64String(incidencia.getFotos());
+                uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia, base64Image);
+
+                // Actualizar la propiedad fotos en la incidencia con la URL
+                incidencia.getPunto().setFoto(incidencia.getId() + incidencia.getDescripcion() + ".jpg");
+                incidencia.setFotos(null);
+            }
+
             incidencia.setEstado(estadoIncidencia);
-
-            String base64Image = decompressBase64String(incidencia.getFotos());
-            uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia.getId(), base64Image);
-            // Construir la URL de la imagen en el servidor
-            String imageUrl = incidencia.getId() + ".jpg";
-
-            // Actualizar la propiedad fotos en la incidencia con la URL
-            incidencia.setFotos(imageUrl);
-
             // Guardar la incidencia modificada en la base de datos
             incidenciaService.modifyIncidencia(id, incidencia);
 
@@ -268,7 +272,7 @@ public class IncidenciaController {
         return null;
     }
 
-    public static void uploadToFTP(String server, int port, String username, String password, String remoteFilePath, long incidenceId, String base64Image) {
+    public static void uploadToFTP(String server, int port, String username, String password, String remoteFilePath, Incidencia incidencia, String base64Image) {
         FTPClient ftpClient = new FTPClient();
 
         try {
@@ -283,7 +287,7 @@ public class IncidenciaController {
             ftpClient.changeWorkingDirectory(remoteFilePath);
 
             // Nombre del archivo que se subirá al servidor FTP (ID de la incidencia + ".jpg")
-            String remoteFileName = incidenceId + ".jpg";
+            String remoteFileName = incidencia.getId() + incidencia.getDescripcion() + ".jpg";
 
             // Decodificar la cadena Base64 y crear un InputStream
             byte[] imageBytes = Base64.getDecoder().decode(base64Image);
