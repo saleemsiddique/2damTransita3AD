@@ -147,8 +147,9 @@ public class IncidenciaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id,
                                                        @RequestBody Incidencia nuevaIncidencia) {
+        nuevaIncidencia.setFotos(compressBase64String(nuevaIncidencia.getFotos()));
         Incidencia incidencia = incidenciaService.modifyIncidencia(id, nuevaIncidencia);
-        return new ResponseEntity<>(incidencia, HttpStatus.OK);
+        return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
     }
 
     @Operation(summary = "Modifica el estado de una incidencia en el catálogo")
