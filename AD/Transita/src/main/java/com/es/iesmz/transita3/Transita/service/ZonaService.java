@@ -20,5 +20,4 @@ public interface ZonaService {
     Zona modifyZona(long id, Zona newZona);
     void deleteZona(long id);
 
-    Set<Punto> findPuntosByZona(Zona zona); // Método para obtener puntos de una zona específica
 }

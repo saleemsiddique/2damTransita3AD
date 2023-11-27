@@ -59,8 +59,4 @@ public class Punto {
     @JsonIgnore
     @OneToMany(mappedBy = "punto", cascade = CascadeType.ALL)
     private List<Incidencia> incidencias;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zona_id")
-    private Zona zona;
 }

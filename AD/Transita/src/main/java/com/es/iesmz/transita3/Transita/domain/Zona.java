@@ -38,9 +38,4 @@ public class Zona {
         @Column(name = "nombre")
         @Schema(description = "Nombre de Zona", example = " Parque Central", required = true)
         private String nombre;
-
-
-        @JsonIgnore
-        @OneToMany(mappedBy = "zona", cascade = CascadeType.ALL)
-        private List<Punto> puntos;
 }

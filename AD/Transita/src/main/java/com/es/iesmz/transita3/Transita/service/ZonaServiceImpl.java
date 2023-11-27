@@ -36,12 +36,6 @@ public class ZonaServiceImpl implements ZonaService {
     public Set<Zona> findByNombreStartingWith(String nombre) {
         return zonaRepository.findByNombreStartingWith(nombre);
     }
-    @Override
-    public Set<Punto> findPuntosByZona(Zona zona) {
-        return (Set<Punto>) zona.getPuntos();
-    }
-
-
 
     @Override
     public Zona findByNombre(String nombre) {

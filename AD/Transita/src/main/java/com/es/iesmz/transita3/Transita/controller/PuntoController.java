@@ -147,6 +147,8 @@ public class PuntoController {
         }
         else if (accesibilidad == 1) {
             accesibilidadPunto = AccesibilidadPunto.NO_ACCESIBLE;
+        } else if (accesibilidad == 2){
+            accesibilidadPunto = AccesibilidadPunto.PARCIALMENTE_ACCESIBLE;
         }
         else {
             throw new AccesibilidadNotFoundException("Tipo de Accesibilidad no existente");

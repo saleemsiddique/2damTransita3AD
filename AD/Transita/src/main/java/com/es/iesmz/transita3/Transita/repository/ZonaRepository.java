@@ -28,7 +28,4 @@ public interface ZonaRepository extends JpaRepository<Zona, Long> {
     Zona save(Zona zona);
 
     void deleteById(long id);
-
-
-    Set<Punto> findByPuntos(Zona zona);
 }

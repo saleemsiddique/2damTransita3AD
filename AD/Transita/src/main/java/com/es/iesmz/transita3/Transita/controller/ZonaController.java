@@ -60,15 +60,4 @@ public class ZonaController {
         zonaService.deleteZona(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    @GetMapping("zona/{id}/puntos")
-    public ResponseEntity<Set<Punto>> getPuntosByZona(@PathVariable long id) {
-        Zona zona = zonaService.findById(id).orElse(null);
-        if (zona != null) {
-            Set<Punto> puntos = zonaService.findPuntosByZona(zona);
-            return new ResponseEntity<>(puntos, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 }
