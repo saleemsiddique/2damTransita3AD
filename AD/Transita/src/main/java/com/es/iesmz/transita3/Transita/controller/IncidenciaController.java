@@ -107,6 +107,11 @@ public class IncidenciaController {
         }
 
         Set<Incidencia> incidencias = incidenciaService.findByEstado(estadoIncidencia);
+        for (Incidencia incidencia : incidencias) {
+            if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
+                incidencia.setFotos(decompressBase64String(incidencia.getFotos()));
+            }
+        }
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
