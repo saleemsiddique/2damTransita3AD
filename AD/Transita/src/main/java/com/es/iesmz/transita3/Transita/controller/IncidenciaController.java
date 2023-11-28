@@ -152,7 +152,13 @@ public class IncidenciaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id,
                                                        @RequestBody Incidencia nuevaIncidencia) {
-        nuevaIncidencia.setFotos(compressBase64String(nuevaIncidencia.getFotos()));
+        Optional<Incidencia> optionalIncidencia = incidenciaService.findById(id);
+        if(nuevaIncidencia.getFotos() != null){
+            nuevaIncidencia.setFotos(compressBase64String(nuevaIncidencia.getFotos()));
+        }else{
+            nuevaIncidencia.setFotos(optionalIncidencia.get().getFotos());
+        }
+
         Incidencia incidencia = incidenciaService.modifyIncidencia(id, nuevaIncidencia);
         return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
     }
