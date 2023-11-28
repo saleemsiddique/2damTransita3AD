@@ -1,12 +1,12 @@
 package com.es.iesmz.transita3.Transita.repository;
 
 import com.es.iesmz.transita3.Transita.domain.Cliente;
+import com.es.iesmz.transita3.Transita.domain.ECliente;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -14,6 +14,7 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Set<Cliente> findAll();
     Set<Cliente> findByNombre(String nombre);
     Set<Cliente> findByApellidos(String apellido);
+    Set<Cliente> findByEstadoCuenta(ECliente estadoCliente);
     Cliente findByNombreUsuario(String nombreUsuario);
     Boolean existsByNombreUsuario(String nombreUsuario);
 

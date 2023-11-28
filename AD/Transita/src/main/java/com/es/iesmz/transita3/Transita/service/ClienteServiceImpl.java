@@ -1,6 +1,7 @@
 package com.es.iesmz.transita3.Transita.service;
 
 import com.es.iesmz.transita3.Transita.domain.Cliente;
+import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.es.iesmz.transita3.Transita.exception.ClienteNotFoundException;
 import com.es.iesmz.transita3.Transita.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class ClienteServiceImpl implements ClienteService {
     public Optional<Cliente> findById(long id) {
         return clienteRepository.findById(id);
     }
+
+
 
     @Override
     public Cliente addCliente(Cliente cliente) {
@@ -52,6 +55,11 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario) {
         return  clienteRepository.findByNombreUsuarioStartingWith(nombreUsuario);
+    }
+
+    @Override
+    public Set<Cliente> findByEstadoCuenta(ECliente estadoCliente) {
+        return clienteRepository.findByEstadoCuenta(estadoCliente);
     }
 
     @Override

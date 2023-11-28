@@ -3,8 +3,10 @@ package com.es.iesmz.transita3.Transita.repository;
 import com.es.iesmz.transita3.Transita.domain.AccesibilidadPunto;
 import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
 import com.es.iesmz.transita3.Transita.domain.TipoPunto;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import com.es.iesmz.transita3.Transita.domain.Punto;
+import org.springframework.data.repository.query.Param;
 
 
 import java.util.Optional;
@@ -24,4 +26,8 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
 
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
+
+    @Query(value = "SELECT * FROM PUNTO P WHERE (COALESCE(:tipo, '') = '' OR P.TIPO = :tipo) AND (COALESCE(:accesibilidad, '') = '' OR P.ACCESIBILIDAD = :accesibilidad) AND (COALESCE(:visibilidad, '') = '' OR P.VISIBILIDAD = :visibilidad)", nativeQuery = true)
+    Set<Punto> findByTipoAccesibilidadVisibilidad(@Param("tipo") String tipo, @Param("accesibilidad") String accesibilidad, @Param("visibilidad") String visibilidad);
+
 }

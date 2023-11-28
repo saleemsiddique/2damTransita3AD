@@ -16,6 +16,7 @@ public interface PuntoService {
     Set<Punto> findByLatitud(double latitud);
     Set<Punto> findByLongitud(double longitud);
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
+    Set<Punto> findByTipoAccesibilidadVisibilidad(String tipoPunto, String accesibilidadPunto, String visibilidad);
 
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Punto addPunto(Punto punto);

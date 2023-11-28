@@ -158,6 +158,21 @@ public class PuntoController {
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene el listado de puntos por tipo, accesibilidad y visibilidad")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+    @GetMapping("/puntos/tipo/{tipo}/accesibilidad/{accesibilidad}/visibilidad/{visibilidad}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Punto>> getPuntoByTipoAccesibilidadVisibilidad(@PathVariable String tipo, @PathVariable String accesibilidad, @PathVariable String visibilidad ) {
+
+
+        Set<Punto> puntos = puntoService.findByTipoAccesibilidadVisibilidad(tipo, accesibilidad, visibilidad);
+        return new ResponseEntity<>(puntos, HttpStatus.OK);
+
+    }
+
     @Operation(summary = "Añade un nuevo punto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Punto agregado",
