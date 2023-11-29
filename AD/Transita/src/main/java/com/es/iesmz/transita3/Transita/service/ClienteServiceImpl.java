@@ -53,6 +53,16 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public Set<Cliente> findByRoleUsuarioAndEstadoDesactivado() {
+        return clienteRepository.findByRoleUsuarioAndEstadoDesactivado();
+    }
+
+    @Override
+    public Set<Cliente> findByRoleUsuarioAndEstadoActivado() {
+        return clienteRepository.findByRoleUsuarioAndEstadoActivado();
+    }
+
+    @Override
     public Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario) {
         return  clienteRepository.findByNombreUsuarioStartingWith(nombreUsuario);
     }

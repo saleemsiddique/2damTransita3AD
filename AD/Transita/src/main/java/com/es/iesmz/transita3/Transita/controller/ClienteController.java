@@ -77,7 +77,20 @@ public class ClienteController {
         Set<Cliente> clientes = clienteService.findByRoleUsuario();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
-
+    @Operation(summary = "Buscar clientes por rol (ROLE_USUARIO) y estado desactivado")
+    @GetMapping("/cliente/RolUsuario/estado/0")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Cliente>> findByRoleUsuarioAndEstadoDesactivado(@RequestParam(value = "nombre", defaultValue = "") String roles_usuario) {
+        Set<Cliente> clientes = clienteService.findByRoleUsuarioAndEstadoDesactivado();
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
+    @Operation(summary = "Buscar clientes por rol (ROLE_USUARIO) y estado activado")
+    @GetMapping("/cliente/RolUsuario/estado/1")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Cliente>> findByRoleUsuarioAndEstadoActivado(@RequestParam(value = "nombre", defaultValue = "") String roles_usuario) {
+        Set<Cliente> clientes = clienteService.findByRoleUsuarioAndEstadoActivado();
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
     @Operation(summary = "Obtiene el listado de clientes por estado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Listado de clientes por estado",
