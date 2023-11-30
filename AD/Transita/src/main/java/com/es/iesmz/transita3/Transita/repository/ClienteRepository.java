@@ -40,6 +40,9 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     @Query(value = "SELECT c.* FROM cliente c INNER JOIN roles_usuario ru ON c.id = ru.id_usuario WHERE ru.id_rol = 3 AND c.estado = 1", nativeQuery = true)
     Set<Cliente> findByRoleUsuarioAndEstadoActivado();
 
+    @Query(value = "SELECT C.* FROM CLIENTE C INNER JOIN ROLES_USUARIO R ON C.ID = R.ID_USUARIO WHERE R.ID_ROL=:rol", nativeQuery = true)
+    Set<Cliente> findByRole(@Param("rol")int rol);
+
 
 
 

@@ -28,4 +28,5 @@ public interface ClienteService {
     Set<Cliente> findByRoleUsuarioAndEstadoDesactivado();
 
     Set<Cliente> findByRoleUsuarioAndEstadoActivado();
+    Set<Cliente> findByRole(int rol);
 }

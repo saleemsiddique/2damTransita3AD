@@ -70,6 +70,19 @@ public class ClienteController {
         Set<Cliente> clientes = clienteService.findByRoleAdminOrModerator();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
+
+    @Operation(summary = "Buscar clientes por rol elegido")
+    @GetMapping("/cliente/RolMunicipio/{rol}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Cliente>> findByRole(@PathVariable int rol) {
+        Set<Cliente> clientes;
+        if(rol == 0){
+            clientes = clienteService.findByRoleAdminOrModerator();
+        }else {
+            clientes = clienteService.findByRole(rol);
+        }
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
     @Operation(summary = "Buscar clientes por rol (ROLE_USUARIO)")
     @GetMapping("/cliente/RolUsuario")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
