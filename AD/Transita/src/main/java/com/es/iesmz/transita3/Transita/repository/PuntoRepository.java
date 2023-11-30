@@ -15,6 +15,14 @@ import java.util.Set;
 public interface PuntoRepository extends CrudRepository<Punto, Long> {
     Set<Punto> findAll();
 
+    @Query(value = "SELECT * FROM PUNTO P ORDER BY P.ID ASC LIMIT 1", nativeQuery = true)
+    Punto getPrimerPunto();
+
+    @Query(value = "SELECT * FROM PUNTO P WHERE ID BETWEEN :idInicial AND :idFinal", nativeQuery = true)
+    Set<Punto> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
+
+    long count();
+
     Optional<Punto> findById(long id);
 
     Set<Punto> findByTipoPunto(TipoPunto tipoPunto);

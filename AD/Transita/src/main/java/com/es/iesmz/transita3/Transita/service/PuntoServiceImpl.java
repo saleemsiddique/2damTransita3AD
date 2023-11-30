@@ -58,6 +58,16 @@ public class PuntoServiceImpl implements PuntoService{
     }
 
     @Override
+    public Set<Punto> findAllByPages(int idInicial, int idFinal) {
+        return puntoRepository.findAllByPages(idInicial, idFinal);
+    }
+
+    @Override
+    public Punto getPrimerPunto() {
+        return puntoRepository.getPrimerPunto();
+    }
+
+    @Override
     public Punto addPunto(Punto punto) {
         return puntoRepository.save(punto);
     }
@@ -75,5 +85,10 @@ public class PuntoServiceImpl implements PuntoService{
         Punto punto = puntoRepository.findById(id)
                 .orElseThrow(() -> new PuntoNotFoundException(id));
         puntoRepository.deleteById(id);
+    }
+
+    @Override
+    public long countPunto() {
+        return puntoRepository.count();
     }
 }
