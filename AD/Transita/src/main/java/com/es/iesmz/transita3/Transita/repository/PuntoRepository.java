@@ -18,7 +18,7 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
     @Query(value = "SELECT * FROM PUNTO P ORDER BY P.ID ASC LIMIT 1", nativeQuery = true)
     Punto getPrimerPunto();
 
-    @Query(value = "SELECT * FROM PUNTO P WHERE ID BETWEEN :idInicial AND :idFinal", nativeQuery = true)
+    @Query(value = "SELECT * FROM (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.ID) AS RowNum FROM PUNTO P) AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal", nativeQuery = true)
     Set<Punto> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
 
     long count();
