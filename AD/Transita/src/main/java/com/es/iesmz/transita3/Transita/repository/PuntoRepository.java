@@ -9,6 +9,7 @@ import com.es.iesmz.transita3.Transita.domain.Punto;
 import org.springframework.data.repository.query.Param;
 
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,6 +21,18 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     @Query(value = "SELECT * FROM (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.ID) AS RowNum FROM PUNTO P) AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal", nativeQuery = true)
     Set<Punto> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
+
+    @Query(value = "SELECT * FROM (SELECT P.*, ROW_NUMBER() OVER (ORDER BY P.ID) AS RowNum FROM PUNTO P " +
+            "WHERE (:tipoPunto IS NULL OR P.tipo = :tipoPunto) " +
+            "AND (:accesibilidadPunto IS NULL OR P.accesibilidad = :accesibilidadPunto) " +
+            "AND (:visibilidadPunto IS NULL OR P.visibilidad = :visibilidadPunto)) AS RankedPoints " +
+            "WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+            nativeQuery = true)
+    List<Punto> buscarPuntosConFiltros(@Param("tipoPunto") String tipoPunto,
+                                       @Param("accesibilidadPunto") String accesibilidadPunto,
+                                       @Param("visibilidadPunto") String visibilidadPunto,
+                                       @Param("idInicial") int idInicial,
+                                       @Param("idFinal") int idFinal);
 
     long count();
 

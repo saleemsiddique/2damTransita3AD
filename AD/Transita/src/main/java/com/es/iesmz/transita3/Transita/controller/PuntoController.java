@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.es.iesmz.transita3.Transita.controller.Response.NOT_FOUND;
@@ -205,7 +206,6 @@ public class PuntoController {
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Integer> getPuntosCount() {
         int cantidadPuntos = Math.toIntExact(puntoService.countPunto()) ;
-
         return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
     }
 
@@ -219,6 +219,18 @@ public class PuntoController {
     public ResponseEntity<Punto> addPunto(@RequestBody Punto punto) {
         Punto nuevoPunto = puntoService.addPunto(punto);
         return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
+    }
+
+    @GetMapping("/filtrados/{tipoPunto}/{accesibilidadPunto}/{visibilidadPunto}/{idInicial}/{idFinal}")
+    public ResponseEntity<List<Punto>> buscarPuntosConFiltros(
+            @PathVariable(name = "tipoPunto") String tipoPunto,
+            @PathVariable(name = "accesibilidadPunto") String accesibilidadPunto,
+            @PathVariable(name = "visibilidadPunto") String visibilidadPunto,
+            @PathVariable(name = "idInicial") int idInicial,
+            @PathVariable(name = "idFinal") int idFinal) {
+
+        List<Punto> puntosFiltrados = puntoService.buscarPuntosConFiltros(tipoPunto, accesibilidadPunto, visibilidadPunto, idInicial, idFinal);
+        return new ResponseEntity<>(puntosFiltrados, HttpStatus.OK);
     }
 
     @Operation(summary = "Modifica un punto")

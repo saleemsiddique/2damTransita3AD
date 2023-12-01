@@ -9,6 +9,7 @@ import com.es.iesmz.transita3.Transita.repository.PuntoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -90,5 +91,10 @@ public class PuntoServiceImpl implements PuntoService{
     @Override
     public long countPunto() {
         return puntoRepository.count();
+    }
+
+    @Override
+    public List<Punto> buscarPuntosConFiltros(String tipo, String accesibilidad, String visibilidad, int ini, int fin) {
+        return puntoRepository.buscarPuntosConFiltros(tipo, accesibilidad, visibilidad, ini, fin);
     }
 }

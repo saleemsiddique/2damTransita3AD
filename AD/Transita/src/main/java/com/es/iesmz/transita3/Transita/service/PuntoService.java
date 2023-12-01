@@ -5,6 +5,7 @@ import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
 import com.es.iesmz.transita3.Transita.domain.Punto;
 import com.es.iesmz.transita3.Transita.domain.TipoPunto;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,4 +26,5 @@ public interface PuntoService {
     Punto modifyPunto(long id, Punto nuevoPunto);
     void deletePunto(long id);
     long countPunto();
+    List<Punto> buscarPuntosConFiltros(String tipo, String accesibilidad, String visibilidad, int ini, int fin);
 }
