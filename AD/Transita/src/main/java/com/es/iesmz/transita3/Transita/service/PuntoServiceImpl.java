@@ -94,6 +94,11 @@ public class PuntoServiceImpl implements PuntoService{
     }
 
     @Override
+    public long countPuntoConFiltros(String tipoPunto, String accesibilidadPunto, String visibilidad) {
+        return puntoRepository.countPuntoConFiltros(tipoPunto, accesibilidadPunto, visibilidad);
+    }
+
+    @Override
     public List<Punto> buscarPuntosConFiltros(String tipo, String accesibilidad, String visibilidad, int ini, int fin) {
         return puntoRepository.buscarPuntosConFiltros(tipo, accesibilidad, visibilidad, ini, fin);
     }

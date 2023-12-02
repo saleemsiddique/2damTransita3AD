@@ -26,5 +26,7 @@ public interface PuntoService {
     Punto modifyPunto(long id, Punto nuevoPunto);
     void deletePunto(long id);
     long countPunto();
+    long countPuntoConFiltros(String tipoPunto, String accesibilidadPunto, String visibilidad);
+
     List<Punto> buscarPuntosConFiltros(String tipo, String accesibilidad, String visibilidad, int ini, int fin);
 }

@@ -209,6 +209,23 @@ public class PuntoController {
         return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene numero de puntos con filtros")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+    @GetMapping("/puntos/count/filtros")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Integer> getPuntosCountConFiltros(
+            @RequestParam(name = "tipoPunto", required = false) String tipoPunto,
+            @RequestParam(name = "accesibilidadPunto", required = false) String accesibilidadPunto,
+            @RequestParam(name = "visibilidadPunto", required = false) String visibilidadPunto) {
+
+        int cantidadPuntos = Math.toIntExact(puntoService.countPuntoConFiltros(tipoPunto, accesibilidadPunto, visibilidadPunto));
+        return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
+    }
+
+
     @Operation(summary = "Añade un nuevo punto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Punto agregado",
@@ -221,13 +238,13 @@ public class PuntoController {
         return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
     }
 
-    @GetMapping("/filtrados/{tipoPunto}/{accesibilidadPunto}/{visibilidadPunto}/{idInicial}/{idFinal}")
+    @GetMapping("puntos/filtrados")
     public ResponseEntity<List<Punto>> buscarPuntosConFiltros(
-            @PathVariable(name = "tipoPunto") String tipoPunto,
-            @PathVariable(name = "accesibilidadPunto") String accesibilidadPunto,
-            @PathVariable(name = "visibilidadPunto") String visibilidadPunto,
-            @PathVariable(name = "idInicial") int idInicial,
-            @PathVariable(name = "idFinal") int idFinal) {
+            @RequestParam(name = "tipoPunto", required = false) String tipoPunto,
+            @RequestParam(name = "accesibilidadPunto", required = false) String accesibilidadPunto,
+            @RequestParam(name = "visibilidadPunto", required = false) String visibilidadPunto,
+            @RequestParam(name = "idInicial", required = true) int idInicial,
+            @RequestParam(name = "idFinal", required = true) int idFinal) {
 
         List<Punto> puntosFiltrados = puntoService.buscarPuntosConFiltros(tipoPunto, accesibilidadPunto, visibilidadPunto, idInicial, idFinal);
         return new ResponseEntity<>(puntosFiltrados, HttpStatus.OK);
