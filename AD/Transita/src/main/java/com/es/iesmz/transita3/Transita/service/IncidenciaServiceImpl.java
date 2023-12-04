@@ -1,6 +1,5 @@
 package com.es.iesmz.transita3.Transita.service;
 
-import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
 import com.es.iesmz.transita3.Transita.exception.IncidenciaNotFoundException;

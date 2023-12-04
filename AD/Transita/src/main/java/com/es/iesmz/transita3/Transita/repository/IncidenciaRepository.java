@@ -24,4 +24,5 @@ public interface IncidenciaRepository extends CrudRepository<Incidencia, Long> {
     Set<Incidencia> findByIncidenciaByClienteId(@Param("clienteId") Long clienteId);
 
 
+
 }
