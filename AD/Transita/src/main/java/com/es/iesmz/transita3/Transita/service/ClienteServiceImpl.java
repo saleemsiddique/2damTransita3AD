@@ -22,6 +22,16 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public Set<Cliente> findAllByPages(int idInicial, int idFinal) {
+        return clienteRepository.findAllByPages(idInicial, idFinal);
+    }
+
+    @Override
+    public Set<Cliente> findAllByPagesFiltrado(int idInicial, int idFinal, int estado) {
+        return clienteRepository.findAllByPagesFiltrado(idInicial, idFinal, estado);
+    }
+
+    @Override
     public Optional<Cliente> findById(long id) {
         return clienteRepository.findById(id);
     }

@@ -42,6 +42,18 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtener una lista de todos los clientes por partes")
+    @GetMapping("/cliente/filtrados")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Cliente>> getClientesByPages(
+            @RequestParam(name = "idInicial") int idInicial,
+            @RequestParam(name = "idFinal") int idFinal,
+            @RequestParam(name = "estado", required = false) Integer estado) {
+        Set<Cliente> clientes =
+        (estado == null) ?  clienteService.findAllByPages(idInicial, idFinal) :  clienteService.findAllByPagesFiltrado(idInicial, idFinal, estado);
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
+
     @Operation(summary = "Obtener un cliente por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente obtenido exitosamente"),

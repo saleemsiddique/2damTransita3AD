@@ -9,7 +9,8 @@ import java.util.Set;
 public interface ClienteService {
 
     Set<Cliente> findAll();
-
+    Set<Cliente> findAllByPages(int idInicial, int idFinal);
+    Set<Cliente> findAllByPagesFiltrado(int idInicial, int idFinal, int estado);
     Optional<Cliente> findById(long id);
     Cliente addCliente(Cliente cliente);
     Set<Cliente> findByNombreStartingWith(String nombre);

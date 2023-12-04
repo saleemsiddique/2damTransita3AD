@@ -2,6 +2,7 @@ package com.es.iesmz.transita3.Transita.repository;
 
 import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.ECliente;
+import com.es.iesmz.transita3.Transita.domain.Punto;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,17 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Set<Cliente> findByEstadoCuenta(ECliente estadoCliente);
     Cliente findByNombreUsuario(String nombreUsuario);
     Boolean existsByNombreUsuario(String nombreUsuario);
+
+
+    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum FROM CLIENTE C) " +
+            "AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+            nativeQuery = true)
+    Set<Cliente> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
+
+    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum FROM CLIENTE C WHERE " +
+            "(:estado IS NULL OR C.ESTADO = :estado) ) AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+            nativeQuery = true)
+    Set<Cliente> findAllByPagesFiltrado(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal, @Param("estado")int estado);
 
     @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre%", nativeQuery = true)
     Set<Cliente> findByNombreStartingWith(@Param("nombre") String nombre);
