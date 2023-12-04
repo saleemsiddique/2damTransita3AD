@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.es.iesmz.transita3.Transita.controller.Response.NOT_FOUND;
@@ -84,6 +85,18 @@ public class PuntoController {
         Punto punto = puntoService.findById(id)
                 .orElseThrow(() -> new PuntoNotFoundException(id));
         return new ResponseEntity<>(punto, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtiene un punto por su latitud y longitud")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto con esas coordenadas",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+    @GetMapping("/punto/coordenadas/{latitud}/{longitud}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Optional<Punto>> getPuntoByCoordenadas(@PathVariable Double latitud, @PathVariable Double longitud) {
+        Optional<Punto> punto = puntoService.findByLatitudLongitud(latitud, longitud);
+        return new ResponseEntity<Optional<Punto>>(punto, HttpStatus.OK);
     }
 
     @Operation(summary = "Obtiene el listado de puntos por tipo")

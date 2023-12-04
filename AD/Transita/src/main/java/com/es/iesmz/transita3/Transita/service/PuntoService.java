@@ -16,12 +16,13 @@ public interface PuntoService {
     Set<Punto> findByTipoPunto(TipoPunto tipoPunto);
     Set<Punto> findByLatitud(double latitud);
     Set<Punto> findByLongitud(double longitud);
+    Optional<Punto> findByLatitudLongitud(Double latitud, Double longitud);
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
     Set<Punto> findByTipoAccesibilidadVisibilidad(String tipoPunto, String accesibilidadPunto, String visibilidad);
-
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Set<Punto> findAllByPages(int idInicial, int idFinal);
     Punto getPrimerPunto();
+
     Punto addPunto(Punto punto);
     Punto modifyPunto(long id, Punto nuevoPunto);
     void deletePunto(long id);

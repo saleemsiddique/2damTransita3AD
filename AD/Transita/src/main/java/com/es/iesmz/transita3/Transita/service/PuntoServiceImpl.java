@@ -44,6 +44,11 @@ public class PuntoServiceImpl implements PuntoService{
     }
 
     @Override
+    public Optional<Punto> findByLatitudLongitud(Double latitud, Double longitud) {
+        return puntoRepository.findByLatitudLongitud(latitud, longitud);
+    }
+
+    @Override
     public Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto) {
         return puntoRepository.findByAccesibilidadPunto(accesibilidadPunto);
     }

@@ -53,11 +53,13 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     Set<Punto> findByLongitud(double longitud);
 
+    @Query(value = "SELECT * FROM PUNTO P WHERE P.latitud = :latitud AND P.longitud = :longitud", nativeQuery = true)
+    Optional<Punto> findByLatitudLongitud(@Param("latitud") Double latitud, @Param("longitud") Double longitud);
+
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
 
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
 
     @Query(value = "SELECT * FROM PUNTO P WHERE (COALESCE(:tipo, '') = '' OR P.TIPO = :tipo) AND (COALESCE(:accesibilidad, '') = '' OR P.ACCESIBILIDAD = :accesibilidad) AND (COALESCE(:visibilidad, '') = '' OR P.VISIBILIDAD = :visibilidad)", nativeQuery = true)
     Set<Punto> findByTipoAccesibilidadVisibilidad(@Param("tipo") String tipo, @Param("accesibilidad") String accesibilidad, @Param("visibilidad") String visibilidad);
-
 }
