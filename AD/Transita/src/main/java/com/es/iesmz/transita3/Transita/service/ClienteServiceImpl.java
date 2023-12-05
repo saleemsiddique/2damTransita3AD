@@ -78,6 +78,16 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public long getNumeroClientesFiltrados(int estado) {
+        return clienteRepository.countClienteConFiltros(estado);
+    }
+
+    @Override
+    public long countCliente() {
+        return clienteRepository.count();
+    }
+
+    @Override
     public Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario) {
         return  clienteRepository.findByNombreUsuarioStartingWith(nombreUsuario);
     }

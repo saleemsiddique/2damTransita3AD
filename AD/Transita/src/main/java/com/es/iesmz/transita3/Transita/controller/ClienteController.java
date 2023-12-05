@@ -53,6 +53,20 @@ public class ClienteController {
         (estado == null) ?  clienteService.findAllByPages(idInicial, idFinal) :  clienteService.findAllByPagesFiltrado(idInicial, idFinal, estado);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
+    @Operation(summary = "Obtiene numero de cliente con filtros")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de cliente",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Cliente.class)))
+            )})
+    @GetMapping("/cliente/count/filtros")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Integer> getClientesCountConFiltros(
+            @RequestParam(name = "estado", required = false) Integer estado)
+    {
+        int cantidadPuntos =
+                (estado == null) ? Math.toIntExact(clienteService.countCliente()) : Math.toIntExact(clienteService.getNumeroClientesFiltrados(estado));
+        return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
+    }
 
     @Operation(summary = "Obtener un cliente por ID")
     @ApiResponses(value = {

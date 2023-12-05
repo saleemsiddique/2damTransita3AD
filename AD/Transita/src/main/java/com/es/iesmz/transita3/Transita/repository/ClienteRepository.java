@@ -55,6 +55,11 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     @Query(value = "SELECT C.* FROM CLIENTE C INNER JOIN ROLES_USUARIO R ON C.ID = R.ID_USUARIO WHERE R.ID_ROL=:rol", nativeQuery = true)
     Set<Cliente> findByRole(@Param("rol")int rol);
 
+    @Query(value = "SELECT COUNT(*) FROM CLIENTE C " +
+            "WHERE (:estado IS NULL OR C.ESTADO = :estado) " ,
+            nativeQuery = true)
+    long countClienteConFiltros(@Param("estado") int estado);
+
 
 
 

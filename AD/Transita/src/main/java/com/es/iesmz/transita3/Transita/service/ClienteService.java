@@ -30,4 +30,6 @@ public interface ClienteService {
 
     Set<Cliente> findByRoleUsuarioAndEstadoActivado();
     Set<Cliente> findByRole(int rol);
+    long getNumeroClientesFiltrados(int estado);
+    long countCliente();
 }
