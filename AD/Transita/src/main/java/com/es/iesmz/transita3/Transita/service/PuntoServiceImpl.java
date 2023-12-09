@@ -69,6 +69,11 @@ public class PuntoServiceImpl implements PuntoService{
     }
 
     @Override
+    public Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal() {
+        return puntoRepository.findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
+    }
+
+    @Override
     public Punto getPrimerPunto() {
         return puntoRepository.getPrimerPunto();
     }

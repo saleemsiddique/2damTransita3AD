@@ -45,6 +45,12 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
                          @Param("accesibilidadPunto") String accesibilidadPunto,
                          @Param("visibilidadPunto") String visibilidadPunto);
 
+    @Query("SELECT DISTINCT p FROM Punto p " +
+            "JOIN FETCH p.incidencias i " +
+            "WHERE i.estado = 'ACEPTADO' " +
+            "AND p.visibilidadPunto = 'GLOBAL'")
+    Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
+
     Optional<Punto> findById(long id);
 
     Set<Punto> findByTipoPunto(TipoPunto tipoPunto);

@@ -136,6 +136,11 @@ public class IncidenciaController {
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_USUARIO') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Incidencia> addIncidencia(@RequestBody Incidencia incidencia) {
         incidencia.setFotos(compressBase64String(incidencia.getFotos()));
+        System.out.println(incidencia.getPunto().getId());
+        System.out.println(incidencia.getDescripcion());
+        incidencia.getPunto().setDescripcion(incidencia.getDescripcion());
+        System.out.println(incidencia.getPunto().getDescripcion());
+        //TO DO Modify descripcion de punto Controller, crearlo, pork en la base dedatos no cambia
         Incidencia nuevaIncidencia = incidenciaService.addIncidencia(incidencia);
         return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
     }

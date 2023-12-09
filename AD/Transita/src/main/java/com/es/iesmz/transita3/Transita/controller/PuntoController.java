@@ -238,6 +238,18 @@ public class PuntoController {
         return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene el listado de puntos con incidencias en estado ACEPTADO y visibilidad GLOBAL")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+    @GetMapping("/global-con-incidencias-aceptadas")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERATOR')")
+    public ResponseEntity<Set<Punto>> getPuntosConIncidenciasAceptadas() {
+        Set<Punto> puntos = puntoService.findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
+        return new ResponseEntity<>(puntos, HttpStatus.OK);
+    }
+
 
     @Operation(summary = "Añade un nuevo punto")
     @ApiResponses(value = {

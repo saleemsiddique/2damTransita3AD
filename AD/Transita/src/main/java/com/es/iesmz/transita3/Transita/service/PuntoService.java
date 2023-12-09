@@ -21,6 +21,8 @@ public interface PuntoService {
     Set<Punto> findByTipoAccesibilidadVisibilidad(String tipoPunto, String accesibilidadPunto, String visibilidad);
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Set<Punto> findAllByPages(int idInicial, int idFinal);
+    Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
+
     Punto getPrimerPunto();
 
     Punto addPunto(Punto punto);
