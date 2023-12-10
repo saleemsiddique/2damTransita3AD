@@ -284,10 +284,16 @@ public class PuntoController {
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Punto> modifyPunto(@PathVariable long id,
                                              @RequestBody Punto nuevoPunto) {
-        Punto punto = puntoService.findById(id)
-                .orElseThrow(() -> new PuntoNotFoundException(id));
-        punto = puntoService.modifyPunto(id, nuevoPunto);
-        return new ResponseEntity<>(punto, HttpStatus.OK);
+        if (puntoService == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        Optional<Punto> punto = puntoService.findById(id);
+        if (punto.isPresent()) {
+            Punto modifiedPunto = puntoService.modifyPunto(id, nuevoPunto);
+            return new ResponseEntity<>(modifiedPunto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Operation(summary = "Elimina un punto")

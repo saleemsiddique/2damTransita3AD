@@ -136,11 +136,6 @@ public class IncidenciaController {
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_USUARIO') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Incidencia> addIncidencia(@RequestBody Incidencia incidencia) {
         incidencia.setFotos(compressBase64String(incidencia.getFotos()));
-        System.out.println(incidencia.getPunto().getId());
-        System.out.println(incidencia.getDescripcion());
-        incidencia.getPunto().setDescripcion(incidencia.getDescripcion());
-        System.out.println(incidencia.getPunto().getDescripcion());
-        //TO DO Modify descripcion de punto Controller, crearlo, pork en la base dedatos no cambia
         Incidencia nuevaIncidencia = incidenciaService.addIncidencia(incidencia);
         return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
     }
@@ -179,7 +174,7 @@ public class IncidenciaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> modifyEstadoIncidencia(@PathVariable long id, @PathVariable String nuevoEstado) {
         Optional<Incidencia> optionalIncidencia = incidenciaService.findById(id);
-
+        PuntoController puntoController = new PuntoController();
         if (optionalIncidencia.isPresent()) {
             Incidencia incidencia = optionalIncidencia.get();
             EstadoIncidencia estadoIncidencia = mapEstado(nuevoEstado);
@@ -189,7 +184,9 @@ public class IncidenciaController {
                 uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia, base64Image);
 
                 // Actualizar la propiedad fotos en la incidencia con la URL
-                incidencia.getPunto().setFoto(incidencia.getId() + incidencia.getDescripcion() + ".jpg");
+                incidencia.getPunto().setFoto(incidencia.getPunto().getId() + "_" + incidencia.getPunto().getLatitud() + "_" + incidencia.getPunto().getLongitud() + ".jpg");
+                incidencia.getPunto().setDescripcion(incidencia.getDescripcion());
+                puntoController.modifyPunto(incidencia.getPunto().getId(), incidencia.getPunto());
                 incidencia.setFotos(null);
             }
 

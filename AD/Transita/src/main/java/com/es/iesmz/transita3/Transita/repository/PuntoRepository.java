@@ -47,7 +47,7 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     @Query("SELECT DISTINCT p FROM Punto p " +
             "JOIN FETCH p.incidencias i " +
-            "WHERE i.estado = 'ACEPTADO' " +
+            "WHERE i.estado IN ('ACEPTADO', 'ENPROCESO') " +
             "AND p.visibilidadPunto = 'GLOBAL'")
     Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
 
