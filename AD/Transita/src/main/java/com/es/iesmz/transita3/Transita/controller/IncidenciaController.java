@@ -301,7 +301,7 @@ public class IncidenciaController {
             ftpClient.changeWorkingDirectory(remoteFilePath);
 
             // Nombre del archivo que se subirá al servidor FTP (ID de la incidencia + ".jpg")
-            String remoteFileName = incidencia.getId() + incidencia.getDescripcion() + ".jpg";
+            String remoteFileName = incidencia.getPunto().getId() + "_" + incidencia.getPunto().getLatitud() + "_" + incidencia.getPunto().getLongitud() + ".jpg";
 
             // Decodificar la cadena Base64 y crear un InputStream
             byte[] imageBytes = Base64.getDecoder().decode(base64Image);
