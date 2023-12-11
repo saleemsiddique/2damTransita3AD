@@ -150,17 +150,26 @@ public class IncidenciaController {
     })
     @PutMapping("/incidencia/modificar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id,
-                                                       @RequestBody Incidencia nuevaIncidencia) {
+    public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id, @RequestBody Incidencia incidencia) {
+        PuntoController puntoController = new PuntoController();
         Optional<Incidencia> optionalIncidencia = incidenciaService.findById(id);
-        if(nuevaIncidencia.getFotos() != null){
-            nuevaIncidencia.setFotos(compressBase64String(nuevaIncidencia.getFotos()));
-        }else{
-            nuevaIncidencia.setFotos(optionalIncidencia.get().getFotos());
+        if(incidencia.getFotos() != null){
+            if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
+                String base64Image = decompressBase64String(incidencia.getFotos());
+                uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia, base64Image);
+
+                // Actualizar la propiedad fotos en la incidencia con la URL
+                incidencia.getPunto().setFoto(incidencia.getPunto().getId() + "_" + incidencia.getPunto().getLatitud() + "_" + incidencia.getPunto().getLongitud() + ".jpg");
+                incidencia.getPunto().setDescripcion(incidencia.getDescripcion());
+                puntoController.modifyPunto(incidencia.getPunto().getId(), incidencia.getPunto());
+                incidencia.setFotos(null);
+            }
+        } else{
+            incidencia.setFotos(optionalIncidencia.get().getFotos());
         }
 
-        Incidencia incidencia = incidenciaService.modifyIncidencia(id, nuevaIncidencia);
-        return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
+        Incidencia oldincidencia = incidenciaService.modifyIncidencia(id, incidencia);
+        return new ResponseEntity<>(incidencia, HttpStatus.OK);
     }
 
     @Operation(summary = "Modifica el estado de una incidencia en el catálogo")
