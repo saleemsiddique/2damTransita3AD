@@ -76,7 +76,7 @@ public class ClienteController {
     @GetMapping("/cliente/count/admin/filtros")
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Integer> getUsuarioMunicipioCountConFiltros(
-            @RequestParam(name = "estado", required = false) Integer rol)
+            @RequestParam(name = "rol", required = false) Integer rol)
     {
         int cantidadPuntos =
                 (rol == null) ? Math.toIntExact(clienteService.countUsuarioMunicipio()) : Math.toIntExact(clienteService.countUsuarioMunicipioFiltrado(rol));
