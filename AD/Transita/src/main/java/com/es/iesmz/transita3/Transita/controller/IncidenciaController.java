@@ -3,6 +3,7 @@ package com.es.iesmz.transita3.Transita.controller;
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
 
+import com.es.iesmz.transita3.Transita.domain.Punto;
 import com.es.iesmz.transita3.Transita.exception.EstadoIncidenciaNotFoundException;
 import com.es.iesmz.transita3.Transita.exception.IncidenciaNotFoundException;
 
@@ -125,6 +126,50 @@ public class IncidenciaController {
     public ResponseEntity<Set<Incidencia>> getIncideciaByDuracion(@PathVariable String duracion) {
         Set<Incidencia> incidencias = incidenciaService.findByDuracion(duracion);
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtiene el listado de incidencias por paginas y filtrado por estado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de incidencias",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
+    @GetMapping("/incidencia/filtrados")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Incidencia>> getIncidenciaPagsPorEstado(
+            @RequestParam(name = "estado", required = false) String estado,
+            @RequestParam(name = "idInicial") int idInicial,
+            @RequestParam(name = "idFinal") int idFinal
+    ) {
+        Set<Incidencia> incidencias;
+        if(estado == null){
+            incidencias = incidenciaService.findAllIncidenciasByPages(idInicial, idFinal);
+        }else {
+            incidencias = incidenciaService.findIncidenciaByPagesFiltro(estado, idInicial, idFinal);
+        }
+        for (Incidencia incidencia : incidencias) {
+            if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
+                incidencia.setFotos(decompressBase64String(incidencia.getFotos()));
+            }
+        }
+        return new ResponseEntity<>(incidencias, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtiene numero de incidencias con filtros")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))
+            )})
+    @GetMapping("/incidencia/count/filtros")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Integer> getIncidenciaCountConFiltros(
+            @RequestParam(name = "estado", required = false) String estado) {
+        int cantidadIncidencias;
+        if(estado == null){
+            cantidadIncidencias = Math.toIntExact(incidenciaService.count());
+        }else {
+            cantidadIncidencias = Math.toIntExact(incidenciaService.countIncidencia(estado));
+        }
+        return new ResponseEntity<>(cantidadIncidencias, HttpStatus.OK);
     }
 
     @Operation(summary = "Registra un nuevo incidencia")

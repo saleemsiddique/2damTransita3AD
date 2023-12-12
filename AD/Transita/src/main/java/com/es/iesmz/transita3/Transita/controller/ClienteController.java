@@ -68,6 +68,33 @@ public class ClienteController {
         return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene numero de usuario municipio con filtros")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de cliente",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Cliente.class)))
+            )})
+    @GetMapping("/cliente/count/admin/filtros")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Integer> getUsuarioMunicipioCountConFiltros(
+            @RequestParam(name = "estado", required = false) Integer rol)
+    {
+        int cantidadPuntos =
+                (rol == null) ? Math.toIntExact(clienteService.countUsuarioMunicipio()) : Math.toIntExact(clienteService.countUsuarioMunicipioFiltrado(rol));
+        return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtener una lista de todos los admin y moderadores por partes")
+    @GetMapping("/cliente/admin/filtrados")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Cliente>> getUsuariosMunicipioByPages(
+            @RequestParam(name = "idInicial") int idInicial,
+            @RequestParam(name = "idFinal") int idFinal,
+            @RequestParam(name = "rol", required = false) Integer rol) {
+        Set<Cliente> clientes =
+                (rol == null) ?  clienteService.findUsuarioMunicipioWithRowNum(idInicial, idFinal) :  clienteService.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal);
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
+
     @Operation(summary = "Obtener un cliente por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente obtenido exitosamente"),

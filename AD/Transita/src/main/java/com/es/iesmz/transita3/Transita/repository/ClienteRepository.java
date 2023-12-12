@@ -2,7 +2,6 @@ package com.es.iesmz.transita3.Transita.repository;
 
 import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.ECliente;
-import com.es.iesmz.transita3.Transita.domain.Punto;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -43,6 +42,30 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
             "WHERE ru.id_rol = 1 OR ru.id_rol = 2", nativeQuery = true)
     Set<Cliente> findByRoleAdminOrModerator();
 
+    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum " +
+            "FROM CLIENTE C " +
+            "INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE (:rol IS NULL OR RU.ID_ROL = :rol)) AS RankedPoints " +
+            "WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+            nativeQuery = true)
+    Set<Cliente> findUsuarioMunicipioWithFilter(
+            @Param("rol") int rol,
+            @Param("idInicial") int idInicial,
+            @Param("idFinal") int idFinal);
+
+
+    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum " +
+            "FROM CLIENTE C " +
+            "INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE (RU.ID_ROL = 1 OR RU.ID_ROL = 2)) AS RankedPoints " +
+            "WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+            nativeQuery = true)
+    Set<Cliente> findUsuarioMunicipioWithRowNum(
+            @Param("idInicial") int idInicial,
+            @Param("idFinal") int idFinal);
+
+
+
     @Query(value = "SELECT c.* FROM cliente c INNER JOIN roles_usuario ru ON c.id = ru.id_usuario WHERE ru.id_rol = 3", nativeQuery = true)
     Set<Cliente> findByRoleUsuario();
 
@@ -59,6 +82,17 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
             "WHERE (:estado IS NULL OR C.ESTADO = :estado) " ,
             nativeQuery = true)
     long countClienteConFiltros(@Param("estado") int estado);
+
+    @Query(value = "SELECT COUNT(*) FROM CLIENTE C INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE (:rol IS NULL OR RU.ID_ROL = :rol)",
+            nativeQuery = true)
+    long countClientesWithRoleFilter(@Param("rol") int rol);
+
+    @Query(value = "SELECT COUNT(*) FROM CLIENTE C INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE (RU.ID_ROL = 1 OR RU.ID_ROL = 2)",
+            nativeQuery = true)
+    long countClientesWithRole();
+
 
 
 

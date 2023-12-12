@@ -10,13 +10,15 @@ public interface ClienteService {
 
     Set<Cliente> findAll();
     Set<Cliente> findAllByPages(int idInicial, int idFinal);
-    Set<Cliente> findAllByPagesFiltrado(int idInicial, int idFinal, int estado);
+    Set<Cliente> findAllByPagesFiltrado(int idInicial, int idFinal, int rol);
     Optional<Cliente> findById(long id);
     Cliente addCliente(Cliente cliente);
     Set<Cliente> findByNombreStartingWith(String nombre);
     Set<Cliente> findByApellidoStartingWith(String apellido);
     Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario);
     Set<Cliente> findByEstadoCuenta(ECliente estadoCliente);
+    Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal);
+    Set<Cliente> findUsuarioMunicipioWithRowNum(int idInicial, int idFinal);
 
     Cliente findByNombreUsuario(String email);
     Cliente modifyCliente(long id, Cliente newCliente);
@@ -29,7 +31,11 @@ public interface ClienteService {
     Set<Cliente> findByRoleUsuarioAndEstadoDesactivado();
 
     Set<Cliente> findByRoleUsuarioAndEstadoActivado();
+
     Set<Cliente> findByRole(int rol);
     long getNumeroClientesFiltrados(int estado);
     long countCliente();
+    long countUsuarioMunicipioFiltrado(int rol);
+    long countUsuarioMunicipio();
+
 }

@@ -72,6 +72,9 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteRepository.findByRoleUsuarioAndEstadoActivado();
     }
 
+
+
+
     @Override
     public Set<Cliente> findByRole(int rol) {
         return clienteRepository.findByRole(rol);
@@ -88,6 +91,16 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public long countUsuarioMunicipioFiltrado(int rol) {
+        return clienteRepository.countClientesWithRoleFilter(rol);
+    }
+
+    @Override
+    public long countUsuarioMunicipio() {
+        return clienteRepository.countClientesWithRole();
+    }
+
+    @Override
     public Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario) {
         return  clienteRepository.findByNombreUsuarioStartingWith(nombreUsuario);
     }
@@ -95,6 +108,16 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Set<Cliente> findByEstadoCuenta(ECliente estadoCliente) {
         return clienteRepository.findByEstadoCuenta(estadoCliente);
+    }
+
+    @Override
+    public Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal) {
+        return clienteRepository.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal);
+    }
+
+    @Override
+    public Set<Cliente> findUsuarioMunicipioWithRowNum(int idInicial, int idFinal) {
+        return clienteRepository.findUsuarioMunicipioWithRowNum(idInicial, idFinal);
     }
 
     @Override
