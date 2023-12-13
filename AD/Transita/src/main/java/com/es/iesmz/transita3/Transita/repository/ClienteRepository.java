@@ -24,10 +24,14 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
             nativeQuery = true)
     Set<Cliente> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
 
-    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum FROM CLIENTE C WHERE " +
-            "(:estado IS NULL OR C.ESTADO = :estado) ) AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum " +
+            "FROM CLIENTE C " +
+            "INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE (:estado IS NULL OR C.ESTADO = :estado) " +
+            "AND RU.ID_ROL = 3) AS RankedPoints " +
+            "WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
             nativeQuery = true)
-    Set<Cliente> findAllByPagesFiltrado(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal, @Param("estado")int estado);
+    Set<Cliente> findAllByPagesFiltrado(@Param("idInicial") int idInicial, @Param("idFinal") int idFinal, @Param("estado") int estado);
 
     @Query(value = "SELECT * FROM cliente c WHERE c.nombre LIKE :nombre%", nativeQuery = true)
     Set<Cliente> findByNombreStartingWith(@Param("nombre") String nombre);
