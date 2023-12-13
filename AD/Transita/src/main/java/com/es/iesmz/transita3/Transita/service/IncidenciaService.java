@@ -22,6 +22,11 @@ public interface  IncidenciaService {
     void deleteIncidencia(Long id);
 
     Set<Incidencia> findByIncidenciaByClienteId(long clienteId);
+    Set<Incidencia> findIncidenciaByPagesFiltro(String estado, int idInicial, int idFinal);
+    Set<Incidencia> findAllIncidenciasByPages(int idInicial, int idFinal);
+
+    long countIncidencia(String estado);
+    long count();
 
 
 }

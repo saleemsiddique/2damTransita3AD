@@ -29,6 +29,26 @@ public class IncidenciaServiceImpl implements IncidenciaService{
     }
 
     @Override
+    public Set<Incidencia> findIncidenciaByPagesFiltro(String estado, int idInicial, int idFinal) {
+        return incidenciaRepository.findIncidenciaConFiltros(estado, idInicial, idFinal);
+    }
+
+    @Override
+    public Set<Incidencia> findAllIncidenciasByPages(int idInicial, int idFinal) {
+        return incidenciaRepository.findAllByPages(idInicial, idFinal);
+    }
+
+    @Override
+    public long countIncidencia(String estado) {
+        return incidenciaRepository.countPuntoConFiltros(estado);
+    }
+
+    @Override
+    public long count(){
+        return incidenciaRepository.count();
+    }
+
+    @Override
     public Set<Incidencia> findByDuracion(String duracion) {
         return incidenciaRepository.findByDuracion(duracion);
     }

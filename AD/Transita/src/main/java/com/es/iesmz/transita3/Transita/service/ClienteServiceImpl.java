@@ -22,6 +22,16 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public Set<Cliente> findAllByPages(int idInicial, int idFinal) {
+        return clienteRepository.findAllByPages(idInicial, idFinal);
+    }
+
+    @Override
+    public Set<Cliente> findAllByPagesFiltrado(int idInicial, int idFinal, int estado) {
+        return clienteRepository.findAllByPagesFiltrado(idInicial, idFinal, estado);
+    }
+
+    @Override
     public Optional<Cliente> findById(long id) {
         return clienteRepository.findById(id);
     }
@@ -62,9 +72,32 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteRepository.findByRoleUsuarioAndEstadoActivado();
     }
 
+
+
+
     @Override
     public Set<Cliente> findByRole(int rol) {
         return clienteRepository.findByRole(rol);
+    }
+
+    @Override
+    public long getNumeroClientesFiltrados(int estado) {
+        return clienteRepository.countClienteConFiltros(estado);
+    }
+
+    @Override
+    public long countCliente() {
+        return clienteRepository.count();
+    }
+
+    @Override
+    public long countUsuarioMunicipioFiltrado(int rol) {
+        return clienteRepository.countClientesWithRoleFilter(rol);
+    }
+
+    @Override
+    public long countUsuarioMunicipio() {
+        return clienteRepository.countClientesWithRole();
     }
 
     @Override
@@ -75,6 +108,16 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Set<Cliente> findByEstadoCuenta(ECliente estadoCliente) {
         return clienteRepository.findByEstadoCuenta(estadoCliente);
+    }
+
+    @Override
+    public Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal) {
+        return clienteRepository.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal);
+    }
+
+    @Override
+    public Set<Cliente> findUsuarioMunicipioWithRowNum(int idInicial, int idFinal) {
+        return clienteRepository.findUsuarioMunicipioWithRowNum(idInicial, idFinal);
     }
 
     @Override
