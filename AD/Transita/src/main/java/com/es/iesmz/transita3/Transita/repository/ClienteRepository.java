@@ -19,8 +19,11 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Boolean existsByNombreUsuario(String nombreUsuario);
 
 
-    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum FROM CLIENTE C) " +
-            "AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+    @Query(value = "SELECT * FROM (SELECT C.*, ROW_NUMBER() OVER (ORDER BY C.ID) AS RowNum " +
+            "FROM CLIENTE C " +
+            "INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE RU.ID_ROL = 3) AS RankedPoints " +
+            "WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
             nativeQuery = true)
     Set<Cliente> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
 
@@ -83,9 +86,12 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
     Set<Cliente> findByRole(@Param("rol")int rol);
 
     @Query(value = "SELECT COUNT(*) FROM CLIENTE C " +
-            "WHERE (:estado IS NULL OR C.ESTADO = :estado) " ,
+            "INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE (:estado IS NULL OR C.ESTADO = :estado) " +
+            "AND RU.ID_ROL = 3",
             nativeQuery = true)
     long countClienteConFiltros(@Param("estado") int estado);
+
 
     @Query(value = "SELECT COUNT(*) FROM CLIENTE C INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
             "WHERE (:rol IS NULL OR RU.ID_ROL = :rol)",
@@ -96,6 +102,13 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
             "WHERE (RU.ID_ROL = 1 OR RU.ID_ROL = 2)",
             nativeQuery = true)
     long countClientesWithRole();
+
+    @Query(value = "SELECT COUNT(*) FROM CLIENTE C INNER JOIN ROLES_USUARIO RU ON C.ID = RU.ID_USUARIO " +
+            "WHERE (RU.ID_ROL = 3)",
+            nativeQuery = true)
+    long countCliente();
+
+
 
 
 
