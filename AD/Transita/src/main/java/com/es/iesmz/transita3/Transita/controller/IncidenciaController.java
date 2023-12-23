@@ -9,6 +9,7 @@ import com.es.iesmz.transita3.Transita.exception.IncidenciaNotFoundException;
 
 import com.es.iesmz.transita3.Transita.service.IncidenciaService;
 
+import com.es.iesmz.transita3.Transita.service.PuntoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,9 @@ import static com.es.iesmz.transita3.Transita.controller.Response.NOT_FOUND;
 public class IncidenciaController {
     @Autowired
     private IncidenciaService incidenciaService;
+
+    @Autowired
+    private PuntoService puntoService;
 
     @Operation(summary = "Obtiene el listado de incidencias")
     @ApiResponses(value = {
@@ -213,7 +217,6 @@ public class IncidenciaController {
     @PutMapping("/incidencia/modificar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id, @RequestBody Incidencia incidencia) {
-        PuntoController puntoController = new PuntoController();
         Optional<Incidencia> optionalIncidencia = incidenciaService.findById(id);
         if(incidencia.getFotos() != null){
             if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
@@ -240,7 +243,6 @@ public class IncidenciaController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Incidencia> modifyEstadoIncidencia(@PathVariable long id, @PathVariable String nuevoEstado) {
         Optional<Incidencia> optionalIncidencia = incidenciaService.findById(id);
-        PuntoController puntoController = new PuntoController();
         if (optionalIncidencia.isPresent()) {
             Incidencia incidencia = optionalIncidencia.get();
             EstadoIncidencia estadoIncidencia = mapEstado(nuevoEstado);
@@ -249,6 +251,7 @@ public class IncidenciaController {
                 String base64Image = decompressBase64String(incidencia.getFotos());
                 uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia, base64Image);
                 updatePunto(incidencia, "PUT");
+                incidencia.setFotos(null);
             }
             incidencia.setEstado(estadoIncidencia);
             // Guardar la incidencia modificada en la base de datos
@@ -262,7 +265,6 @@ public class IncidenciaController {
 
     private void updatePunto(Incidencia incidencia, String action){
         // Actualizar la propiedad fotos en la incidencia con la URL
-        PuntoController puntoController = new PuntoController();
         Set<Incidencia> incidenciasSet = getIncidenciaByPunto(incidencia.getPunto().getId()).getBody();
         List<Incidencia> incidencias = new ArrayList<>(incidenciasSet);
         switch (action) {
@@ -285,7 +287,7 @@ public class IncidenciaController {
             incidencia.getPunto().setDescripcion(getLastIncidencia(incidencias).getDescripcion());
         }
 
-        puntoController.modifyPunto(incidencia.getPunto().getId(), incidencia.getPunto());
+        puntoService.modifyPunto(incidencia.getPunto().getId(), incidencia.getPunto());
     }
 
 
