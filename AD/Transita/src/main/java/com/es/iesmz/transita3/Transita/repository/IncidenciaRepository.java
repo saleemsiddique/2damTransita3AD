@@ -22,6 +22,9 @@ public interface IncidenciaRepository extends CrudRepository<Incidencia, Long> {
 
     Set<Incidencia> findByDuracion(String duracion);
 
+    @Query(value = "SELECT * FROM incidencia i WHERE i.punto_id = :puntoId", nativeQuery = true)
+    Set<Incidencia> findByIncidenciaByPuntoId(@Param("puntoId") Long puntoId);
+
     @Query(value = "SELECT * FROM incidencia i WHERE i.cliente_id = :clienteId", nativeQuery = true)
     Set<Incidencia> findByIncidenciaByClienteId(@Param("clienteId") Long clienteId);
 

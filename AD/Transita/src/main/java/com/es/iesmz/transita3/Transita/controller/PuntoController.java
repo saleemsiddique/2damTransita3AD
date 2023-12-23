@@ -244,7 +244,7 @@ public class PuntoController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
             )})
     @GetMapping("/global-con-incidencias-aceptadas")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERATOR')")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Punto>> getPuntosConIncidenciasAceptadas() {
         Set<Punto> puntos = puntoService.findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
         return new ResponseEntity<>(puntos, HttpStatus.OK);
@@ -284,9 +284,6 @@ public class PuntoController {
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<Punto> modifyPunto(@PathVariable long id,
                                              @RequestBody Punto nuevoPunto) {
-        if (puntoService == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
         Optional<Punto> punto = puntoService.findById(id);
         if (punto.isPresent()) {
             Punto modifiedPunto = puntoService.modifyPunto(id, nuevoPunto);

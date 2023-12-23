@@ -39,6 +39,11 @@ public class IncidenciaServiceImpl implements IncidenciaService{
     }
 
     @Override
+    public Set<Incidencia> findByPunto(long id) {
+        return incidenciaRepository.findByIncidenciaByPuntoId(id);
+    }
+
+    @Override
     public long countIncidencia(String estado) {
         return incidenciaRepository.countPuntoConFiltros(estado);
     }

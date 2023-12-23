@@ -24,6 +24,7 @@ public interface  IncidenciaService {
     Set<Incidencia> findByIncidenciaByClienteId(long clienteId);
     Set<Incidencia> findIncidenciaByPagesFiltro(String estado, int idInicial, int idFinal);
     Set<Incidencia> findAllIncidenciasByPages(int idInicial, int idFinal);
+    Set<Incidencia> findByPunto(long id);
 
     long countIncidencia(String estado);
     long count();

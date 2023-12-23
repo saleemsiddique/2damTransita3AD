@@ -24,9 +24,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.util.Base64;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.*;
 
 import static com.es.iesmz.transita3.Transita.controller.Response.NOT_FOUND;
@@ -52,6 +50,24 @@ public class IncidenciaController {
             }
         }
 
+        return new ResponseEntity<>(incidencias, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtiene el listado de incidencias")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de incidencias",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
+    @GetMapping("/incidencias/puntoid/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Incidencia>> getIncidenciaByPunto(@PathVariable long id) {
+        Set<Incidencia> incidencias = null;
+        incidencias = incidenciaService.findByPunto(id);
+        for (Incidencia incidencia : incidencias) {
+            if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
+                incidencia.setFotos(decompressBase64String(incidencia.getFotos()));
+            }
+        }
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
@@ -180,6 +196,7 @@ public class IncidenciaController {
     @PostMapping("/incidencia")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_USUARIO') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Incidencia> addIncidencia(@RequestBody Incidencia incidencia) {
+        PuntoController puntoController = new PuntoController();
         incidencia.setFotos(compressBase64String(incidencia.getFotos()));
         Incidencia nuevaIncidencia = incidenciaService.addIncidencia(incidencia);
         return new ResponseEntity<>(nuevaIncidencia, HttpStatus.OK);
@@ -202,12 +219,7 @@ public class IncidenciaController {
             if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
                 String base64Image = decompressBase64String(incidencia.getFotos());
                 uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia, base64Image);
-
-                // Actualizar la propiedad fotos en la incidencia con la URL
-                incidencia.getPunto().setFoto(incidencia.getPunto().getId() + "_" + incidencia.getPunto().getLatitud() + "_" + incidencia.getPunto().getLongitud() + ".jpg");
-                incidencia.getPunto().setDescripcion(incidencia.getDescripcion());
-                puntoController.modifyPunto(incidencia.getPunto().getId(), incidencia.getPunto());
-                incidencia.setFotos(null);
+                updatePunto(incidencia, "PUT");
             }
         } else{
             incidencia.setFotos(optionalIncidencia.get().getFotos());
@@ -236,14 +248,8 @@ public class IncidenciaController {
             if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
                 String base64Image = decompressBase64String(incidencia.getFotos());
                 uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia, base64Image);
-
-                // Actualizar la propiedad fotos en la incidencia con la URL
-                incidencia.getPunto().setFoto(incidencia.getPunto().getId() + "_" + incidencia.getPunto().getLatitud() + "_" + incidencia.getPunto().getLongitud() + ".jpg");
-                incidencia.getPunto().setDescripcion(incidencia.getDescripcion());
-                puntoController.modifyPunto(incidencia.getPunto().getId(), incidencia.getPunto());
-                incidencia.setFotos(null);
+                updatePunto(incidencia, "PUT");
             }
-
             incidencia.setEstado(estadoIncidencia);
             // Guardar la incidencia modificada en la base de datos
             incidenciaService.modifyIncidencia(id, incidencia);
@@ -252,6 +258,40 @@ public class IncidenciaController {
         } else {
             throw new IncidenciaNotFoundException(id);
         }
+    }
+
+    private void updatePunto(Incidencia incidencia, String action){
+        // Actualizar la propiedad fotos en la incidencia con la URL
+        PuntoController puntoController = new PuntoController();
+        Set<Incidencia> incidenciasSet = getIncidenciaByPunto(incidencia.getPunto().getId()).getBody();
+        List<Incidencia> incidencias = new ArrayList<>(incidenciasSet);
+        switch (action) {
+            case "PUT": {
+                incidencias.add(incidencia);
+                break;
+            }
+            case "DELETE": {
+                incidencias.remove(getLastIncidencia(incidencias));
+                break;
+            }
+        }
+
+        if (incidencias.isEmpty()) {
+            incidencia.getPunto().setFoto(null);
+            incidencia.getPunto().setDescripcion(null);
+        } else {
+            // Utilizar la referencia a la última incidencia antes de la eliminación
+            incidencia.getPunto().setFoto(getLastIncidencia(incidencias).getPunto().getId() + "_" + getLastIncidencia(incidencias).getPunto().getLatitud() + "_" + getLastIncidencia(incidencias).getPunto().getLongitud() + ".jpg");
+            incidencia.getPunto().setDescripcion(getLastIncidencia(incidencias).getDescripcion());
+        }
+
+        puntoController.modifyPunto(incidencia.getPunto().getId(), incidencia.getPunto());
+    }
+
+
+
+    private Incidencia getLastIncidencia(List<Incidencia> incidencias){
+        return incidencias.get(incidencias.size() - 1);
     }
 
 
@@ -266,7 +306,6 @@ public class IncidenciaController {
     }
 
 
-
     @Operation(summary = "Elimina una incidencia")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Se elimina la incidencia", content = @Content(schema = @Schema(implementation =
@@ -279,6 +318,7 @@ public class IncidenciaController {
     public ResponseEntity<Incidencia> deleteIncidencia(@PathVariable long id) {
         Incidencia incidencia = incidenciaService.findById(id)
                 .orElseThrow(() -> new IncidenciaNotFoundException(id));
+        updatePunto(incidencia, "DELETE");
         incidenciaService.deleteIncidencia(id);
         return new ResponseEntity(Response.noErrorResponse(), HttpStatus.OK);
     }
