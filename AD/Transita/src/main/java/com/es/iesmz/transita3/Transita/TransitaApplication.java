@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita;
 
+import com.es.iesmz.transita3.Transita.Utils.Util;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,5 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TransitaApplication {
     public static void main(String[] args) {
         SpringApplication.run(TransitaApplication.class, args);
+        Util.readConfigFile();
     }
 }

@@ -6,7 +6,7 @@ import com.es.iesmz.transita3.Transita.domain.Incidencia;
 import java.util.Optional;
 import java.util.Set;
 
-public interface  IncidenciaService {
+public interface IncidenciaService {
     Set<Incidencia> findAll();
 
     Optional<Incidencia> findById(long id);
