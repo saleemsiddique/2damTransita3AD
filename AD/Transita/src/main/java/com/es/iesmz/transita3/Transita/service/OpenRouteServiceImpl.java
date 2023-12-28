@@ -27,7 +27,7 @@ public class OpenRouteServiceImpl implements OpenRouteService{
         System.out.println(Util.ORSToken);
         System.out.println(startPoint);
         System.out.println(endPoint);
-        String apiUrl = "https://api.openrouteservice.org/v2/directions/wheelchair?api_key=" + Util.ORSToken + "&start=" + startPoint + "&end=" + endPoint;
+        String apiUrl = "https://api.openrouteservice.org/v2/directions/wheelchair?api_key=" + Util.ORSToken + "&start=" + startPoint.lng + "," + startPoint.lat + "&end=" + + endPoint.lng + "," + endPoint.lat;
         //String apiUrl = "https://api.openrouteservice.org/v2/directions/wheelchair?api_key=5b3ce3597851110001cf624877b29e7b706641248e293b507b995592&start=8.681495,49.41461&end=8.687872,49.420318";
 
         URI uri = new URI(apiUrl);
