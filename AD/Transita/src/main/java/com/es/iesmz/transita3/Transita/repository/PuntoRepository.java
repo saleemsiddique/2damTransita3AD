@@ -36,6 +36,12 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     long count();
 
+    @Query("SELECT DISTINCT p FROM Punto p " +
+            "JOIN FETCH p.incidencias i " +
+            "WHERE i.estado IN ('ACEPTADO', 'ENPROCESO', 'ENVIADO') " +
+            "AND p.visibilidadPunto = 'GLOBAL'")
+    Set<Punto> findPuntosConIncidencias();
+
     @Query(value = "SELECT COUNT(*) FROM PUNTO P " +
             "WHERE (:tipoPunto IS NULL OR P.tipo = :tipoPunto) " +
             "AND (:accesibilidadPunto IS NULL OR P.accesibilidad = :accesibilidadPunto) " +
@@ -68,4 +74,7 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     @Query(value = "SELECT * FROM PUNTO P WHERE (COALESCE(:tipo, '') = '' OR P.TIPO = :tipo) AND (COALESCE(:accesibilidad, '') = '' OR P.ACCESIBILIDAD = :accesibilidad) AND (COALESCE(:visibilidad, '') = '' OR P.VISIBILIDAD = :visibilidad)", nativeQuery = true)
     Set<Punto> findByTipoAccesibilidadVisibilidad(@Param("tipo") String tipo, @Param("accesibilidad") String accesibilidad, @Param("visibilidad") String visibilidad);
+
+
+
 }

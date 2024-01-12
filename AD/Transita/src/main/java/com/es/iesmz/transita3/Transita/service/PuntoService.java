@@ -22,7 +22,7 @@ public interface PuntoService {
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Set<Punto> findAllByPages(int idInicial, int idFinal);
     Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
-
+    Set<Punto> findPuntosConIncidencias();
     Punto getPrimerPunto();
 
     Punto addPunto(Punto punto);
