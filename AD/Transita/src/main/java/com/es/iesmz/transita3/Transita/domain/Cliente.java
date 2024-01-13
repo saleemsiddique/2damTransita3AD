@@ -78,13 +78,17 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Incidencia> incidencias = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Favorito> favoritos = new ArrayList<>();
+
+
     public Cliente(String nombre, String apellidos, String nombreUsuario, String contrasenya) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.nombreUsuario = nombreUsuario;
         this.contrasenya = contrasenya;
         this.estadoCuenta = ECliente.ACTIVADO;
-
     }
 
 }
