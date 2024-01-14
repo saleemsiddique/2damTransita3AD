@@ -75,12 +75,12 @@ public class Cliente {
     private Set<Rol> rols = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Incidencia> incidencias = new ArrayList<>();
+    @ManyToMany(mappedBy = "clientes")
+    private Set<Punto> favoritos = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Favorito> favoritos = new ArrayList<>();
+    private List<Incidencia> incidencias = new ArrayList<>();
 
 
     public Cliente(String nombre, String apellidos, String nombreUsuario, String contrasenya) {

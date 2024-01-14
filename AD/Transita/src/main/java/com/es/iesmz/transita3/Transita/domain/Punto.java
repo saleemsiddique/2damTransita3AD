@@ -8,7 +8,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -59,4 +61,14 @@ public class Punto {
     @JsonIgnore
     @OneToMany(mappedBy = "punto", cascade = CascadeType.ALL)
     private List<Incidencia> incidencias;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinTable(
+            name = "favoritos",
+            joinColumns = @JoinColumn(name = "id_punto"),
+            inverseJoinColumns = @JoinColumn(name = "id_usuario")
+    )
+    private Set<Cliente> clientes = new HashSet<>();
+
+
 }

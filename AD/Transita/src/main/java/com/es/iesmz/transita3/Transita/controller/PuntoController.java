@@ -210,6 +210,35 @@ public class PuntoController {
 
     }
 
+    @Operation(summary = "Obtiene el listado de puntos por tipo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+    @GetMapping("/favoritos/{id}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Set<Punto>> getPuntoByIdCliente(@PathVariable Long id) {
+        Set<Punto> puntos = puntoService.findPuntosByClienteId(id);
+        return new ResponseEntity<>(puntos, HttpStatus.OK);
+    }
+
+    @GetMapping("/favoritos")
+    public ResponseEntity<Punto> buscarPuntoPorCoordenadasYCliente(
+            @RequestParam double latitud,
+            @RequestParam double longitud,
+            @RequestParam long idCliente) {
+        try {
+            Punto punto = puntoService.findPuntoByCoordinatesAndCliente(latitud, longitud, idCliente);
+            if (punto != null) {
+                return new ResponseEntity<>(punto, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Operation(summary = "Obtiene numero de puntos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Listado de puntos",
@@ -290,6 +319,22 @@ public class PuntoController {
             return new ResponseEntity<>(modifiedPunto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @Operation(summary = "Modifica la lista de clientes de punto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto modificado",
+                    content = @Content(schema = @Schema(implementation = Punto.class))
+            )})
+    @PutMapping("/favorito")
+    public ResponseEntity<Punto> agregarClienteAlPunto(
+            @RequestParam long puntoId,
+            @RequestParam long clienteId) {
+        try {
+            Punto punto = puntoService.agregarClienteAlPunto(puntoId, clienteId);
+            return new ResponseEntity<>(punto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

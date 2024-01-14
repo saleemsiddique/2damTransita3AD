@@ -22,11 +22,16 @@ public interface PuntoService {
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Set<Punto> findAllByPages(int idInicial, int idFinal);
     Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
+    Set<Punto> findPuntosByClienteId(Long id);
+
+    Punto findPuntoByCoordinatesAndCliente(double latitud, double longitud, long id);
 
     Punto getPrimerPunto();
 
     Punto addPunto(Punto punto);
     Punto modifyPunto(long id, Punto nuevoPunto);
+
+    Punto agregarClienteAlPunto(long id, long clienteId);
     void deletePunto(long id);
     long countPunto();
     long countPuntoConFiltros(String tipoPunto, String accesibilidadPunto, String visibilidad);
