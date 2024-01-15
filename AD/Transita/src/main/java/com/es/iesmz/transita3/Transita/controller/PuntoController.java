@@ -222,11 +222,11 @@ public class PuntoController {
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
-    @GetMapping("/favoritos")
+    @GetMapping("/favoritos/{latitud}/{longitud}/{idCliente}")
     public ResponseEntity<Punto> buscarPuntoPorCoordenadasYCliente(
-            @RequestParam double latitud,
-            @RequestParam double longitud,
-            @RequestParam long idCliente) {
+            @PathVariable double latitud,
+            @PathVariable double longitud,
+            @PathVariable long idCliente) {
         try {
             Punto punto = puntoService.findPuntoByCoordinatesAndCliente(latitud, longitud, idCliente);
             if (punto != null) {
@@ -326,10 +326,10 @@ public class PuntoController {
             @ApiResponse(responseCode = "200", description = "Punto modificado",
                     content = @Content(schema = @Schema(implementation = Punto.class))
             )})
-    @PutMapping("/favorito")
+    @PutMapping("/favorito/{puntoId}/{clienteId}")
     public ResponseEntity<Punto> agregarClienteAlPunto(
-            @RequestParam long puntoId,
-            @RequestParam long clienteId) {
+            @PathVariable long puntoId,
+            @PathVariable long clienteId) {
         try {
             Punto punto = puntoService.agregarClienteAlPunto(puntoId, clienteId);
             return new ResponseEntity<>(punto, HttpStatus.OK);
