@@ -7,6 +7,7 @@ import com.es.iesmz.transita3.Transita.repository.PuntoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,6 +20,9 @@ public class PuntoServiceImpl implements PuntoService{
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteService clienteService;
 
     @Override
     public Set<Punto> findAll() {
@@ -95,6 +99,24 @@ public class PuntoServiceImpl implements PuntoService{
     public Punto addPunto(Punto punto) {
         return puntoRepository.save(punto);
     }
+
+    @Override
+    @Transactional  // Asegura que la operación se realiza en una transacción
+    public Punto addPuntoconFav(Punto punto, Long clienteId) {
+        Punto nuevoPunto = puntoRepository.save(punto);  // Guarda el Punto
+
+        Optional<Cliente> optionalCliente = clienteService.findById(clienteId);
+        if (optionalCliente.isPresent()) {
+            Cliente cliente = optionalCliente.get();
+            nuevoPunto.getClientes().add(cliente);
+        } else {
+            throw new RuntimeException("Cliente no encontrado");
+        }
+
+        return puntoRepository.save(nuevoPunto);  // Guarda nuevamente el Punto
+
+    }
+
 
     @Override
     public Punto modifyPunto(long id, Punto nuevoPunto) {

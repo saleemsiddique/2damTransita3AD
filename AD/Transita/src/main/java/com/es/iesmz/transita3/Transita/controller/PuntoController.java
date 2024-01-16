@@ -292,6 +292,21 @@ public class PuntoController {
         return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
     }
 
+    @Operation(summary = "Añade un nuevo punto con un favorito")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto agregado con favorito",
+                    content = @Content(schema = @Schema(implementation = Punto.class))
+            )})
+    @PostMapping("/puntos/{clienteId}")
+    public ResponseEntity<Punto> addPunto(@RequestBody Punto punto, @PathVariable Long clienteId) {
+        try {
+            Punto nuevoPunto = puntoService.addPuntoconFav(punto, clienteId);
+            return new ResponseEntity<>(nuevoPunto, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("puntos/filtrados")
     public ResponseEntity<List<Punto>> buscarPuntosConFiltros(
             @RequestParam(name = "tipoPunto", required = false) String tipoPunto,
@@ -326,7 +341,7 @@ public class PuntoController {
             @ApiResponse(responseCode = "200", description = "Punto modificado",
                     content = @Content(schema = @Schema(implementation = Punto.class))
             )})
-    @PutMapping("/favorito/{puntoId}/{clienteId}")
+    @PostMapping("/favorito/{puntoId}/{clienteId}")
     public ResponseEntity<Punto> agregarClienteAlPunto(
             @PathVariable long puntoId,
             @PathVariable long clienteId) {

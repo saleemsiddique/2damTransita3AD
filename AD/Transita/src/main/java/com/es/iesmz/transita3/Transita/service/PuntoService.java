@@ -29,6 +29,9 @@ public interface PuntoService {
     Punto getPrimerPunto();
 
     Punto addPunto(Punto punto);
+
+    Punto addPuntoconFav(Punto punto, Long clienteId);
+
     Punto modifyPunto(long id, Punto nuevoPunto);
 
     Punto agregarClienteAlPunto(long id, long clienteId);
