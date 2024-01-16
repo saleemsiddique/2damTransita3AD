@@ -5,6 +5,7 @@ import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
 import com.es.iesmz.transita3.Transita.domain.Punto;
 import com.es.iesmz.transita3.Transita.domain.TipoPunto;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,6 +32,9 @@ public interface PuntoService {
     Punto addPunto(Punto punto);
 
     Punto addPuntoconFav(Punto punto, Long clienteId);
+
+    @Transactional
+    Punto removeClienteFromPunto(Long puntoId, Long clienteId);
 
     Punto modifyPunto(long id, Punto nuevoPunto);
 

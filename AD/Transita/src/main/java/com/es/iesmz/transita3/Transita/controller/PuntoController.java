@@ -301,7 +301,7 @@ public class PuntoController {
     public ResponseEntity<Punto> addPunto(@RequestBody Punto punto, @PathVariable Long clienteId) {
         try {
             Punto nuevoPunto = puntoService.addPuntoconFav(punto, clienteId);
-            return new ResponseEntity<>(nuevoPunto, HttpStatus.CREATED);
+            return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -341,7 +341,7 @@ public class PuntoController {
             @ApiResponse(responseCode = "200", description = "Punto modificado",
                     content = @Content(schema = @Schema(implementation = Punto.class))
             )})
-    @PostMapping("/favorito/{puntoId}/{clienteId}")
+    @PutMapping("/favorito/{puntoId}/{clienteId}")
     public ResponseEntity<Punto> agregarClienteAlPunto(
             @PathVariable long puntoId,
             @PathVariable long clienteId) {
@@ -367,6 +367,23 @@ public class PuntoController {
                 .orElseThrow(() -> new PuntoNotFoundException(id));
         puntoService.deletePunto(id);
         return new ResponseEntity(Response.noErrorResponse(), HttpStatus.OK);
+    }
+    @Operation(summary = "Elimina un favorito")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se elimina el punto", content = @Content(schema = @Schema(implementation =
+                    Response.class))),
+            @ApiResponse(responseCode = "404", description = "El punto no existe", content = @Content(schema = @Schema(implementation =
+                    Response.class)))
+    })
+    @DeleteMapping("favorito/eliminar/{puntoId}/{clienteId}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Punto> removeClienteFromPunto(@PathVariable Long puntoId, @PathVariable Long clienteId) {
+        try {
+            Punto updatedPunto = puntoService.removeClienteFromPunto(puntoId, clienteId);
+            return new ResponseEntity<>(updatedPunto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @ExceptionHandler(PuntoNotFoundException.class)

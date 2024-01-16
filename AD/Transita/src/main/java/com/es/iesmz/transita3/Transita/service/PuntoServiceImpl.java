@@ -117,6 +117,19 @@ public class PuntoServiceImpl implements PuntoService{
 
     }
 
+    @Override
+    @Transactional
+    public Punto removeClienteFromPunto(Long puntoId, Long clienteId) {
+        Optional<Punto> optionalPunto = puntoRepository.findById(puntoId);
+
+        if (optionalPunto.isPresent()) {
+            Punto punto = optionalPunto.get();
+            punto.getClientes().removeIf(cliente -> cliente.getId().equals(clienteId));
+            return puntoRepository.save(punto);
+        } else {
+            throw new RuntimeException("Punto no encontrado");
+        }
+    }
 
     @Override
     public Punto modifyPunto(long id, Punto nuevoPunto) {
