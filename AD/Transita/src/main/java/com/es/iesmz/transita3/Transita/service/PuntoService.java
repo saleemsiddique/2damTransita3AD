@@ -5,6 +5,7 @@ import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
 import com.es.iesmz.transita3.Transita.domain.Punto;
 import com.es.iesmz.transita3.Transita.domain.TipoPunto;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -22,11 +23,22 @@ public interface PuntoService {
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Set<Punto> findAllByPages(int idInicial, int idFinal);
     Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
-    Set<Punto> findPuntosConIncidencias();
+    Set<Punto> findPuntosByClienteId(Long id);
+
+    Punto findPuntoByCoordinatesAndCliente(double latitud, double longitud, long id);
+
     Punto getPrimerPunto();
 
     Punto addPunto(Punto punto);
+
+    Punto addPuntoconFav(Punto punto, Long clienteId);
+
+    @Transactional
+    Punto removeClienteFromPunto(Long puntoId, Long clienteId);
+
     Punto modifyPunto(long id, Punto nuevoPunto);
+
+    Punto agregarClienteAlPunto(long id, long clienteId);
     void deletePunto(long id);
     long countPunto();
     long countPuntoConFiltros(String tipoPunto, String accesibilidadPunto, String visibilidad);

@@ -210,6 +210,35 @@ public class PuntoController {
 
     }
 
+    @Operation(summary = "Obtiene el listado de puntos por tipo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de puntos",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
+            )})
+    @GetMapping("/favoritos/{id}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Set<Punto>> getPuntoByIdCliente(@PathVariable Long id) {
+        Set<Punto> puntos = puntoService.findPuntosByClienteId(id);
+        return new ResponseEntity<>(puntos, HttpStatus.OK);
+    }
+
+    @GetMapping("/favoritos/{latitud}/{longitud}/{idCliente}")
+    public ResponseEntity<Punto> buscarPuntoPorCoordenadasYCliente(
+            @PathVariable double latitud,
+            @PathVariable double longitud,
+            @PathVariable long idCliente) {
+        try {
+            Punto punto = puntoService.findPuntoByCoordinatesAndCliente(latitud, longitud, idCliente);
+            if (punto != null) {
+                return new ResponseEntity<>(punto, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Operation(summary = "Obtiene numero de puntos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Listado de puntos",
@@ -274,6 +303,21 @@ public class PuntoController {
         return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
     }
 
+    @Operation(summary = "Añade un nuevo punto con un favorito")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto agregado con favorito",
+                    content = @Content(schema = @Schema(implementation = Punto.class))
+            )})
+    @PostMapping("/puntos/{clienteId}")
+    public ResponseEntity<Punto> addPunto(@RequestBody Punto punto, @PathVariable Long clienteId) {
+        try {
+            Punto nuevoPunto = puntoService.addPuntoconFav(punto, clienteId);
+            return new ResponseEntity<>(nuevoPunto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("puntos/filtrados")
     public ResponseEntity<List<Punto>> buscarPuntosConFiltros(
             @RequestParam(name = "tipoPunto", required = false) String tipoPunto,
@@ -303,6 +347,22 @@ public class PuntoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @Operation(summary = "Modifica la lista de clientes de punto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Punto modificado",
+                    content = @Content(schema = @Schema(implementation = Punto.class))
+            )})
+    @PutMapping("/favorito/{puntoId}/{clienteId}")
+    public ResponseEntity<Punto> agregarClienteAlPunto(
+            @PathVariable long puntoId,
+            @PathVariable long clienteId) {
+        try {
+            Punto punto = puntoService.agregarClienteAlPunto(puntoId, clienteId);
+            return new ResponseEntity<>(punto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @Operation(summary = "Elimina un punto")
     @ApiResponses(value = {
@@ -318,6 +378,23 @@ public class PuntoController {
                 .orElseThrow(() -> new PuntoNotFoundException(id));
         puntoService.deletePunto(id);
         return new ResponseEntity(Response.noErrorResponse(), HttpStatus.OK);
+    }
+    @Operation(summary = "Elimina un favorito")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se elimina el punto", content = @Content(schema = @Schema(implementation =
+                    Response.class))),
+            @ApiResponse(responseCode = "404", description = "El punto no existe", content = @Content(schema = @Schema(implementation =
+                    Response.class)))
+    })
+    @DeleteMapping("favorito/eliminar/{puntoId}/{clienteId}")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    public ResponseEntity<Punto> removeClienteFromPunto(@PathVariable Long puntoId, @PathVariable Long clienteId) {
+        try {
+            Punto updatedPunto = puntoService.removeClienteFromPunto(puntoId, clienteId);
+            return new ResponseEntity<>(updatedPunto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @ExceptionHandler(PuntoNotFoundException.class)

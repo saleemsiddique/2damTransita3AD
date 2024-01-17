@@ -75,8 +75,13 @@ public class Cliente {
     private Set<Rol> rols = new HashSet<>();
 
     @JsonIgnore
+    @ManyToMany(mappedBy = "clientes")
+    private Set<Punto> favoritos = new HashSet<>();
+
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Incidencia> incidencias = new ArrayList<>();
+
 
     public Cliente(String nombre, String apellidos, String nombreUsuario, String contrasenya) {
         this.nombre = nombre;
@@ -84,7 +89,6 @@ public class Cliente {
         this.nombreUsuario = nombreUsuario;
         this.contrasenya = contrasenya;
         this.estadoCuenta = ECliente.ACTIVADO;
-
     }
 
 }

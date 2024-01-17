@@ -1,14 +1,13 @@
 package com.es.iesmz.transita3.Transita.service;
 
-import com.es.iesmz.transita3.Transita.domain.AccesibilidadPunto;
-import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
-import com.es.iesmz.transita3.Transita.domain.Punto;
-import com.es.iesmz.transita3.Transita.domain.TipoPunto;
+import com.es.iesmz.transita3.Transita.domain.*;
 import com.es.iesmz.transita3.Transita.exception.PuntoNotFoundException;
+import com.es.iesmz.transita3.Transita.repository.ClienteRepository;
 import com.es.iesmz.transita3.Transita.repository.PuntoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,6 +17,13 @@ public class PuntoServiceImpl implements PuntoService{
 
     @Autowired
     private PuntoRepository puntoRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteService clienteService;
+
     @Override
     public Set<Punto> findAll() {
         return puntoRepository.findAll();
@@ -77,6 +83,17 @@ public class PuntoServiceImpl implements PuntoService{
         return puntoRepository.findPuntosConIncidencias();
     }
     @Override
+    public Set<Punto> findPuntosByClienteId(Long id) {
+        return puntoRepository.findPuntosByClienteId(id);
+    }
+
+    @Override
+    public Punto findPuntoByCoordinatesAndCliente(double latitud, double longitud, long id) {
+        return puntoRepository.findPuntoByCoordinatesAndCliente(latitud, longitud, id);
+    }
+
+
+    @Override
     public Punto getPrimerPunto() {
         return puntoRepository.getPrimerPunto();
     }
@@ -87,11 +104,60 @@ public class PuntoServiceImpl implements PuntoService{
     }
 
     @Override
+    @Transactional  // Asegura que la operación se realiza en una transacción
+    public Punto addPuntoconFav(Punto punto, Long clienteId) {
+        Punto nuevoPunto = puntoRepository.save(punto);  // Guarda el Punto
+
+        Optional<Cliente> optionalCliente = clienteService.findById(clienteId);
+        if (optionalCliente.isPresent()) {
+            Cliente cliente = optionalCliente.get();
+            nuevoPunto.getClientes().add(cliente);
+        } else {
+            throw new RuntimeException("Cliente no encontrado");
+        }
+
+        return puntoRepository.save(nuevoPunto);  // Guarda nuevamente el Punto
+
+    }
+
+    @Override
+    @Transactional
+    public Punto removeClienteFromPunto(Long puntoId, Long clienteId) {
+        Optional<Punto> optionalPunto = puntoRepository.findById(puntoId);
+
+        if (optionalPunto.isPresent()) {
+            Punto punto = optionalPunto.get();
+            punto.getClientes().removeIf(cliente -> cliente.getId().equals(clienteId));
+            return puntoRepository.save(punto);
+        } else {
+            throw new RuntimeException("Punto no encontrado");
+        }
+    }
+
+    @Override
     public Punto modifyPunto(long id, Punto nuevoPunto) {
         Punto punto = puntoRepository.findById(id)
                 .orElseThrow(() -> new PuntoNotFoundException(id));
         nuevoPunto.setId(punto.getId());
         return puntoRepository.save(nuevoPunto);
+    }
+
+    @Override
+    public Punto agregarClienteAlPunto(long id, long clienteId) {
+        Optional<Punto> optionalPunto = puntoRepository.findById(id);
+        Optional<Cliente> optionalCliente = clienteRepository.findById(clienteId);
+
+        if (optionalPunto.isPresent() && optionalCliente.isPresent()) {
+            Punto punto = optionalPunto.get();
+            Cliente cliente = optionalCliente.get();
+
+            punto.getClientes().add(cliente);
+            puntoRepository.save(punto);
+
+            return punto;
+        } else {
+            throw new RuntimeException("Punto o Cliente no encontrado");
+        }
     }
 
     @Override
