@@ -286,7 +286,7 @@ public class PuntoController {
     @GetMapping("/global-con-incidencias")
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Punto>> getPuntosConIncidencias() {
-        Set<Punto> puntos = puntoService.findPuntosConIncidencias();
+        Set<Punto> puntos = puntoService.findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 

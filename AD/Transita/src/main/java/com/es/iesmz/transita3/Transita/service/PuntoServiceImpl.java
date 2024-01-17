@@ -80,7 +80,7 @@ public class PuntoServiceImpl implements PuntoService{
     }
     @Override
     public Set<Punto> findPuntosConIncidencias() {
-        return puntoRepository.findPuntosConIncidencias();
+        return puntoRepository.findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
     }
     @Override
     public Set<Punto> findPuntosByClienteId(Long id) {

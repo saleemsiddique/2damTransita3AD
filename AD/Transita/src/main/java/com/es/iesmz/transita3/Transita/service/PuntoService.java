@@ -23,6 +23,9 @@ public interface PuntoService {
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Set<Punto> findAllByPages(int idInicial, int idFinal);
     Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
+
+    Set<Punto> findPuntosConIncidencias();
+
     Set<Punto> findPuntosByClienteId(Long id);
 
     Punto findPuntoByCoordinatesAndCliente(double latitud, double longitud, long id);
