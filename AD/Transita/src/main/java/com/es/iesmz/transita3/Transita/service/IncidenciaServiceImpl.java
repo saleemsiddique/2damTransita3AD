@@ -2,6 +2,7 @@ package com.es.iesmz.transita3.Transita.service;
 
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
+import com.es.iesmz.transita3.Transita.domain.Punto;
 import com.es.iesmz.transita3.Transita.exception.IncidenciaNotFoundException;
 import com.es.iesmz.transita3.Transita.repository.IncidenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,11 @@ public class IncidenciaServiceImpl implements IncidenciaService{
     @Override
     public Set<Incidencia> findByDuracion(String duracion) {
         return incidenciaRepository.findByDuracion(duracion);
+    }
+
+    @Override
+    public Incidencia lastIncidencia(Optional<Punto> punto) {
+        return punto.getIncidencias().get(punto.getIncidencias().size() - 1);
     }
 
     @Override

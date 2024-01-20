@@ -88,6 +88,22 @@ public class IncidenciaController {
         return new ResponseEntity<>(incidencia, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene una incidencia determinada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ultima incidencia de un punto",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
+    })
+    @GetMapping("/incidencia/punto/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Incidencia> getLastIncidenciaOfPunto(@PathVariable long id) {
+        Optional<Punto> punto = puntoService.findById(id);
+        Incidencia incidencia = new Incidencia();
+        if (punto.isPresent()) {
+            incidencia = incidenciaService.lastIncidencia(punto);
+        }
+        return new ResponseEntity<>(incidencia, HttpStatus.OK);
+    }
+
     @Operation(summary = "Obtiene las incidencias de un cliente especifico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Incidencias con ese Cliente_ID",

@@ -2,6 +2,7 @@ package com.es.iesmz.transita3.Transita.service;
 
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
+import com.es.iesmz.transita3.Transita.domain.Punto;
 
 import java.util.Optional;
 import java.util.Set;
@@ -14,6 +15,7 @@ public interface IncidenciaService {
     Set<Incidencia> findByEstado(EstadoIncidencia estado);
 
     Set<Incidencia> findByDuracion(String duracion);
+    Incidencia lastIncidencia(Optional<Punto> punto);
 
     Incidencia addIncidencia(Incidencia incidencia);
 
