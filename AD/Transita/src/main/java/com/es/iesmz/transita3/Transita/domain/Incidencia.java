@@ -21,7 +21,7 @@ public class Incidencia {
     @Schema(description = "ID de la incidencia", example = "1", required = true)
     private long id;
 
-    @Column(name = "Descripción")
+    @Column(name = "Descripcion")
     @Schema(description = "Descripción de la incidencia", example = "Reporte de incidente en la carretera", required = true)
     private String descripcion;
 
