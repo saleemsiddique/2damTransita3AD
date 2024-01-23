@@ -20,6 +20,8 @@ public interface ClienteService {
     Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal);
     Set<Cliente> findUsuarioMunicipioWithRowNum(int idInicial, int idFinal);
 
+    Set<Cliente> searchUser(int idInicial, int idFinal, Integer estado, String nombre, String apellidos, String nombreUsuario);
+
     Cliente findByNombreUsuario(String email);
     Cliente modifyCliente(long id, Cliente newCliente);
     Cliente modifyClienteEstado(long id, Cliente newCliente);

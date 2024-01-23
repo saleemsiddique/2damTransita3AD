@@ -121,6 +121,11 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public Set<Cliente> searchUser(int idInicial, int idFinal, Integer estado, String nombre, String apellidos, String nombreUsuario) {
+        return clienteRepository.searchClientesFiltradoPages(idInicial, idFinal, estado, nombre, apellidos, nombreUsuario);
+    }
+
+    @Override
     public Cliente findByNombreUsuario(String nombreUsuario) {
         return clienteRepository.findByNombreUsuario(nombreUsuario);
     }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Util {
-    static String filePath = "./src/main/resources/application.properties";
+    static String filePath = "C:\\Clase\\2dam\\desarrolloMultimedia\\seminario6validacion\\2damTransita3AD\\AD\\Transita\\src\\main\\resources\\application.properties";
     public static String ddlAuto;
     public static String port;
     public static String url;

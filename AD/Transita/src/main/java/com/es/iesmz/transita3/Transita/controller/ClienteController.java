@@ -196,6 +196,22 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
+    @Operation(summary = "Buscar clientes que contengan el valor pasado por parametro")
+    @GetMapping("/cliente/buscar")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Cliente>> searchClientes(
+            @RequestParam(name = "idInicial") int idInicial,
+            @RequestParam(name = "idFinal") int idFinal,
+            @RequestParam(name = "estado", required = false) Integer estado,
+            @RequestParam(name = "nombre", required = false) String nombre,
+            @RequestParam(name = "apellidos", required = false) String apellidos,
+            @RequestParam(name = "nombre_usuario", required = false) String nombreUsuario)
+    {
+        Set<Cliente> clientes = clienteService.searchUser(idInicial, idFinal, estado, nombre, apellidos, nombreUsuario);
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
+
+
     @Operation(summary = "Eliminar un cliente por ID")
     @DeleteMapping("/cliente/eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
