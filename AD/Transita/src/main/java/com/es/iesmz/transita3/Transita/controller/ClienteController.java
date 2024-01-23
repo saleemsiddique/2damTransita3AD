@@ -48,9 +48,10 @@ public class ClienteController {
     public ResponseEntity<Set<Cliente>> getClientesByPages(
             @RequestParam(name = "idInicial") int idInicial,
             @RequestParam(name = "idFinal") int idFinal,
-            @RequestParam(name = "estado", required = false) Integer estado) {
+            @RequestParam(name = "estado", required = false) Integer estado,
+            @RequestParam(name = "query")String query) {
         Set<Cliente> clientes =
-        (estado == null) ?  clienteService.findAllByPages(idInicial, idFinal) :  clienteService.findAllByPagesFiltrado(idInicial, idFinal, estado);
+        (estado == null) ?  clienteService.findAllByPages(idInicial, idFinal, query) :  clienteService.findAllByPagesFiltrado(idInicial, idFinal, estado, query);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
     @Operation(summary = "Obtiene numero de cliente con filtros")
@@ -61,10 +62,11 @@ public class ClienteController {
     @GetMapping("/cliente/count/filtros")
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Integer> getClientesCountConFiltros(
-            @RequestParam(name = "estado", required = false) Integer estado)
+            @RequestParam(name = "estado", required = false) Integer estado,
+            @RequestParam(name = "query") String query)
     {
         int cantidadPuntos =
-                (estado == null) ? Math.toIntExact(clienteService.countCliente()) : Math.toIntExact(clienteService.getNumeroClientesFiltrados(estado));
+                (estado == null) ? Math.toIntExact(clienteService.countCliente(query)) : Math.toIntExact(clienteService.getNumeroClientesFiltrados(estado, query));
         return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
     }
 
@@ -76,10 +78,11 @@ public class ClienteController {
     @GetMapping("/cliente/count/admin/filtros")
     @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Integer> getUsuarioMunicipioCountConFiltros(
-            @RequestParam(name = "rol", required = false) Integer rol)
+            @RequestParam(name = "rol", required = false) Integer rol,
+            @RequestParam(name = "query") String query)
     {
         int cantidadPuntos =
-                (rol == null) ? Math.toIntExact(clienteService.countUsuarioMunicipio()) : Math.toIntExact(clienteService.countUsuarioMunicipioFiltrado(rol));
+                (rol == null) ? Math.toIntExact(clienteService.countUsuarioMunicipio(query)) : Math.toIntExact(clienteService.countUsuarioMunicipioFiltrado(rol));
         return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
     }
 
@@ -89,9 +92,10 @@ public class ClienteController {
     public ResponseEntity<Set<Cliente>> getUsuariosMunicipioByPages(
             @RequestParam(name = "idInicial") int idInicial,
             @RequestParam(name = "idFinal") int idFinal,
-            @RequestParam(name = "rol", required = false) Integer rol) {
+            @RequestParam(name = "rol", required = false) Integer rol,
+            @RequestParam(name = "query") String query) {
         Set<Cliente> clientes =
-                (rol == null) ?  clienteService.findUsuarioMunicipioWithRowNum(idInicial, idFinal) :  clienteService.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal);
+                (rol == null) ?  clienteService.findUsuarioMunicipioWithRowNum(idInicial, idFinal, query) :  clienteService.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal, query);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
@@ -203,11 +207,9 @@ public class ClienteController {
             @RequestParam(name = "idInicial") int idInicial,
             @RequestParam(name = "idFinal") int idFinal,
             @RequestParam(name = "estado", required = false) Integer estado,
-            @RequestParam(name = "nombre", required = false) String nombre,
-            @RequestParam(name = "apellidos", required = false) String apellidos,
-            @RequestParam(name = "nombre_usuario", required = false) String nombreUsuario)
+            @RequestParam(name = "query", required = false) String query)
     {
-        Set<Cliente> clientes = clienteService.searchUser(idInicial, idFinal, estado, nombre, apellidos, nombreUsuario);
+        Set<Cliente> clientes = clienteService.searchUser(idInicial, idFinal, estado, query);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 

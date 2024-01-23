@@ -22,13 +22,13 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Set<Cliente> findAllByPages(int idInicial, int idFinal) {
-        return clienteRepository.findAllByPages(idInicial, idFinal);
+    public Set<Cliente> findAllByPages(int idInicial, int idFinal, String query) {
+        return clienteRepository.findAllByPages(idInicial, idFinal, query);
     }
 
     @Override
-    public Set<Cliente> findAllByPagesFiltrado(int idInicial, int idFinal, int estado) {
-        return clienteRepository.findAllByPagesFiltrado(idInicial, idFinal, estado);
+    public Set<Cliente> findAllByPagesFiltrado(int idInicial, int idFinal, int estado, String query) {
+        return clienteRepository.findAllByPagesFiltrado(idInicial, idFinal, estado, query);
     }
 
     @Override
@@ -81,13 +81,13 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public long getNumeroClientesFiltrados(int estado) {
-        return clienteRepository.countClienteConFiltros(estado);
+    public long getNumeroClientesFiltrados(int estado, String query) {
+        return clienteRepository.countClienteConFiltros(estado, query);
     }
 
     @Override
-    public long countCliente() {
-        return clienteRepository.countCliente();
+    public long countCliente(String query) {
+        return clienteRepository.countCliente(query);
     }
 
     @Override
@@ -96,8 +96,8 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public long countUsuarioMunicipio() {
-        return clienteRepository.countClientesWithRole();
+    public long countUsuarioMunicipio(String query) {
+        return clienteRepository.countClientesWithRole(query);
     }
 
     @Override
@@ -111,18 +111,18 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal) {
-        return clienteRepository.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal);
+    public Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal, String query) {
+        return clienteRepository.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal, query);
     }
 
     @Override
-    public Set<Cliente> findUsuarioMunicipioWithRowNum(int idInicial, int idFinal) {
-        return clienteRepository.findUsuarioMunicipioWithRowNum(idInicial, idFinal);
+    public Set<Cliente> findUsuarioMunicipioWithRowNum(int idInicial, int idFinal, String query) {
+        return clienteRepository.findUsuarioMunicipioWithRowNum(idInicial, idFinal, query);
     }
 
     @Override
-    public Set<Cliente> searchUser(int idInicial, int idFinal, Integer estado, String nombre, String apellidos, String nombreUsuario) {
-        return clienteRepository.searchClientesFiltradoPages(idInicial, idFinal, estado, nombre, apellidos, nombreUsuario);
+    public Set<Cliente> searchUser(int idInicial, int idFinal, Integer estado, String query) {
+        return clienteRepository.searchClientesFiltradoPages(idInicial, idFinal, estado, query);
     }
 
     @Override
