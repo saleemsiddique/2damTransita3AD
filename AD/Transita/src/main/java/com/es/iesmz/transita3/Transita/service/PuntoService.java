@@ -19,7 +19,7 @@ public interface PuntoService {
     Set<Punto> findByLongitud(double longitud);
     Optional<Punto> findByLatitudLongitud(Double latitud, Double longitud);
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
-    Set<Punto> findByTipoAccesibilidadVisibilidad(String tipoPunto, String accesibilidadPunto, String visibilidad);
+    Set<Punto> findByAccesibilidadVisibilidad(String accesibilidadPunto, String visibilidad);
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
     Set<Punto> findAllByPages(int idInicial, int idFinal);
     Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();

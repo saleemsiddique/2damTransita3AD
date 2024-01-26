@@ -66,12 +66,12 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
 
-    @Query(value = "SELECT * FROM PUNTO P WHERE (COALESCE(:tipo, '') = '' OR P.TIPO = :tipo) AND (COALESCE(:accesibilidad, '') = '' OR P.ACCESIBILIDAD = :accesibilidad) AND (COALESCE(:visibilidad, '') = '' OR P.VISIBILIDAD = :visibilidad)", nativeQuery = true)
-    Set<Punto> findByTipoAccesibilidadVisibilidad(@Param("tipo") String tipo, @Param("accesibilidad") String accesibilidad, @Param("visibilidad") String visibilidad);
+    @Query(value = "SELECT * FROM PUNTO P WHERE (COALESCE(:accesibilidad, '') = '' OR P.ACCESIBILIDAD = :accesibilidad) AND (COALESCE(:visibilidad, '') = '' OR P.VISIBILIDAD = :visibilidad)", nativeQuery = true)
+    Set<Punto> findByAccesibilidadVisibilidad(@Param("accesibilidad") String accesibilidad, @Param("visibilidad") String visibilidad);
 
     @Query(value = "SELECT P.* FROM PUNTO P " +
             "INNER JOIN favoritos F ON P.id = F.id_punto " +
-            "WHERE F.id_usuario = :idCliente",
+            "WHERE F.id_usuario = :idCliente AND P.visibilidad = 'FAVORITO'",
             nativeQuery = true)
     Set<Punto> findPuntosByClienteId(@Param("idCliente") Long idCliente);
 

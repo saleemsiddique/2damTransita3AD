@@ -60,8 +60,8 @@ public class PuntoServiceImpl implements PuntoService{
     }
 
     @Override
-    public Set<Punto> findByTipoAccesibilidadVisibilidad(String tipoPunto, String accesibilidadPunto, String visibilidad) {
-        return puntoRepository.findByTipoAccesibilidadVisibilidad(tipoPunto, accesibilidadPunto, visibilidad);
+    public Set<Punto> findByAccesibilidadVisibilidad(String accesibilidadPunto, String visibilidad) {
+        return puntoRepository.findByAccesibilidadVisibilidad(accesibilidadPunto, visibilidad);
     }
 
     @Override
