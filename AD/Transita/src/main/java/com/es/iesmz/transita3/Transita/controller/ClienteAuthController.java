@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -142,7 +143,7 @@ public class ClienteAuthController {
 
 
 
-
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     @PutMapping("/cliente/modificar/{id}")
     public ResponseEntity<?> modifyCliente(@PathVariable Long id, @Valid @RequestBody ClienteModificarDatosRequest modifyDatosCliente) {
         // Verifica si el cliente existe en la base de datos
@@ -198,6 +199,7 @@ public class ClienteAuthController {
         return ResponseEntity.ok(new MessageResponse("Cliente modificado exitosamente"));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/cliente/modificarEstado/{id}")
     public ResponseEntity<?> modifyClienteEstado(@PathVariable Long id, @Valid @RequestBody ClienteModifyEstadoRequest clienteModifyEstadoRequest) {
         // Verifica si el cliente existe en la base de datos
@@ -235,6 +237,7 @@ public class ClienteAuthController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     @PutMapping("/cliente/modificarContrasenya/{id}")
     public ResponseEntity<?> modifyContrasenyaCliente(@PathVariable Long id, @Valid @RequestBody ClienteModificarContrasenyaRequest clienteModificarContrasenyaRequest){
         Optional<Cliente> optionalCliente = clientRepository.findById(id);

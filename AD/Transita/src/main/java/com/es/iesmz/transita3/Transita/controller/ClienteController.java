@@ -60,7 +60,7 @@ public class ClienteController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Cliente.class)))
             )})
     @GetMapping("/cliente/count/filtros")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Integer> getClientesCountConFiltros(
             @RequestParam(name = "estado", required = false) Integer estado,
             @RequestParam(name = "query") String query)
@@ -76,7 +76,7 @@ public class ClienteController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Cliente.class)))
             )})
     @GetMapping("/cliente/count/admin/filtros")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Integer> getUsuarioMunicipioCountConFiltros(
             @RequestParam(name = "rol", required = false) Integer rol,
             @RequestParam(name = "query") String query)
@@ -105,7 +105,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
     })
     @GetMapping("/cliente/id/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Cliente> getCliente(@PathVariable long id) {
         Cliente cliente = clienteService.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException(id));
