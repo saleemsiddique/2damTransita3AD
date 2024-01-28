@@ -27,7 +27,7 @@ public class Punto {
     @Schema(description = "ID del punto", example = "1", required = true)
     private long id;
 
-    @Column(name = "Descripción")
+    @Column(name = "Descripcion")
     @Schema(description = "Descripción del punto", example = "Punto de referencia en la carretera", required = true)
     private String descripcion;
 
