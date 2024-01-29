@@ -43,7 +43,7 @@ public class IncidenciaController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
     })
     @GetMapping("/incidencias")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Incidencia>> getIncidencia() {
         Set<Incidencia> incidencias = null;
         incidencias = incidenciaService.findAll();
@@ -57,13 +57,13 @@ public class IncidenciaController {
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtiene el listado de incidencias")
+    @Operation(summary = "Obtiene el listado de incidencias de un punto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Listado de incidencias",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
     })
     @GetMapping("/incidencias/puntoid/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Incidencia>> getIncidenciaByPunto(@PathVariable long id) {
         Set<Incidencia> incidencias = null;
         incidencias = incidenciaService.findByPunto(id);
@@ -81,7 +81,7 @@ public class IncidenciaController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
     })
     @GetMapping("/incidencia/id/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Incidencia> getIncidenciaById(@PathVariable long id) {
         Incidencia incidencia = incidenciaService.findById(id)
                 .orElseThrow(() -> new IncidenciaNotFoundException(id));
@@ -94,7 +94,7 @@ public class IncidenciaController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
     })
     @GetMapping("/incidencias/clienteid/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERADOR', 'ROLE_USUARIO')")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Incidencia>> findByIncidenciaByClienteId(@PathVariable long id) {
         Set<Incidencia> incidencias = incidenciaService.findByIncidenciaByClienteId(id);
         for (Incidencia incidencia : incidencias) {
@@ -111,7 +111,7 @@ public class IncidenciaController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
     })
     @GetMapping("/incidencia/estado/{estado}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Incidencia>> findByEstado(@PathVariable int estado) {
         EstadoIncidencia estadoIncidencia = null;
 
@@ -142,7 +142,7 @@ public class IncidenciaController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
     })
     @GetMapping("/incidencia/duracion/{duracion}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Incidencia>> getIncideciaByDuracion(@PathVariable String duracion) {
         Set<Incidencia> incidencias = incidenciaService.findByDuracion(duracion);
         return new ResponseEntity<>(incidencias, HttpStatus.OK);
@@ -154,7 +154,7 @@ public class IncidenciaController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))),
     })
     @GetMapping("/incidencia/filtrados")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Incidencia>> getIncidenciaPagsPorEstado(
             @RequestParam(name = "estado", required = false) String estado,
             @RequestParam(name = "idInicial") int idInicial,
@@ -180,7 +180,7 @@ public class IncidenciaController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidencia.class)))
             )})
     @GetMapping("/incidencia/count/filtros")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Integer> getIncidenciaCountConFiltros(
             @RequestParam(name = "estado", required = false) String estado) {
         int cantidadIncidencias;
@@ -215,7 +215,7 @@ public class IncidenciaController {
                     Response.class)))
     })
     @PutMapping("/incidencia/modificar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_USUARIO') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Incidencia> modifyIncidencia(@PathVariable long id, @RequestBody Incidencia incidencia) {
         Optional<Incidencia> optionalIncidencia = incidenciaService.findById(id);
         if(incidencia.getFotos() != null){
@@ -240,7 +240,7 @@ public class IncidenciaController {
                     Response.class)))
     })
     @PutMapping("/incidencia/modificarEstado/{id}/{nuevoEstado}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Incidencia> modifyEstadoIncidencia(@PathVariable long id, @PathVariable String nuevoEstado) {
         Optional<Incidencia> optionalIncidencia = incidenciaService.findById(id);
         if (optionalIncidencia.isPresent()) {
@@ -316,7 +316,7 @@ public class IncidenciaController {
                     Response.class)))
     })
     @DeleteMapping("/incidencia/eliminar/{id}")
-    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_USUARIO') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Incidencia> deleteIncidencia(@PathVariable long id) {
         Incidencia incidencia = incidenciaService.findById(id)
                 .orElseThrow(() -> new IncidenciaNotFoundException(id));
