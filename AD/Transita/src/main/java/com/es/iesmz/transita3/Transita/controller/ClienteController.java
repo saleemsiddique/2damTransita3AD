@@ -36,7 +36,7 @@ public class ClienteController {
 
     @Operation(summary = "Obtener una lista de todos los clientes")
     @GetMapping("/cliente")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Cliente>> getClientes(@RequestParam(value = "nombre", defaultValue = "") String nombre) {
         Set<Cliente> clientes = clienteService.findAll();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
