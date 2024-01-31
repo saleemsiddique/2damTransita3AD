@@ -263,7 +263,8 @@ public class ClienteAuthController {
 
     @PutMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email){
-        return new ResponseEntity<>(clienteService.forgotPassword(email), HttpStatus.OK);
+        String responseMessage = clienteService.setPassword(email);
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
 }

@@ -15,6 +15,8 @@ public interface ClienteService {
     Cliente addCliente(Cliente cliente);
     Set<Cliente> findByNombreStartingWith(String nombre);
     Set<Cliente> findByApellidoStartingWith(String apellido);
+    String setPassword(String email);
+
     Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario);
     Set<Cliente> findByEstadoCuenta(ECliente estadoCliente);
     Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal, String query);
@@ -40,5 +42,4 @@ public interface ClienteService {
     long countUsuarioMunicipioFiltrado(int rol);
     long countUsuarioMunicipio(String query);
 
-    Cliente forgotPassword(String email);
 }
