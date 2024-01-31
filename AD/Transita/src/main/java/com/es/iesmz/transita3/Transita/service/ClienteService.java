@@ -40,4 +40,5 @@ public interface ClienteService {
     long countUsuarioMunicipioFiltrado(int rol);
     long countUsuarioMunicipio(String query);
 
+    Cliente forgotPassword(String email);
 }

@@ -101,6 +101,11 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public Cliente forgotPassword(String email) {
+        return clienteRepository.findByNombreUsuario(email);
+    }
+
+    @Override
     public Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario) {
         return  clienteRepository.findByNombreUsuarioStartingWith(nombreUsuario);
     }
