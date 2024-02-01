@@ -47,4 +47,5 @@ public interface PuntoService {
     long countPuntoConFiltros(String tipoPunto, String accesibilidadPunto, String visibilidad);
 
     List<Punto> buscarPuntosConFiltros(String tipo, String accesibilidad, String visibilidad, int ini, int fin);
+    List<Punto> buscarPuntosConFiltrosMapa(String tipo, String accesibilidad, String visibilidad);
 }

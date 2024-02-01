@@ -34,6 +34,15 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
                                        @Param("idInicial") int idInicial,
                                        @Param("idFinal") int idFinal);
 
+    @Query(value = "SELECT * FROM  PUNTO P " +
+            "WHERE (:tipoPunto IS NULL OR P.tipo = :tipoPunto) " +
+            "AND (:accesibilidadPunto IS NULL OR P.accesibilidad = :accesibilidadPunto) " +
+            "AND (:visibilidadPunto IS NULL OR P.visibilidad = :visibilidadPunto)" ,
+            nativeQuery = true)
+    List<Punto> buscarPuntosConFiltrosMapa(@Param("tipoPunto") String tipoPunto,
+                                       @Param("accesibilidadPunto") String accesibilidadPunto,
+                                       @Param("visibilidadPunto") String visibilidadPunto);
+
     long count();
 
     @Query(value = "SELECT COUNT(*) FROM PUNTO P " +

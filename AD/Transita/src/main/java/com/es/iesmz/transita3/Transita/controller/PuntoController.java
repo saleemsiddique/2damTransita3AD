@@ -44,6 +44,7 @@ public class PuntoController {
 
         return new ResponseEntity<>(punto, HttpStatus.OK);
     }
+
     @Operation(summary = "Obtiene el listado de puntos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Listado de puntos",
@@ -253,7 +254,7 @@ public class PuntoController {
     @GetMapping("/puntos/count")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Integer> getPuntosCount() {
-        int cantidadPuntos = Math.toIntExact(puntoService.countPunto()) ;
+        int cantidadPuntos = Math.toIntExact(puntoService.countPunto());
         return new ResponseEntity<>(cantidadPuntos, HttpStatus.OK);
     }
 
@@ -284,6 +285,7 @@ public class PuntoController {
         Set<Punto> puntos = puntoService.findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
         return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
+
     @Operation(summary = "Obtiene el listado de puntos con incidencias en estado ACEPTADO y visibilidad GLOBAL")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Listado de puntos",
@@ -324,6 +326,8 @@ public class PuntoController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Operation(summary = "Busca de forma paginada los puntos filtrados")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     @GetMapping("puntos/filtrados")
     public ResponseEntity<List<Punto>> buscarPuntosConFiltros(
@@ -334,6 +338,18 @@ public class PuntoController {
             @RequestParam(name = "idFinal", required = true) int idFinal) {
 
         List<Punto> puntosFiltrados = puntoService.buscarPuntosConFiltros(tipoPunto, accesibilidadPunto, visibilidadPunto, idInicial, idFinal);
+        return new ResponseEntity<>(puntosFiltrados, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Busca los puntos filtrados")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    @GetMapping("puntos/filtrados/mapa")
+    public ResponseEntity<List<Punto>> buscarPuntosConFiltrosMapa(
+            @RequestParam(name = "tipoPunto", required = false) String tipoPunto,
+            @RequestParam(name = "accesibilidadPunto", required = false) String accesibilidadPunto,
+            @RequestParam(name = "visibilidadPunto", required = false) String visibilidadPunto) {
+
+        List<Punto> puntosFiltrados = puntoService.buscarPuntosConFiltrosMapa(tipoPunto, accesibilidadPunto, visibilidadPunto);
         return new ResponseEntity<>(puntosFiltrados, HttpStatus.OK);
     }
 
@@ -354,6 +370,7 @@ public class PuntoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @Operation(summary = "Modifica la lista de clientes de punto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Punto modificado",
@@ -387,6 +404,7 @@ public class PuntoController {
         puntoService.deletePunto(id);
         return new ResponseEntity(Response.noErrorResponse(), HttpStatus.OK);
     }
+
     @Operation(summary = "Elimina un favorito")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Se elimina el punto", content = @Content(schema = @Schema(implementation =

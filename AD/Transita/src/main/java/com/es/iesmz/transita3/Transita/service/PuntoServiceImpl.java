@@ -181,4 +181,9 @@ public class PuntoServiceImpl implements PuntoService{
     public List<Punto> buscarPuntosConFiltros(String tipo, String accesibilidad, String visibilidad, int ini, int fin) {
         return puntoRepository.buscarPuntosConFiltros(tipo, accesibilidad, visibilidad, ini, fin);
     }
+
+    @Override
+    public List<Punto> buscarPuntosConFiltrosMapa(String tipo, String accesibilidad, String visibilidad) {
+        return puntoRepository.buscarPuntosConFiltrosMapa(tipo, accesibilidad,visibilidad);
+    }
 }
