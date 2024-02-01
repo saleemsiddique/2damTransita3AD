@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.service;
 
+import com.es.iesmz.transita3.Transita.Utils.EmailUtil;
 import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.es.iesmz.transita3.Transita.exception.ClienteNotFoundException;
@@ -7,6 +8,8 @@ import com.es.iesmz.transita3.Transita.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Set;
 
@@ -15,6 +18,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EmailUtil emailUtil;
 
     @Override
     public Set<Cliente> findAll() {
@@ -98,6 +104,44 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public long countUsuarioMunicipio(String query) {
         return clienteRepository.countClientesWithRole(query);
+    }
+
+    @Override
+    public String setPassword(String email) {
+        Cliente cliente = clienteRepository.findByNombreUsuario(email);
+
+        // Generar una contraseña aleatoria
+        String newPassword = generateRandomPassword();
+
+        cliente.setContrasenya(newPassword);
+        clienteRepository.save(cliente);
+
+        try {
+            emailUtil.sendSetPasswordEmail(email, newPassword);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Unable to send set password email. Please try again.");
+        }
+
+        return "New password set successfully. Check your email for the new password.";
+    }
+
+
+    // Método para generar una contraseña aleatoria
+    private String generateRandomPassword() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
+        int length = 12; // Longitud de la contraseña
+
+        StringBuilder newPassword = new StringBuilder();
+
+        // Uso de SecureRandom para mayor seguridad
+        SecureRandom random = new SecureRandom();
+
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            newPassword.append(characters.charAt(index));
+        }
+
+        return newPassword.toString();
     }
 
     @Override

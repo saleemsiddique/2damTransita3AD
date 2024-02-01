@@ -11,6 +11,7 @@ import com.es.iesmz.transita3.Transita.repository.ClienteRepository;
 import com.es.iesmz.transita3.Transita.repository.RolRepository;
 import com.es.iesmz.transita3.Transita.security.jwt.JwtUtils;
 import com.es.iesmz.transita3.Transita.security.services.UsuarioDetailsImpl;
+import com.es.iesmz.transita3.Transita.service.ClienteService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,9 @@ public class ClienteAuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    ClienteService clienteService;
 
     @PostMapping("/signin/cliente")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody ClienteLoginRequest clienteLoginRequest) {
@@ -257,5 +261,10 @@ public class ClienteAuthController {
 
     }
 
+    @GetMapping("/forgot-password/{email}")
+    public ResponseEntity<String> forgotPassword(@PathVariable String email){
+        String responseMessage = clienteService.setPassword(email);
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
 
 }
