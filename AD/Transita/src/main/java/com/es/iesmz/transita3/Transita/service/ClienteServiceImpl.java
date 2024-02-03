@@ -6,6 +6,7 @@ import com.es.iesmz.transita3.Transita.domain.ECliente;
 import com.es.iesmz.transita3.Transita.exception.ClienteNotFoundException;
 import com.es.iesmz.transita3.Transita.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -15,6 +16,9 @@ import java.util.Set;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -113,7 +117,7 @@ public class ClienteServiceImpl implements ClienteService {
         // Generar una contraseña aleatoria
         String newPassword = generateRandomPassword();
 
-        cliente.setContrasenya(newPassword);
+        cliente.setContrasenya(encoder.encode(newPassword));
         clienteRepository.save(cliente);
 
         try {
@@ -128,7 +132,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     // Método para generar una contraseña aleatoria
     private String generateRandomPassword() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!_";
         int length = 12; // Longitud de la contraseña
 
         StringBuilder newPassword = new StringBuilder();
