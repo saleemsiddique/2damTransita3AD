@@ -106,7 +106,7 @@ public class PuntoController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Punto.class)))
             )})
     @GetMapping("/puntos/tipo/{tipo}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
+    @PreAuthorize("hasRole('ROLE_USUARIO') || hasRole('ROLE_ADMIN') || hasRole('ROLE_MODERADOR')")
     public ResponseEntity<Set<Punto>> getPuntoByTipo(@PathVariable int tipo) {
         TipoPunto tipoPunto = null;
 
