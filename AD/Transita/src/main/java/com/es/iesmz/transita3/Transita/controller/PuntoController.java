@@ -114,6 +114,8 @@ public class PuntoController {
             tipoPunto = TipoPunto.ACCESO;
         } else if (tipo == 1) {
             tipoPunto = TipoPunto.LUGAR;
+        } else if (tipo == 2){
+            tipoPunto = TipoPunto.PARKING;
         } else {
             throw new TipoNotFoundException("Tipo de Punto no existente");
         }

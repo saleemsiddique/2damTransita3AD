@@ -1,5 +1,6 @@
 package com.es.iesmz.transita3.Transita.controller;
 
+import com.es.iesmz.transita3.Transita.Utils.Util;
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
 
@@ -221,7 +222,7 @@ public class IncidenciaController {
         if(incidencia.getFotos() != null){
             if (incidencia.getEstado() == EstadoIncidencia.ENVIADO) {
                 String base64Image = decompressBase64String(incidencia.getFotos());
-                uploadToFTP("127.0.0.1", 21, "web", "web", "/img/puntos", incidencia, base64Image);
+                uploadToFTP(Util.FTPHost, Integer.parseInt(Util.FTPPort), Util.ftpUsername, Util.ftpPassword, Util.ftpRemoteDirectory, incidencia, base64Image);
                 updatePunto(incidencia, "PUT");
             }
         } else{
