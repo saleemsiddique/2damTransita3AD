@@ -33,11 +33,6 @@
 			<version>1.6.11</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.11</version>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.30</version>
@@ -109,11 +104,6 @@
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
 			<version>10.1.13</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-			<version>9.0.65</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
