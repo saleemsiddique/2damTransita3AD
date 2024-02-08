@@ -9,6 +9,7 @@ import java.util.Set;
 public interface IncidenciaService {
     Set<Incidencia> findAll();
 
+    Set<Incidencia> findAllByFiltro(String parametro, String valor);
     Optional<Incidencia> findById(long id);
 
     Set<Incidencia> findByEstado(EstadoIncidencia estado);

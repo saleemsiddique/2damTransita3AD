@@ -1,11 +1,8 @@
 package com.es.iesmz.transita3.Transita.repository;
 
-import com.es.iesmz.transita3.Transita.domain.AccesibilidadPunto;
-import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
-import com.es.iesmz.transita3.Transita.domain.TipoPunto;
+import com.es.iesmz.transita3.Transita.domain.*;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import com.es.iesmz.transita3.Transita.domain.Punto;
 import org.springframework.data.repository.query.Param;
 
 
@@ -80,6 +77,17 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     @Query(value = "SELECT "+ atributos +" FROM PUNTO P WHERE (COALESCE(:accesibilidad, '') = '' OR P.ACCESIBILIDAD = :accesibilidad) AND (COALESCE(:visibilidad, '') = '' OR P.VISIBILIDAD = :visibilidad)", nativeQuery = true)
     Set<Punto> findByAccesibilidadVisibilidad(@Param("accesibilidad") String accesibilidad, @Param("visibilidad") String visibilidad);
+
+    @Query(value = "SELECT " + atributos + " FROM PUNTO P " +
+            "WHERE " +
+            "    IF (:parametro = 'id', P.id = :valor, 1)" +
+            "    AND IF (:parametro = 'accesibilidad', P.ACCESIBILIDAD = :valor, 1)" +
+            "    AND IF (:parametro = 'tipo', P.TIPO = :valor, 1)" +
+            "    AND IF (:parametro = 'visibilidad', P.VISIBILIDAD = :valor, 1)"
+            , nativeQuery = true)
+    Set<Punto> findByFiltro(@Param("parametro") String parametro,
+                                 @Param("valor") String valor);
+
 
     @Query(value = "SELECT "+ atributos +" FROM PUNTO P " +
             "INNER JOIN favoritos F ON P.id = F.id_punto " +

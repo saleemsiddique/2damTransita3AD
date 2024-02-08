@@ -1,6 +1,7 @@
 package com.es.iesmz.transita3.Transita.controller;
 
 import com.es.iesmz.transita3.Transita.Utils.Util;
+import com.es.iesmz.transita3.Transita.domain.Cliente;
 import com.es.iesmz.transita3.Transita.domain.EstadoIncidencia;
 import com.es.iesmz.transita3.Transita.domain.Incidencia;
 
@@ -191,6 +192,16 @@ public class IncidenciaController {
             cantidadIncidencias = Math.toIntExact(incidenciaService.countIncidencia(estado));
         }
         return new ResponseEntity<>(cantidadIncidencias, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtener una lista de todos las incidencias con filtros")
+    @GetMapping("/incidencia/filtro")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Incidencia>> getClientesFiltrados(
+            @RequestParam(name = "valor") String valor,
+            @RequestParam(name = "filtro") String filtro) {
+        Set<Incidencia> incidencias = incidenciaService.findAllByFiltro(filtro, valor);
+        return new ResponseEntity<>(incidencias, HttpStatus.OK);
     }
 
     @Operation(summary = "Registra un nuevo incidencia")

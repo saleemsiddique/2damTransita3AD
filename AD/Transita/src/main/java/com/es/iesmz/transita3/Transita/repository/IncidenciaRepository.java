@@ -25,16 +25,16 @@ public interface IncidenciaRepository extends CrudRepository<Incidencia, Long> {
 
     Set<Incidencia> findByDuracion(String duracion);
 
-    @Query(value = "SELECT"+atributos+"FROM incidencia i WHERE i.punto_id = :puntoId", nativeQuery = true)
+    @Query(value = "SELECT" + atributos + "FROM incidencia i WHERE i.punto_id = :puntoId", nativeQuery = true)
     Set<Incidencia> findByIncidenciaByPuntoId(@Param("puntoId") Long puntoId);
 
-    @Query(value = "SELECT"+atributos+"FROM incidencia i WHERE i.cliente_id = :clienteId", nativeQuery = true)
+    @Query(value = "SELECT" + atributos + "FROM incidencia i WHERE i.cliente_id = :clienteId", nativeQuery = true)
     Set<Incidencia> findByIncidenciaByClienteId(@Param("clienteId") Long clienteId);
 
-    @Query(value = "SELECT"+atributosRank+"FROM (SELECT"+atributos+", ROW_NUMBER() OVER (ORDER BY I.ID) AS RowNum FROM INCIDENCIA I) AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal", nativeQuery = true)
-    Set<Incidencia> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
+    @Query(value = "SELECT" + atributosRank + "FROM (SELECT" + atributos + ", ROW_NUMBER() OVER (ORDER BY I.ID) AS RowNum FROM INCIDENCIA I) AS RankedPoints WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal", nativeQuery = true)
+    Set<Incidencia> findAllByPages(@Param("idInicial") int idInicial, @Param("idFinal") int idFinal);
 
-    @Query(value = "SELECT"+atributosRank+"FROM (SELECT"+atributos+", ROW_NUMBER() OVER (ORDER BY I.ID) AS RowNum FROM INCIDENCIA I " +
+    @Query(value = "SELECT" + atributosRank + "FROM (SELECT" + atributos + ", ROW_NUMBER() OVER (ORDER BY I.ID) AS RowNum FROM INCIDENCIA I " +
             "WHERE (:estado IS NULL OR I.ESTADO = :estado)) AS RankedPoints " +
             "WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
             nativeQuery = true)
@@ -46,4 +46,13 @@ public interface IncidenciaRepository extends CrudRepository<Incidencia, Long> {
             " WHERE (:estado IS NULL OR I.ESTADO = :estado)",
             nativeQuery = true)
     long countPuntoConFiltros(@Param("estado") String estado);
+
+    @Query(value = "SELECT " + atributos + " FROM INCIDENCIA I " +
+            "WHERE " +
+            "    IF (:parametro = 'id', I.id = :valor, 1)" +
+            "    AND IF (:parametro = 'estado', I.ESTADO = :valor, 1)" +
+            "    AND IF (:parametro = 'fecha_hora', I.FECHA_HORA = :valor, 1) "
+            , nativeQuery = true)
+    Set<Incidencia> findByFiltro(@Param("parametro") String parametro,
+                                 @Param("valor") String valor);
 }

@@ -1,9 +1,6 @@
 package com.es.iesmz.transita3.Transita.controller;
 
-import com.es.iesmz.transita3.Transita.domain.AccesibilidadPunto;
-import com.es.iesmz.transita3.Transita.domain.EVisibilidad;
-import com.es.iesmz.transita3.Transita.domain.Punto;
-import com.es.iesmz.transita3.Transita.domain.TipoPunto;
+import com.es.iesmz.transita3.Transita.domain.*;
 import com.es.iesmz.transita3.Transita.exception.AccesibilidadNotFoundException;
 import com.es.iesmz.transita3.Transita.exception.PuntoNotFoundException;
 import com.es.iesmz.transita3.Transita.exception.TipoNotFoundException;
@@ -211,6 +208,16 @@ public class PuntoController {
         Set<Punto> puntos = puntoService.findByAccesibilidadVisibilidad(accesibilidad, visibilidad);
         return new ResponseEntity<>(puntos, HttpStatus.OK);
 
+    }
+
+    @Operation(summary = "Obtener una lista de todos los Puntos con filtros")
+    @GetMapping("/punto/filtro")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Punto>> getPuntosFiltrados(
+            @RequestParam(name = "valor") String valor,
+            @RequestParam(name = "filtro") String filtro) {
+        Set<Punto> puntos = puntoService.findAllByFiltro(filtro, valor);
+        return new ResponseEntity<>(puntos, HttpStatus.OK);
     }
 
     @Operation(summary = "Obtiene el listado de puntos por tipo")

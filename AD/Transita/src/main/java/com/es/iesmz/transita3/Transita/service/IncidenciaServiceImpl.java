@@ -19,6 +19,11 @@ public class IncidenciaServiceImpl implements IncidenciaService{
     }
 
     @Override
+    public Set<Incidencia> findAllByFiltro(String parametro, String valor) {
+        return incidenciaRepository.findByFiltro(parametro, valor);
+    }
+
+    @Override
     public Optional<Incidencia> findById(long id) {
         return incidenciaRepository.findById(id);
     }

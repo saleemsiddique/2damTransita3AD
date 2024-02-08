@@ -17,6 +17,8 @@ public interface ClienteService {
     Set<Cliente> findByApellidoStartingWith(String apellido);
     String setPassword(String email);
 
+    Set<Cliente> findByFiltro(String filtro, String valor);
+
     Set<Cliente> findByNombreUsuarioStartingWith(String nombreUsuario);
     Set<Cliente> findByEstadoCuenta(ECliente estadoCliente);
     Set<Cliente> findUsuarioMunicipioWithFilter(int rol, int idInicial, int idFinal, String query);

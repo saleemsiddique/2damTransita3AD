@@ -24,6 +24,16 @@ import java.util.Set;
 
 import static com.es.iesmz.transita3.Transita.controller.Response.NOT_FOUND;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 @RestController
 public class ClienteController {
 
@@ -96,6 +106,16 @@ public class ClienteController {
             @RequestParam(name = "query") String query) {
         Set<Cliente> clientes =
                 (rol == null) ?  clienteService.findUsuarioMunicipioWithRowNum(idInicial, idFinal, query) :  clienteService.findUsuarioMunicipioWithFilter(rol, idInicial, idFinal, query);
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtener una lista de todos los clientes con filtros")
+    @GetMapping("/cliente/filtro")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Set<Cliente>> getClientesFiltrados(
+            @RequestParam(name = "valor") String valor,
+            @RequestParam(name = "filtro") String filtro) {
+        Set<Cliente> clientes = clienteService.findByFiltro(filtro, valor);
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 

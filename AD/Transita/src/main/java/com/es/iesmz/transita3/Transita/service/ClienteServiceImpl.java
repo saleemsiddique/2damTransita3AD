@@ -129,6 +129,11 @@ public class ClienteServiceImpl implements ClienteService {
         return "New password set successfully. Check your email for the new password.";
     }
 
+    @Override
+    public Set<Cliente> findByFiltro(String filtro, String valor) {
+        return clienteRepository.findByFiltro(filtro, valor);
+    }
+
 
     // Método para generar una contraseña aleatoria
     private String generateRandomPassword() {

@@ -13,6 +13,7 @@ import java.util.Set;
 public interface PuntoService {
 
     Set<Punto> findAll();
+    Set<Punto> findAllByFiltro(String parametro, String valor);
     Optional<Punto> findById(long id);
     Set<Punto> findByTipoPunto(TipoPunto tipoPunto);
     Set<Punto> findByLatitud(double latitud);

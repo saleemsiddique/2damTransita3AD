@@ -30,6 +30,11 @@ public class PuntoServiceImpl implements PuntoService{
     }
 
     @Override
+    public Set<Punto> findAllByFiltro(String parametro, String valor) {
+        return puntoRepository.findByFiltro(parametro, valor);
+    }
+
+    @Override
     public Optional<Punto> findById(long id) {
         return puntoRepository.findById(id);
     }

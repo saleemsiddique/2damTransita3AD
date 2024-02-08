@@ -55,14 +55,28 @@ public interface ClienteRepository extends CrudRepository<Cliente, Long> {
             @Param("query") String query);
 
 
+    @Query(value = "SELECT "+ atributos +" FROM CLIENTE " +
+            "WHERE " +
+            "    IF (:parametro = 'id', CLIENTE.id = :valor, 1)" +
+            "    AND IF (:parametro = 'nombre', CLIENTE.NOMBRE = :valor, 1)" +
+            "    AND IF (:parametro = 'apellidos', CLIENTE.APELLIDOS = :valor, 1) " +
+            "    AND IF (:parametro = 'nombre_usuario', CLIENTE.NOMBRE_USUARIO = :valor, 1);"
+            , nativeQuery = true)
+    Set<Cliente> findByFiltro(@Param("parametro") String parametro,
+                              @Param("valor") String valor);
 
-    @Query(value = "SELECT "+atributos+" FROM cliente c WHERE c.nombre LIKE :nombre%", nativeQuery = true)
+
+
+
+
+
+    @Query(value = "SELECT "+atributos+" FROM cliente c WHERE c.nombre LIKE %:nombre%", nativeQuery = true)
     Set<Cliente> findByNombreStartingWith(@Param("nombre") String nombre);
 
-    @Query(value = "SELECT"+atributos+"FROM cliente c WHERE c.apellidos LIKE :apellido%", nativeQuery = true)
+    @Query(value = "SELECT"+atributos+"FROM cliente c WHERE c.apellidos LIKE %:apellido%", nativeQuery = true)
     Set<Cliente> findByApellidoStartingWith(@Param("apellido") String apellido);
 
-    @Query(value = "SELECT"+atributos+"FROM cliente c WHERE c.nombre_usuario LIKE :nombreUsuario%", nativeQuery = true)
+    @Query(value = "SELECT"+atributos+"FROM cliente c WHERE c.nombre_usuario LIKE %:nombreUsuario%", nativeQuery = true)
     Set<Cliente> findByNombreUsuarioStartingWith(@Param("nombreUsuario") String nombreUsuario);
 
     @Query(value = "SELECT"+atributos+"FROM cliente c INNER JOIN roles_usuario ru ON c.id = ru.id_usuario " +
