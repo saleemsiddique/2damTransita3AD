@@ -11,53 +11,53 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface PuntoRepository extends CrudRepository<Punto, Long> {
-    String atributos = " P.ID, P.ACCESIBILIDAD, P.DESCRIPCION, P.FOTO, P.LATITUD, P.LONGITUD, P.TIPO, P.VISIBILIDAD ";
-    String atributosRank = " RankedPoints.ID, RankedPoints.ACCESIBILIDAD, RankedPoints.DESCRIPCION, RankedPoints.FOTO, RankedPoints.LATITUD," +
-            " RankedPoints.LONGITUD, RankedPoints.TIPO, RankedPoints.VISIBILIDAD ";
+    String atributos = " p.id, p.accesibilidad, p.descripcion, p.foto, p.latitud, p.longitud, p.tipo, p.visibilidad ";
+    String atributosRank = " rankedpoints.id, rankedpoints.accesibilidad, rankedpoints.descripcion, rankedpoints.foto, rankedpoints.latitud," +
+            " rankedpoints.longitud, rankedpoints.tipo, rankedpoints.visibilidad ";
     Set<Punto> findAll();
 
-    @Query(value = "SELECT"+atributos+"FROM PUNTO P ORDER BY P.ID ASC LIMIT 1", nativeQuery = true)
+    @Query(value = "select"+atributos+"from punto p order by p.id asc limit 1", nativeQuery = true)
     Punto getPrimerPunto();
 
-    @Query(value = "SELECT"+ atributosRank +"FROM (SELECT"+atributos+", ROW_NUMBER() OVER (ORDER BY P.ID) AS RowNum FROM PUNTO P) AS RankedPoints R WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal", nativeQuery = true)
-    Set<Punto> findAllByPages(@Param("idInicial")int idInicial, @Param("idFinal") int idFinal);
+    @Query(value = "select"+ atributosRank +"from (select"+atributos+", row_number() over (order by p.id) as rownum from punto p) as rankedpoints r where rankedpoints.rownum between :idinicial and :idfinal", nativeQuery = true)
+    Set<Punto> findAllByPages(@Param("idinicial")int idInicial, @Param("idfinal") int idFinal);
 
-    @Query(value = "SELECT"+ atributosRank + "FROM (SELECT"+atributos+", ROW_NUMBER() OVER (ORDER BY P.ID) AS RowNum FROM PUNTO P " +
-            "WHERE (:tipoPunto IS NULL OR P.tipo = :tipoPunto) " +
-            "AND (:accesibilidadPunto IS NULL OR P.accesibilidad = :accesibilidadPunto) " +
-            "AND (:visibilidadPunto IS NULL OR P.visibilidad = :visibilidadPunto)) AS RankedPoints " +
-            "WHERE RankedPoints.RowNum BETWEEN :idInicial AND :idFinal",
+    @Query(value = "SELECT"+ atributosRank + "from (select"+atributos+", row_number() over (order by p.id) as rownum from punto p " +
+            "where (:tipopunto is null or p.tipo = :tipopunto) " +
+            "and (:accesibilidadpunto is null or p.accesibilidad = :accesibilidadpunto) " +
+            "and (:visibilidadpunto is null or p.visibilidad = :visibilidadpunto)) as rankedpoints " +
+            "where rankedpoints.rownum between :idinicial and :idfinal",
             nativeQuery = true)
-    List<Punto> buscarPuntosConFiltros(@Param("tipoPunto") String tipoPunto,
-                                       @Param("accesibilidadPunto") String accesibilidadPunto,
-                                       @Param("visibilidadPunto") String visibilidadPunto,
-                                       @Param("idInicial") int idInicial,
-                                       @Param("idFinal") int idFinal);
+    List<Punto> buscarPuntosConFiltros(@Param("tipopunto") String tipoPunto,
+                                       @Param("accesibilidadpunto") String accesibilidadPunto,
+                                       @Param("visibilidadpunto") String visibilidadPunto,
+                                       @Param("idinicial") int idInicial,
+                                       @Param("idfinal") int idFinal);
 
-    @Query(value = "SELECT"+ atributos +"FROM  PUNTO P " +
-            "WHERE (:tipoPunto IS NULL OR P.tipo = :tipoPunto) " +
-            "AND (:accesibilidadPunto IS NULL OR P.accesibilidad = :accesibilidadPunto) " +
-            "AND (:visibilidadPunto IS NULL OR P.visibilidad = :visibilidadPunto)" ,
+    @Query(value = "select"+ atributos +"from  punto p " +
+            "where (:tipopunto is null or p.tipo = :tipopunto) " +
+            "and (:accesibilidadpunto is null or p.accesibilidad = :accesibilidadpunto) " +
+            "and (:visibilidadpunto is null or p.visibilidad = :visibilidadpunto)" ,
             nativeQuery = true)
-    List<Punto> buscarPuntosConFiltrosMapa(@Param("tipoPunto") String tipoPunto,
-                                       @Param("accesibilidadPunto") String accesibilidadPunto,
-                                       @Param("visibilidadPunto") String visibilidadPunto);
+    List<Punto> buscarPuntosConFiltrosMapa(@Param("tipopunto") String tipoPunto,
+                                       @Param("accesibilidadpunto") String accesibilidadPunto,
+                                       @Param("visibilidadpunto") String visibilidadPunto);
 
     long count();
 
-    @Query(value = "SELECT COUNT(P.ID) FROM PUNTO P " +
-            "WHERE (:tipoPunto IS NULL OR P.tipo = :tipoPunto) " +
-            "AND (:accesibilidadPunto IS NULL OR P.accesibilidad = :accesibilidadPunto) " +
-            "AND (:visibilidadPunto IS NULL OR P.visibilidad = :visibilidadPunto)",
+    @Query(value = "select count(p.id) from punto p " +
+            "where (:tipopunto is null or p.tipo = :tipopunto) " +
+            "and (:accesibilidadpunto is null or p.accesibilidad = :accesibilidadpunto) " +
+            "and (:visibilidadpunto is null or p.visibilidad = :visibilidadpunto)",
             nativeQuery = true)
-    long countPuntoConFiltros(@Param("tipoPunto") String tipoPunto,
-                         @Param("accesibilidadPunto") String accesibilidadPunto,
-                         @Param("visibilidadPunto") String visibilidadPunto);
+    long countPuntoConFiltros(@Param("tipopunto") String tipoPunto,
+                         @Param("accesibilidadpunto") String accesibilidadPunto,
+                         @Param("visibilidadpunto") String visibilidadPunto);
 
-    @Query("SELECT DISTINCT p FROM Punto p " +
-            "JOIN FETCH p.incidencias i " +
-            "WHERE i.estado IN ('ACEPTADO', 'ENPROCESO') " +
-            "AND p.visibilidadPunto = 'GLOBAL'")
+    @Query(value = "select distinct p from punto p " +
+            "join fetch p.incidencias i " +
+            "where i.estado in ('aceptado', 'enproceso') " +
+            "and p.visibilidadpunto = 'global'", nativeQuery = true)
     Set<Punto> findPuntosConIncidenciasAceptadasYVisibilidadGlobal();
 
     Optional<Punto> findById(long id);
@@ -68,40 +68,40 @@ public interface PuntoRepository extends CrudRepository<Punto, Long> {
 
     Set<Punto> findByLongitud(double longitud);
 
-    @Query(value = "SELECT "+ atributos +" FROM PUNTO P WHERE P.latitud = :latitud AND P.longitud = :longitud", nativeQuery = true)
+    @Query(value = "select "+ atributos +" from punto p where p.latitud = :latitud and p.longitud = :longitud", nativeQuery = true)
     Optional<Punto> findByLatitudLongitud(@Param("latitud") Double latitud, @Param("longitud") Double longitud);
 
     Set<Punto> findByAccesibilidadPunto(AccesibilidadPunto accesibilidadPunto);
 
     Set<Punto> findByVisibilidadPunto(EVisibilidad visibilidadPunto);
 
-    @Query(value = "SELECT "+ atributos +" FROM PUNTO P WHERE (COALESCE(:accesibilidad, '') = '' OR P.ACCESIBILIDAD = :accesibilidad) AND (COALESCE(:visibilidad, '') = '' OR P.VISIBILIDAD = :visibilidad)", nativeQuery = true)
+    @Query(value = "select "+ atributos +" from punto p where (coalesce(:accesibilidad, '') = '' or p.accesibilidad = :accesibilidad) and (coalesce(:visibilidad, '') = '' or p.visibilidad = :visibilidad)", nativeQuery = true)
     Set<Punto> findByAccesibilidadVisibilidad(@Param("accesibilidad") String accesibilidad, @Param("visibilidad") String visibilidad);
 
-    @Query(value = "SELECT " + atributos + " FROM PUNTO P " +
-            "WHERE " +
-            "    IF (:parametro = 'id', P.id = :valor, 1)" +
-            "    AND IF (:parametro = 'accesibilidad', P.ACCESIBILIDAD = :valor, 1)" +
-            "    AND IF (:parametro = 'tipo', P.TIPO = :valor, 1)" +
-            "    AND IF (:parametro = 'visibilidad', P.VISIBILIDAD = :valor, 1)"
+    @Query(value = "select " + atributos + " from punto p " +
+            "where " +
+            "    if (:parametro = 'id', p.id = :valor, 1)" +
+            "    and if (:parametro = 'accesibilidad', p.accesibilidad = :valor, 1)" +
+            "    and if (:parametro = 'tipo', p.tipo = :valor, 1)" +
+            "    and if (:parametro = 'visibilidad', p.visibilidad = :valor, 1)"
             , nativeQuery = true)
     Set<Punto> findByFiltro(@Param("parametro") String parametro,
                                  @Param("valor") String valor);
 
 
-    @Query(value = "SELECT "+ atributos +" FROM PUNTO P " +
-            "INNER JOIN favoritos F ON P.id = F.id_punto " +
-            "WHERE F.id_usuario = :idCliente AND P.visibilidad = 'FAVORITO'",
+    @Query(value = "select "+ atributos +" from punto p " +
+            "inner join favoritos f on p.id = f.id_punto " +
+            "where f.id_usuario = :idcliente and p.visibilidad = 'favorito'",
             nativeQuery = true)
-    Set<Punto> findPuntosByClienteId(@Param("idCliente") Long idCliente);
+    Set<Punto> findPuntosByClienteId(@Param("idcliente") Long idCliente);
 
-    @Query(value = "SELECT "+ atributos +" FROM Punto P " +
-            "INNER JOIN favoritos F ON P.id = F.id_punto " +
-            "WHERE P.latitud = :latitud " +
-            "AND P.longitud = :longitud " +
-            "AND F.id_usuario = :idCliente",
+    @Query(value = "select "+ atributos +" from punto p " +
+            "inner join favoritos f on p.id = f.id_punto " +
+            "where p.latitud = :latitud " +
+            "and p.longitud = :longitud " +
+            "and f.id_usuario = :idcliente",
             nativeQuery = true)
     Punto findPuntoByCoordinatesAndCliente(@Param("latitud") double latitud,
                                                  @Param("longitud") double longitud,
-                                                 @Param("idCliente") long idCliente);
+                                                 @Param("idcliente") long idCliente);
 }
